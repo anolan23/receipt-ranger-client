@@ -1,10 +1,13 @@
+import { ReceiptData } from '@/lib/types';
 import { MetricCard } from './metric-card';
 import { MonthlySpendingCard } from './monthly-spending-card';
 import { RecentReceiptsCard } from './recent-receipts-card';
 
-interface OverviewProps {}
+interface OverviewProps {
+  receipts?: ReceiptData[];
+}
 
-export function Overview({ ...props }: OverviewProps) {
+export function Overview({ receipts, ...props }: OverviewProps) {
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -38,7 +41,7 @@ export function Overview({ ...props }: OverviewProps) {
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <MonthlySpendingCard />
-        <RecentReceiptsCard />
+        <RecentReceiptsCard receipts={receipts} />
       </div>
     </>
   );

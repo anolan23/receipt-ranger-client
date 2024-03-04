@@ -6,18 +6,20 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CornersIcon } from '@radix-ui/react-icons';
 import { Overview } from './components/overview';
+import { useReceipts } from '@/hooks/use-receipts';
 
 interface DashboardProps {}
 
 export function Dashboard({ ...props }: DashboardProps) {
+  const { data: receipts } = useReceipts();
   return (
     <div className="min-h-screen flex flex-col">
       <header className="h-16 flex items-center px-4 border-b">
         <Combobox />
         <nav className="flex items-center space-x-4 lg:space-x-6 mx-6">
           <Link to="/dashboard">Overview</Link>
+          <Link to="/receipts">Receipts</Link>
           <Link to="/scanner">Scanner</Link>
-          <Link to="/calculators">Calculators</Link>
           <Link to="/settings">Settings</Link>
         </nav>
         <div className="ml-auto flex items-center space-x-4">
@@ -46,7 +48,7 @@ export function Dashboard({ ...props }: DashboardProps) {
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
           </TabsList>
           <TabsContent value="overview" className="space-y-4">
-            <Overview />
+            <Overview receipts={receipts} />
           </TabsContent>
           <TabsContent value="analytics" className="space-y-4">
             Analytics
