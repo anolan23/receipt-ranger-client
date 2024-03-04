@@ -1,18 +1,17 @@
-import { NavLink, NavLinkProps } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  LinkProps as RouterLinkProps,
+} from 'react-router-dom';
 
-interface LinkProps extends NavLinkProps {}
+interface HeaderLinkProps extends RouterLinkProps {}
 
-export function Link({ ...props }: LinkProps) {
+export function Link({ ...props }: HeaderLinkProps) {
   return (
-    <NavLink
-      className={({ isActive }) =>
-        isActive
-          ? 'text-sm font-medium transition-colors hover:text-primary'
-          : 'text-sm font-medium text-muted-foreground transition-colors hover:text-primary'
-      }
+    <RouterLink
+      className="text-muted-foreground underline underline-offset-4 hover:text-primary"
       {...props}
     >
       {props.children}
-    </NavLink>
+    </RouterLink>
   );
 }

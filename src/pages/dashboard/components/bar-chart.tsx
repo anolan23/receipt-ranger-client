@@ -45,7 +45,12 @@ export default class StackedBarChart extends PureComponent {
           <YAxis tickFormatter={(value) => `$${value}`} />
           <Tooltip />
           <Legend />
-          <Bar dataKey="category1" stackId="a" fill="#000000" />
+          <Bar
+            dataKey="category1"
+            stackId="a"
+            fill="#000000"
+            radius={[4, 4, 0, 0]}
+          />
         </BarChart>
       </ResponsiveContainer>
     );

@@ -1,5 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 import { Dashboard } from './pages/dashboard';
+import { Layout } from './layout/layout';
+import { ReceiptPage } from './pages/receipts/[receiptId]';
+import { ReceiptsPage } from './pages/receipts';
 
 function App() {
   return (
@@ -7,7 +10,11 @@ function App() {
       <Routes>
         <Route path="/" element={<div>Login</div>} />
         <Route path="signup" element={<div>Signup</div>} />
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route element={<Layout />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="receipts" element={<ReceiptsPage />} />
+          <Route path="receipts/:receiptId" element={<ReceiptPage />} />
+        </Route>
       </Routes>
     </>
   );
