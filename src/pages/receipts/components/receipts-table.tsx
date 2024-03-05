@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { ItemData, ReceiptData } from '@/lib/types';
 import { DotsHorizontalIcon, MixerVerticalIcon } from '@radix-ui/react-icons';
 import { createColumnHelper } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 
 interface ReceiptsTableProps {
   receipts?: ReceiptData[];
@@ -56,6 +57,11 @@ export function ReceiptsTable({ receipts, ...props }: ReceiptsTableProps) {
     columnHelper.accessor('transaction_date', {
       id: 'Receipt date',
       header: 'Receipt date',
+      cell: (info) => {
+        return dayjs(info.row.original.transaction_date).format(
+          'MMMM D, YYYY h:mm A'
+        );
+      },
     }),
     columnHelper.accessor('total_amount', {
       id: 'total',

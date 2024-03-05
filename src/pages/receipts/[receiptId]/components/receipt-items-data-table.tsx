@@ -2,6 +2,16 @@ import { DataTable } from '@/components/data-table';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
+import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -14,6 +24,7 @@ import { Input } from '@/components/ui/input';
 import { ItemData } from '@/lib/types';
 import { DotsHorizontalIcon, MixerVerticalIcon } from '@radix-ui/react-icons';
 import { createColumnHelper } from '@tanstack/react-table';
+import { EditItemMenuItem } from './edit-item-menu-item';
 
 interface ReceiptItemsDataTableProps {
   items?: ItemData[];
@@ -76,7 +87,7 @@ export function ReceiptItemsDataTable({
       id: 'actions',
       cell: ({ row }) => {
         return (
-          <DropdownMenu>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
                 <span className="sr-only">Open menu</span>
@@ -85,10 +96,10 @@ export function ReceiptItemsDataTable({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>Copy payment ID</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
               <DropdownMenuItem>View payment details</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <EditItemMenuItem item={row.original} />
+              <DropdownMenuItem>Delete item</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
