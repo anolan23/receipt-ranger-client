@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
 import { ReloadIcon } from '@radix-ui/react-icons';
 
+import { useToast } from '@/components/ui/use-toast';
 import { Select } from '@/components/select';
 import { Button } from '@/components/ui/button';
 import {
@@ -58,6 +59,7 @@ export function EditItemMenuItem({ item, ...props }: EditItemMenuItemProps) {
   });
 
   const { mutate } = useSWRConfig();
+  const { toast } = useToast();
 
   async function onSubmit(values: FormValues) {
     try {
@@ -68,8 +70,18 @@ export function EditItemMenuItem({ item, ...props }: EditItemMenuItemProps) {
       const result = await updateItem(item.id, newItem);
       const key = `/receipts/${item.receipt_id}/items`;
       await mutate(key);
+      toast({
+        description: 'Line item updated',
+      });
     } catch (error) {
-      console.error(error);
+      let message = 'Something went wrong';
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      toast({
+        variant: 'destructive',
+        description: message,
+      });
     } finally {
       setOpen(false);
     }
