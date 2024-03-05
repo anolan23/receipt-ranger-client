@@ -48,7 +48,7 @@ export default class StackedBarChart extends PureComponent {
           <Bar
             dataKey="category1"
             stackId="a"
-            fill="#000000"
+            fill={`hsl(var(--primary))`}
             radius={[4, 4, 0, 0]}
           />
         </BarChart>

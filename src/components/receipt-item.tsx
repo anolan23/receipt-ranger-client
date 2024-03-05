@@ -11,7 +11,7 @@ export function ReceiptItem({ receipt, ...props }: ReceiptItemProps) {
   return (
     <div className="flex items-center">
       <Avatar className="h-9 w-9">
-        <AvatarImage src={wfm} className="grayscale" />
+        <AvatarImage src={wfm} />
       </Avatar>
       <div className="ml-4 space-y-1">
         <div className="text-sm font-medium leading-none">

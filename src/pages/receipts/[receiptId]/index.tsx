@@ -21,7 +21,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
       <div className="flex items-center space-y-2">
         <div className="flex items-center space-x-4">
           <Avatar>
-            <AvatarImage src={wfm} className="grayscale" />
+            <AvatarImage src={wfm} />
             <AvatarFallback>AN</AvatarFallback>
           </Avatar>
           <h2 className="text-3xl font-bold tracking-tight">
