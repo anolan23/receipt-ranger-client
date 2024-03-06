@@ -7,6 +7,15 @@ import { useReceiptItems } from '@/hooks/use-receipt-items';
 import { useParams } from 'react-router-dom';
 import { useReceipt } from '@/hooks/use-receipt';
 import dayjs from 'dayjs';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { DeleteMenuItem } from './components/delete-menu-item';
 
 interface ReceiptPageProps {}
 
@@ -30,7 +39,15 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
         </div>
         <div className="flex items-center space-x-3 ml-auto">
           <Button variant="outline">View receipt</Button>
-          <Button>Receipt actions</Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button>Receipt actions</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>View receipt</DropdownMenuItem>
+              <DeleteMenuItem receipt={receipt} />
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <Tabs defaultValue="receipt-data" className="space-y-4">

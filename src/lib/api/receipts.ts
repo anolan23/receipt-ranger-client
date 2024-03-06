@@ -22,3 +22,7 @@ export async function createReceipt(object_key: string) {
   const response = await backend.post(`/receipts`, { object_key });
   return response.data;
 }
+
+export async function deleteReceipt(receipt_id: number) {
+  await backend.delete(`/receipts/${receipt_id}`);
+}
