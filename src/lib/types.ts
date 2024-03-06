@@ -22,3 +22,15 @@ export type ItemData = {
   quantity: number | null;
   total_price: string | null;
 };
+
+export type UploadFileStatus =
+  | 'uploading'
+  | 'processing'
+  | 'complete'
+  | 'error';
+
+export type UploadFile = {
+  id: string;
+  file: File;
+  status: UploadFileStatus;
+};

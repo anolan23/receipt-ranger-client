@@ -14,7 +14,7 @@ export function Layout({ ...props }: LayoutProps) {
         <nav className="flex items-center space-x-4 lg:space-x-6 mx-6">
           <HeaderLink to="/dashboard">Overview</HeaderLink>
           <HeaderLink to="/receipts">Receipts</HeaderLink>
-          <HeaderLink to="/scanner">Scanner</HeaderLink>
+          <HeaderLink to="/upload">Upload</HeaderLink>
           <HeaderLink to="/settings">Settings</HeaderLink>
         </nav>
         <div className="ml-auto flex items-center space-x-4">

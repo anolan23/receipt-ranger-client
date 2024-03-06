@@ -3,6 +3,7 @@ import { Dashboard } from './pages/dashboard';
 import { Layout } from './layout/layout';
 import { ReceiptPage } from './pages/receipts/[receiptId]';
 import { ReceiptsPage } from './pages/receipts';
+import { UploadPage } from './pages/upload';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="receipts" element={<ReceiptsPage />} />
           <Route path="receipts/:receiptId" element={<ReceiptPage />} />
+          <Route path="upload" element={<UploadPage />} />
         </Route>
       </Routes>
     </>

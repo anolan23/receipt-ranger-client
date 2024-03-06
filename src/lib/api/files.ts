@@ -1,7 +1,6 @@
 import { backend } from '../backend';
 
 type ImageData = {
-  uri: string;
   name: string;
   type: string;
 };

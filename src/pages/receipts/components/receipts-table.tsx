@@ -54,6 +54,15 @@ export function ReceiptsTable({ receipts, ...props }: ReceiptsTableProps) {
         return <Link to={`/receipts/${id}`}>{info.getValue()}</Link>;
       },
     }),
+    columnHelper.accessor('created_at', {
+      id: 'Upload date',
+      header: 'Upload date',
+      cell: (info) => {
+        return dayjs(info.row.original.created_at).format(
+          'MMMM D, YYYY h:mm A'
+        );
+      },
+    }),
     columnHelper.accessor('transaction_date', {
       id: 'Receipt date',
       header: 'Receipt date',
