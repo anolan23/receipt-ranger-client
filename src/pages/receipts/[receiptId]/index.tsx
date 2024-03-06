@@ -1,30 +1,54 @@
+import wfm from '@/assets/wfm.png';
+import { DeleteReceiptMenuItem } from '@/components/delete-receipt-menu-item';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import wfm from '@/assets/wfm.png';
-import { ReceiptItemsDataTable } from './components/receipt-items-data-table';
-import { useReceiptItems } from '@/hooks/use-receipt-items';
-import { useParams } from 'react-router-dom';
-import { useReceipt } from '@/hooks/use-receipt';
-import dayjs from 'dayjs';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { DeleteMenuItem } from './components/delete-menu-item';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useReceipt } from '@/hooks/use-receipt';
+import { useReceiptItems } from '@/hooks/use-receipt-items';
+import dayjs from 'dayjs';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ReceiptItemsDataTable } from './components/receipt-items-data-table';
+import { ReceiptData } from '@/lib/types';
+import { deleteReceipt } from '@/lib/api/receipts';
+import { useToast } from '@/components/ui/use-toast';
 
 interface ReceiptPageProps {}
 
 export function ReceiptPage({ ...props }: ReceiptPageProps) {
   const { receiptId } = useParams();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
   const { data: receipt } = useReceipt(receiptId);
   const { data: items } = useReceiptItems(receiptId);
   if (!receipt) return <div>Loading...</div>;
   const date = dayjs(receipt.transaction_date).format('MMM D, YYYY');
+
+  const handleDeleteSubmit = async function (receipt: ReceiptData) {
+    try {
+      if (!receipt?.id) return;
+      await deleteReceipt(receipt.id);
+      navigate('/receipts');
+      toast({
+        description: 'Receipt deleted',
+      });
+    } catch (error) {
+      let message = 'Something went wrong';
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      toast({
+        variant: 'destructive',
+        description: message,
+      });
+    }
+  };
   return (
     <>
       <div className="flex items-center space-y-2">
@@ -45,7 +69,10 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>View receipt</DropdownMenuItem>
-              <DeleteMenuItem receipt={receipt} />
+              <DeleteReceiptMenuItem
+                receipt={receipt}
+                onDeleteSubmit={handleDeleteSubmit}
+              />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

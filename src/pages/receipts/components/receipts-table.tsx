@@ -1,4 +1,5 @@
 import { DataTable } from '@/components/data-table';
+import { DeleteReceiptMenuItem } from '@/components/delete-receipt-menu-item';
 import { Link } from '@/components/link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -12,30 +13,46 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
+import { useRowSelection } from '@/hooks/use-row-selection';
+import { deleteReceipt } from '@/lib/api/receipts';
 import { ItemData, ReceiptData } from '@/lib/types';
-import { DotsHorizontalIcon, MixerVerticalIcon } from '@radix-ui/react-icons';
-import { createColumnHelper } from '@tanstack/react-table';
+import {
+  DotsHorizontalIcon,
+  DotsVerticalIcon,
+  MixerVerticalIcon,
+} from '@radix-ui/react-icons';
+import { RowSelectionState, createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSWRConfig } from 'swr';
 
 interface ReceiptsTableProps {
   receipts?: ReceiptData[];
 }
 
 export function ReceiptsTable({ receipts, ...props }: ReceiptsTableProps) {
+  const { toast } = useToast();
+  const { mutate } = useSWRConfig();
+
+  const { rowSelection, setRowSelection, selectedRow } = useRowSelection({
+    data: receipts,
+  });
   const columnHelper = createColumnHelper<ReceiptData>();
   const columns = [
     columnHelper.display({
       id: 'select',
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
+      // header: ({ table }) => (
+      //   <Checkbox
+      //     checked={
+      //       table.getIsAllPageRowsSelected() ||
+      //       (table.getIsSomePageRowsSelected() && 'indeterminate')
+      //     }
+      //     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+      //     aria-label="Select all"
+      //   />
+      // ),
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
@@ -101,11 +118,35 @@ export function ReceiptsTable({ receipts, ...props }: ReceiptsTableProps) {
       enableHiding: false,
     }),
   ];
+
+  const handleDeleteSubmit = async function (receipt: ReceiptData) {
+    try {
+      if (!receipt?.id) return;
+      await deleteReceipt(receipt.id);
+      setRowSelection({});
+      mutate('/receipts');
+      toast({
+        description: 'Receipt deleted',
+      });
+    } catch (error) {
+      let message = 'Something went wrong';
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      toast({
+        variant: 'destructive',
+        description: message,
+      });
+    }
+  };
+
   return (
     <DataTable
       columns={columns}
       data={receipts || []}
       selectionType="single"
+      rowSelection={rowSelection}
+      onRowSelectionChange={setRowSelection}
       filter={(table) => (
         <>
           <Input
@@ -116,33 +157,49 @@ export function ReceiptsTable({ receipts, ...props }: ReceiptsTableProps) {
             }
             className="h-8 w-[150px] lg:w-[250px]"
           />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto" size="sm">
-                <MixerVerticalIcon className="mr-2 h-4 w-4" />
-                View
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="ml-auto flex items-center space-x-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <MixerVerticalIcon className="mr-2 h-4 w-4" />
+                  View
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  Actions
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DeleteReceiptMenuItem
+                  receipt={selectedRow}
+                  onDeleteSubmit={handleDeleteSubmit}
+                />
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </>
       )}
     />

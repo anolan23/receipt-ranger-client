@@ -12,6 +12,8 @@ import {
   getSortedRowModel,
   useReactTable,
   VisibilityState,
+  RowSelectionState,
+  OnChangeFn,
 } from '@tanstack/react-table';
 
 import {
@@ -33,7 +35,9 @@ import { Input } from './ui/input';
 interface DataTableProps<TData> {
   columns: ColumnDef<TData, any>[];
   data: TData[];
-  selectionType?: 'single';
+  selectionType?: 'single' | 'multiple';
+  rowSelection?: RowSelectionState;
+  onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   filter?: (table: ITable<TData>) => ReactNode;
 }
 
@@ -41,9 +45,10 @@ export function DataTable<TData>({
   selectionType,
   columns,
   data,
+  rowSelection = {},
+  onRowSelectionChange,
   filter,
 }: DataTableProps<TData>) {
-  const [rowSelection, setRowSelection] = React.useState({});
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -54,9 +59,10 @@ export function DataTable<TData>({
   const table = useReactTable({
     data,
     columns,
+    enableMultiRowSelection: selectionType === 'multiple',
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: onRowSelectionChange,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
