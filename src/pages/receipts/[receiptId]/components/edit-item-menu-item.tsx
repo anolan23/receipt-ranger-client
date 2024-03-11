@@ -35,8 +35,8 @@ interface EditItemMenuItemProps {
 
 interface FormValues {
   generated_item_name: string;
-  category: string;
-  quantity: string;
+  category_id?: number;
+  quantity: number;
   discount: string;
   price_per_unit: string;
   total_price: string;
@@ -47,8 +47,8 @@ export function EditItemMenuItem({ item, ...props }: EditItemMenuItemProps) {
   const defaultValues = useMemo<FormValues>(() => {
     return {
       generated_item_name: item.generated_item_name || '',
-      category: item.category || '',
-      quantity: item.quantity?.toString() || '',
+      category_id: item.category_id || undefined,
+      quantity: item.quantity || 1,
       discount: '',
       price_per_unit: item.price_per_unit || '',
       total_price: item.total_price || '',
@@ -63,11 +63,8 @@ export function EditItemMenuItem({ item, ...props }: EditItemMenuItemProps) {
 
   async function onSubmit(values: FormValues) {
     try {
-      const newItem: Partial<ItemData> = {
-        ...values,
-        quantity: +values.quantity,
-      };
-      const result = await updateItem(item.id, newItem);
+      const { discount, ...updates } = values;
+      const result = await updateItem(item.id, updates);
       const key = `/receipts/${item.receipt_id}/items`;
       await mutate(key);
       toast({
@@ -122,7 +119,7 @@ export function EditItemMenuItem({ item, ...props }: EditItemMenuItemProps) {
               />
               <FormField
                 control={form.control}
-                name="category"
+                name="category_id"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Category</FormLabel>
@@ -173,7 +170,7 @@ export function EditItemMenuItem({ item, ...props }: EditItemMenuItemProps) {
                     placeholder="Enter quantity"
                     min={0}
                     step={0.01}
-                    {...form.register('discount')}
+                    {...form.register('discount', { valueAsNumber: true })}
                   />
                 </FormControl>
                 <FormMessage />

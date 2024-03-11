@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { ReceiptData } from '@/lib/types';
+import { ReceiptsTable } from '@/pages/receipts/components/receipts-table';
 
 interface RecentReceiptsCardProps {
   receipts?: ReceiptData[];
@@ -22,10 +23,15 @@ export function RecentReceiptsCard({
         <CardTitle>Recent Receipts</CardTitle>
         <CardDescription>You scanned 9 receipts this month.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-8">
-        {receipts?.map((receipt) => (
+      <CardContent className="space-y-2">
+        {/* {receipts?.map((receipt) => (
           <ReceiptItem key={receipt.id} receipt={receipt} />
-        ))}
+        ))} */}
+        <ReceiptsTable
+          data={receipts || []}
+          variant="embedded"
+          initialColumnVisibility={{ created_at: false }}
+        />
       </CardContent>
     </Card>
   );

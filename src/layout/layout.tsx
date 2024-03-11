@@ -9,7 +9,7 @@ interface LayoutProps {}
 export function Layout({ ...props }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="h-16 flex items-center px-4 border-b">
+      <header className="h-16 flex items-center px-4 border-b fixed top-0 left-0 right-0 bg-white z-50">
         <Combobox />
         <nav className="flex items-center space-x-4 lg:space-x-6 mx-6">
           <HeaderLink to="/dashboard">Overview</HeaderLink>
@@ -28,7 +28,7 @@ export function Layout({ ...props }: LayoutProps) {
           </Avatar>
         </div>
       </header>
-      <main className="flex-1 space-y-4 p-8 pt-6">{<Outlet />}</main>
+      <main className="flex-1 space-y-4 p-8 pt-20">{<Outlet />}</main>
     </div>
   );
 }

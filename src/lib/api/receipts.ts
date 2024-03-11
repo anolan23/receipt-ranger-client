@@ -6,12 +6,12 @@ export async function getReceipts() {
   return response.data;
 }
 
-export async function getReceipt(receiptId: number) {
+export async function getReceipt(receiptId: string) {
   const response = await backend.get<ReceiptData>(`/receipts/${receiptId}`);
   return response.data;
 }
 
-export async function getReceiptItems(receiptId: number) {
+export async function getReceiptItems(receiptId: string) {
   const response = await backend.get<ItemData[]>(
     `/receipts/${receiptId}/items`
   );

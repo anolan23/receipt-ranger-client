@@ -57,7 +57,7 @@ export function UploadArea({ onFileProcessed }: UploadAreaProps) {
         ref={fileInputRef}
         type="file"
         multiple
-        accept="image/jpeg, image/png, image/gif"
+        accept="image/jpeg, image/png, image/gif, image/webp"
         style={{ display: 'none' }}
         onChange={handleFileSelect}
         hidden

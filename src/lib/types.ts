@@ -3,10 +3,20 @@ export type ReceiptData = {
   created_at: string;
   updated_at: string;
   object_key: string | null;
-  store_name: string | null;
+  merchant_id: string | null;
+  merchant: MerchantData;
   total_amount: string | null;
   transaction_date: string | null;
   user_id: number | null;
+  ocr_text: string | null;
+};
+
+type MerchantData = {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  logo_url: string | null;
 };
 
 export type ItemData = {

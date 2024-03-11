@@ -28,7 +28,7 @@ const data = [
 export default class StackedBarChart extends PureComponent {
   render() {
     return (
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={300}>
         <BarChart
           width={500}
           height={300}
@@ -40,11 +40,11 @@ export default class StackedBarChart extends PureComponent {
             bottom: 5,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis tickFormatter={(value) => `$${value}`} />
-          <Tooltip />
-          <Legend />
+          <CartesianGrid horizontal vertical={false} />
+          <XAxis dataKey="name" fontSize={12} />
+          <YAxis tickFormatter={(value) => `$${value}`} fontSize={12} />
+          <Tooltip labelStyle={{ fontSize: 12 }} itemStyle={{ fontSize: 12 }} />
+          <Legend iconSize={12} fontSize={12} />
           <Bar
             dataKey="category1"
             stackId="a"

@@ -16,9 +16,6 @@ export function UploadPage({ ...props }: UploadPageProps) {
       <div className="flex items-center space-y-2">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Upload receipts</h2>
-          {/* <p className="text-muted-foreground">
-            Here's a list of your scanned receipts
-          </p> */}
         </div>
       </div>
       <Card>

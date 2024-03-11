@@ -1,19 +1,17 @@
 import {
   ColumnDef,
   ColumnFiltersState,
-  Header,
-  SortingState,
   Table as ITable,
-  createColumnHelper,
+  OnChangeFn,
+  RowSelectionState,
+  SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  VisibilityState,
-  RowSelectionState,
-  OnChangeFn,
 } from '@tanstack/react-table';
 
 import {
@@ -24,21 +22,25 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
-import { ReactNode, useMemo } from 'react';
-import { Checkbox } from './ui/checkbox';
-import React from 'react';
+import { cn } from '@/lib/utils';
 import { CaretSortIcon } from '@radix-ui/react-icons';
-import { Input } from './ui/input';
+import React, { ReactNode } from 'react';
+import { Button } from './ui/button';
 
-interface DataTableProps<TData> {
+type ColumnVisibilty<TData> = {
+  [Key in keyof TData]?: boolean;
+};
+
+export interface DataTableProps<TData> {
   columns: ColumnDef<TData, any>[];
   data: TData[];
   selectionType?: 'single' | 'multiple';
   rowSelection?: RowSelectionState;
+  variant?: 'default' | 'embedded';
+  initialColumnVisibility?: ColumnVisibilty<TData>;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   filter?: (table: ITable<TData>) => ReactNode;
+  footerControls?: (table: ITable<TData>) => ReactNode;
 }
 
 export function DataTable<TData>({
@@ -46,15 +48,18 @@ export function DataTable<TData>({
   columns,
   data,
   rowSelection = {},
+  variant = 'default',
+  initialColumnVisibility,
   onRowSelectionChange,
   filter,
+  footerControls,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>({ ...initialColumnVisibility });
 
   const table = useReactTable({
     data,
@@ -80,7 +85,7 @@ export function DataTable<TData>({
   return (
     <div>
       {filter && <div className="flex items-center py-4">{filter(table)}</div>}
-      <div className="rounded-md border">
+      <div className={cn(variant === 'default' && 'rounded-md border')}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -139,30 +144,11 @@ export function DataTable<TData>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between px-2 mt-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+      {footerControls && (
+        <div className="flex items-center justify-between px-2 mt-4">
+          {footerControls(table)}
         </div>
-        <div className="flex items-center justify-end space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
