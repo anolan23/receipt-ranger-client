@@ -61,7 +61,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       },
     }),
     columnHelper.accessor('transaction_date', {
-      id: 'Document date',
+      id: 'transaction_date',
       header: 'Document date',
       cell: (info) => {
         return dayjs(info.row.original.transaction_date).format(

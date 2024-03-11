@@ -30,7 +30,9 @@ export function RecentReceiptsCard({
         <ReceiptsTable
           data={receipts || []}
           variant="embedded"
-          initialColumnVisibility={{ created_at: false }}
+          initialColumnVisibility={{
+            created_at: false,
+          }}
         />
       </CardContent>
     </Card>

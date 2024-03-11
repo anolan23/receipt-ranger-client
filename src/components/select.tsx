@@ -5,20 +5,21 @@ import {
   SelectValue,
   Select as SelectPrimitive,
 } from './ui/select';
+import { SelectProps as RadixSelectProps } from '@radix-ui/react-select';
 
 type SelectItemDefinition = {
   value: string;
   label: string;
 };
 
-interface SelectProps {
+interface SelectProps extends RadixSelectProps {
   items: SelectItemDefinition[];
   placeholder?: string;
 }
 
 export function Select({ items, placeholder, ...props }: SelectProps) {
   return (
-    <SelectPrimitive>
+    <SelectPrimitive {...props}>
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

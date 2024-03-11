@@ -4,11 +4,13 @@ import { useReceipts } from '@/hooks/use-receipts';
 import { UploadIcon } from '@radix-ui/react-icons';
 import { Overview } from './components/overview';
 import { Link } from '@/components/link';
+import { useMonthlySpending } from '@/hooks/use-monthly-spending';
 
 interface DashboardProps {}
 
 export function Dashboard({ ...props }: DashboardProps) {
   const { data: receipts } = useReceipts();
+  const { data: monthlySpending } = useMonthlySpending();
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
@@ -27,7 +29,7 @@ export function Dashboard({ ...props }: DashboardProps) {
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
-          <Overview receipts={receipts} />
+          <Overview receipts={receipts} monthlySpending={monthlySpending} />
         </TabsContent>
         <TabsContent value="analytics" className="space-y-4">
           Analytics

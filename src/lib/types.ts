@@ -44,3 +44,9 @@ export type UploadFile = {
   file: File;
   status: UploadFileStatus;
 };
+
+export type MonthySpendingData = {
+  month_name: string;
+  total: string;
+  year: number;
+};

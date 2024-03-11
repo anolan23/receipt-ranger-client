@@ -1,5 +1,5 @@
 import { backend } from '../backend';
-import { ItemData, ReceiptData } from '../types';
+import { ItemData, MonthySpendingData, ReceiptData } from '../types';
 
 export async function getReceipts() {
   const response = await backend.get<ReceiptData[]>('/receipts');
@@ -25,4 +25,11 @@ export async function createReceipt(object_key: string) {
 
 export async function deleteReceipt(receipt_id: number) {
   await backend.delete(`/receipts/${receipt_id}`);
+}
+
+export async function getMonthlySpending() {
+  const response = await backend.get<MonthySpendingData[]>(
+    `/receipts/monthly-totals`
+  );
+  return response.data;
 }
