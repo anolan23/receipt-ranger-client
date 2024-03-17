@@ -27,9 +27,14 @@ export async function deleteReceipt(receipt_id: number) {
   await backend.delete(`/receipts/${receipt_id}`);
 }
 
-export async function getMonthlySpending() {
+export async function getMonthlySpending(year?: string | number) {
   const response = await backend.get<MonthySpendingData[]>(
-    `/receipts/monthly-totals`
+    `/receipts/monthly-totals`,
+    year
+      ? {
+          params: { year },
+        }
+      : undefined
   );
   return response.data;
 }

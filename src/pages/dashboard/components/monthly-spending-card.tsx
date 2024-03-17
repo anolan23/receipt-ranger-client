@@ -1,8 +1,24 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart } from '../../../components/bar-chart/bar-chart';
 import { MonthySpendingData } from '@/lib/types';
 import { useMemo } from 'react';
-import { BarDataSeries, BarSeries } from '@/components/bar-chart/interfaces';
+import { BarDataSeries, BarSeries } from '@/components/charts/interfaces';
+import { BarChart } from '@/components/charts/bar-chart';
+import dayjs from 'dayjs';
+
+const monthOrder = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 
 interface MonthlySpendingCardProps {
   monthlySpending?: MonthySpendingData[];
@@ -13,42 +29,24 @@ export function MonthlySpendingCard({
   ...props
 }: MonthlySpendingCardProps) {
   const series = useMemo<BarSeries<string>[]>(() => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-
     const groupedData: Record<number, BarDataSeries<string>> = {};
 
-    // Initialize groupedData with all the months for each year
+    // Update the values for the corresponding months
     monthlySpending?.forEach((item) => {
-      const { year } = item;
+      const { iso_date, total } = item;
+      const djs = dayjs(iso_date);
+      const year = djs.toDate().getFullYear();
+      const monthAbbr = djs.format('MMM YYYY');
+
       if (!groupedData[year]) {
         groupedData[year] = {
           type: 'bar',
           title: year.toString(),
-          data: months.map((month) => ({ x: month, y: 0 })),
+          data: [],
         };
       }
-    });
 
-    // Update the values for the corresponding months
-    monthlySpending?.forEach((item) => {
-      const { month_name, total, year } = item;
-      const monthIndex = months.indexOf(month_name);
-      if (monthIndex !== -1) {
-        groupedData[year].data[monthIndex].y = parseFloat(total);
-      }
+      groupedData[year].data.push({ x: monthAbbr, y: parseFloat(total) });
     });
 
     return Object.values(groupedData);
@@ -59,7 +57,7 @@ export function MonthlySpendingCard({
         <CardTitle>Monthly Spending</CardTitle>
       </CardHeader>
       <CardContent>
-        <BarChart series={series} hideLegend />
+        <BarChart series={series} hideLegend hideFilter />
       </CardContent>
     </Card>
   );

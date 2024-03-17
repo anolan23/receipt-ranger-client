@@ -5,12 +5,17 @@ import { UploadIcon } from '@radix-ui/react-icons';
 import { Overview } from './components/overview';
 import { Link } from '@/components/link';
 import { useMonthlySpending } from '@/hooks/use-monthly-spending';
+import { useSpendingOverview } from '@/hooks/use-spending-overview';
+import { Analytics } from './components/analytics';
 
 interface DashboardProps {}
 
 export function Dashboard({ ...props }: DashboardProps) {
   const { data: receipts } = useReceipts();
-  const { data: monthlySpending } = useMonthlySpending();
+  const { data: monthlySpending } = useMonthlySpending(
+    new Date().getFullYear()
+  );
+  const { data: spendingOverview } = useSpendingOverview();
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
@@ -25,14 +30,22 @@ export function Dashboard({ ...props }: DashboardProps) {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="reports" disabled>
+            Reports
+          </TabsTrigger>
+          <TabsTrigger value="notifications" disabled>
+            Notifications
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
-          <Overview receipts={receipts} monthlySpending={monthlySpending} />
+          <Overview
+            receipts={receipts}
+            monthlySpending={monthlySpending}
+            spendingOverview={spendingOverview}
+          />
         </TabsContent>
         <TabsContent value="analytics" className="space-y-4">
-          Analytics
+          <Analytics />
         </TabsContent>
         <TabsContent value="reports" className="space-y-4">
           Reports

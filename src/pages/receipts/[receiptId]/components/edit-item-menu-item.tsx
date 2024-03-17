@@ -120,23 +120,27 @@ export function EditItemMenuItem({ item, ...props }: EditItemMenuItemProps) {
               <FormField
                 control={form.control}
                 name="category_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category</FormLabel>
-                    <FormControl>
-                      <Select
-                        placeholder="Select category"
-                        items={[
-                          { label: 'Meat', value: 'meat' },
-                          { label: 'Vegetables', value: 'veggies' },
-                          { label: 'Condiments', value: 'cond' },
-                        ]}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  const { value, ...rest } = field;
+                  return (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <FormControl>
+                        <Select
+                          placeholder="Select category"
+                          items={[
+                            { label: 'Meat', value: 'meat' },
+                            { label: 'Vegetables', value: 'veggies' },
+                            { label: 'Condiments', value: 'cond' },
+                          ]}
+                          value={value?.toString()}
+                          {...rest}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
               <FormItem>
                 <FormLabel>Quantity</FormLabel>

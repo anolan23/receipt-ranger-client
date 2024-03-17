@@ -1,7 +1,11 @@
-interface Datum<T> {
+export interface Datum<T> {
   x: T;
   y: number;
 }
+
+export type RechartsData = {
+  [key: string]: ChartDataTypes;
+};
 
 export interface BarDataSeries<T> {
   type: 'bar';
@@ -19,8 +23,9 @@ export interface BarChartProps<T extends ChartDataTypes> {
   series: BarSeries<T>[];
   hideFilter?: boolean;
   hideLegend?: boolean;
-  visibleSeries?: BarSeries<T>[];
-  onFilterChange?: (visibleSeries: BarSeries<T>[]) => void;
+  stackedBars?: boolean;
+  xDomain?: string[];
+  height?: number;
 }
 
 export type ChartDataTypes = number | string | Date;

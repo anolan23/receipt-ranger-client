@@ -1,49 +1,61 @@
-import * as React from 'react';
-import { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu';
-
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { CaretSortIcon } from '@radix-ui/react-icons';
+import { useMemo, useState } from 'react';
 
-type Checked = DropdownMenuCheckboxItemProps['checked'];
+type FilterItemDefinition = {
+  value: string;
+  label: string;
+};
+interface FilterProps {
+  items: FilterItemDefinition[];
+  value?: string[];
+  onValueChange?: (value: string[]) => void;
+}
+export function Filter({ items, value, onValueChange }: FilterProps) {
+  const [internalValue, setInternalValue] = useState<string[]>([]);
 
-interface FilterProps {}
-export function Filter({ ...props }: FilterProps) {
-  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
-  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
-  const [showPanel, setShowPanel] = React.useState<Checked>(false);
+  const handleItemClick = function (item: FilterItemDefinition) {
+    const newValue = selectedValues.includes(item.value)
+      ? selectedValues.filter((value) => value !== item.value)
+      : [...selectedValues, item.value];
+    if (onValueChange) {
+      onValueChange(newValue);
+    } else {
+      setInternalValue(newValue);
+    }
+  };
+
+  const selectedValues = useMemo(() => {
+    return value !== undefined ? value : internalValue;
+  }, [value, internalValue]);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">AAAAA</Button>
+        <Button variant="outline" className="justify-between">
+          Filter data
+          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuCheckboxItem
-          checked={showStatusBar}
-          onCheckedChange={setShowStatusBar}
-        >
-          2021
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showActivityBar}
-          onCheckedChange={setShowActivityBar}
-          disabled
-        >
-          2022
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showPanel}
-          onCheckedChange={setShowPanel}
-        >
-          2023
-        </DropdownMenuCheckboxItem>
+      <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)]">
+        {items.map((item) => {
+          return (
+            <DropdownMenuCheckboxItem
+              key={item.value}
+              checked={selectedValues.includes(item.value)}
+              onCheckedChange={() => handleItemClick(item)}
+              onSelect={(e) => e.preventDefault()}
+            >
+              {item.label}
+            </DropdownMenuCheckboxItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

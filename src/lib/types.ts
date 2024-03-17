@@ -46,7 +46,32 @@ export type UploadFile = {
 };
 
 export type MonthySpendingData = {
+  iso_date: string;
   month_name: string;
   total: string;
   year: number;
 };
+
+export type SpendingOverviewResult = {
+  current_month_spend: string;
+  forecasted_spend: string;
+  comparison: string;
+};
+
+export interface SpendingExplorerParams {
+  start_date: string;
+  end_date: string;
+  granularity: 'daily' | 'monthly';
+  dimension?: 'category';
+}
+
+export type SpendingExplorerResultBase = {
+  date: string;
+  total_spent: string;
+};
+export type SpendingExplorerCategoryResult = {
+  category: string;
+} & SpendingExplorerResultBase;
+export type SpendingExplorerResult =
+  | SpendingExplorerResultBase
+  | SpendingExplorerCategoryResult;

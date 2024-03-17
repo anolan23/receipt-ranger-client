@@ -80,6 +80,12 @@ export function DataTable<TData>({
       columnFilters,
       columnVisibility,
     },
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: 20,
+      },
+    },
   });
 
   return (
