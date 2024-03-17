@@ -1,3 +1,5 @@
+import { BarDatum, ResponsiveBarSvgProps } from '@nivo/bar';
+
 export interface Datum<T> {
   x: T;
   y: number;
@@ -5,6 +7,9 @@ export interface Datum<T> {
 
 export type RechartsData = {
   [key: string]: ChartDataTypes;
+};
+export type NivoData = {
+  [key: string]: number | string;
 };
 
 export interface BarDataSeries<T> {
@@ -25,6 +30,13 @@ export interface BarChartProps<T extends ChartDataTypes> {
   hideLegend?: boolean;
   stackedBars?: boolean;
   xDomain?: string[];
+  height?: number;
+}
+
+export interface NivoBarChartProps<T extends ChartDataTypes>
+  extends Omit<ResponsiveBarSvgProps<BarDatum>, 'data'> {
+  series: BarSeries<T>[];
+  hideFilter?: boolean;
   height?: number;
 }
 

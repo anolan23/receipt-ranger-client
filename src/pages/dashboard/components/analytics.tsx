@@ -1,5 +1,6 @@
 import { BarChart } from '@/components/charts/bar-chart';
 import { BarSeries, Datum } from '@/components/charts/interfaces';
+import { NivoBarChart } from '@/components/charts/nivo-bar-chart';
 import { DateRangePicker } from '@/components/date-range-picker';
 import { Select } from '@/components/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -46,7 +47,7 @@ export function Analytics({ ...props }: AnalyticsProps) {
     return 'category' in item;
   };
 
-  const computeSeries = useCallback(
+  const formatToSeries = useCallback(
     (
       data: SpendingExplorerResult[],
       dimension: Dimension,
@@ -81,7 +82,6 @@ export function Analytics({ ...props }: AnalyticsProps) {
             type: 'bar',
             title: category,
             data,
-            color: getRandomColor(),
           });
         });
       } else {
@@ -99,7 +99,6 @@ export function Analytics({ ...props }: AnalyticsProps) {
           type: 'bar',
           title: 'Total Spent',
           data: _data,
-          color: getRandomColor(),
         });
       }
 
@@ -109,9 +108,11 @@ export function Analytics({ ...props }: AnalyticsProps) {
   );
 
   const series = useMemo(() => {
-    if (!data) return undefined;
-    return computeSeries(data, dimension, granularity);
-  }, [data, computeSeries, dimension, granularity]);
+    if (!data) return [];
+    return formatToSeries(data, dimension, granularity);
+  }, [data, formatToSeries, dimension, granularity]);
+
+  console.log(series);
 
   return (
     <>
@@ -121,12 +122,7 @@ export function Analytics({ ...props }: AnalyticsProps) {
             <CardTitle>Spending explorer</CardTitle>
           </CardHeader>
           <CardContent>
-            <BarChart
-              series={series || []}
-              hideFilter
-              stackedBars
-              height={450}
-            />
+            <NivoBarChart series={series} hideFilter height={450} />
           </CardContent>
         </Card>
         <div className="hidden flex-col space-y-4 sm:flex md:order-2">

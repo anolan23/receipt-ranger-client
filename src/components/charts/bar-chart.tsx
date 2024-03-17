@@ -76,8 +76,6 @@ export function BarChart<T extends number | string | Date>({
     return populatedData;
   }, [filteredSeries, xDomain]);
 
-  console.log(rechartsData);
-
   return (
     <div>
       {showFilter && (
