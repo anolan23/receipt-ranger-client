@@ -26,6 +26,57 @@
     --radius: 0.5rem;
 
     --font-sans: 'GeistSans';
+
+    --color-charts-palette-categorical-1: #688ae8;
+    --color-charts-palette-categorical-2: #c33d69;
+    --color-charts-palette-categorical-3: #2ea597;
+    --color-charts-palette-categorical-4: #8456ce;
+    --color-charts-palette-categorical-5: #e07941;
+    --color-charts-palette-categorical-6: #3759ce;
+    --color-charts-palette-categorical-7: #962249;
+    --color-charts-palette-categorical-8: #096f64;
+    --color-charts-palette-categorical-9: #6237a7;
+    --color-charts-palette-categorical-10: #a84401;
+    --color-charts-palette-categorical-11: #273ea5;
+    --color-charts-palette-categorical-12: #780d35;
+    --color-charts-palette-categorical-13: #03524a;
+    --color-charts-palette-categorical-14: #4a238b;
+    --color-charts-palette-categorical-15: #7e3103;
+    --color-charts-palette-categorical-16: #1b2b88;
+    --color-charts-palette-categorical-17: #ce567c;
+    --color-charts-palette-categorical-18: #003e38;
+    --color-charts-palette-categorical-19: #9469d6;
+    --color-charts-palette-categorical-20: #602400;
+    --color-charts-palette-categorical-21: #4066df;
+    --color-charts-palette-categorical-22: #a32952;
+    --color-charts-palette-categorical-23: #0d7d70;
+    --color-charts-palette-categorical-24: #6b40b2;
+    --color-charts-palette-categorical-25: #bc4d01;
+    --color-charts-palette-categorical-26: #2c46b1;
+    --color-charts-palette-categorical-27: #81143b;
+    --color-charts-palette-categorical-28: #045b52;
+    --color-charts-palette-categorical-29: #512994;
+    --color-charts-palette-categorical-30: #8a3603;
+    --color-charts-palette-categorical-31: #1f3191;
+    --color-charts-palette-categorical-32: #da7596;
+    --color-charts-palette-categorical-33: #01443e;
+    --color-charts-palette-categorical-34: #a783e1;
+    --color-charts-palette-categorical-35: #692801;
+    --color-charts-palette-categorical-36: #5978e3;
+    --color-charts-palette-categorical-37: #b1325c;
+    --color-charts-palette-categorical-38: #1c8e81;
+    --color-charts-palette-categorical-39: #7749bf;
+    --color-charts-palette-categorical-40: #cc5f21;
+    --color-charts-palette-categorical-41: #314fbf;
+    --color-charts-palette-categorical-42: #8b1b42;
+    --color-charts-palette-categorical-43: #06645a;
+    --color-charts-palette-categorical-44: #59309d;
+    --color-charts-palette-categorical-45: #983c02;
+    --color-charts-palette-categorical-46: #23379b;
+    --color-charts-palette-categorical-47: #6f062f;
+    --color-charts-palette-categorical-48: #014b44;
+    --color-charts-palette-categorical-49: #431d84;
+    --color-charts-palette-categorical-50: #732c02;
   }
 
   .dark {

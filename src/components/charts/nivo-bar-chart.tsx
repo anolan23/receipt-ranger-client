@@ -60,8 +60,6 @@ export function NivoBarChart<T extends number | string>({
     return populatedData;
   }, [filteredSeries]);
 
-  console.log(nivoData);
-
   const keys = useMemo(() => {
     const uniqueKeys = new Set<string>();
     series.forEach((serie) => {
@@ -69,7 +67,7 @@ export function NivoBarChart<T extends number | string>({
         uniqueKeys.add(serie.title);
       });
     });
-    return Array.from(uniqueKeys);
+    return Array.from(uniqueKeys).sort((a, b) => b.localeCompare(a));
   }, [series]);
 
   return (
@@ -92,9 +90,8 @@ export function NivoBarChart<T extends number | string>({
         groupMode="stacked"
         indexBy="x"
         margin={{ top: 10, right: 170, bottom: 50, left: 60 }}
-        padding={0.5}
-        innerPadding={2}
-        borderRadius={2}
+        padding={0.1}
+        // borderRadius={2}
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}
         colors={{ scheme: 'nivo' }}
@@ -104,7 +101,7 @@ export function NivoBarChart<T extends number | string>({
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'country',
+          legend: 'Date',
           legendPosition: 'middle',
           legendOffset: 32,
           truncateTickAt: 0,
@@ -113,7 +110,7 @@ export function NivoBarChart<T extends number | string>({
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'food',
+          legend: 'Total',
           legendPosition: 'middle',
           legendOffset: -40,
           truncateTickAt: 0,

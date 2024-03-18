@@ -2,8 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MonthySpendingData } from '@/lib/types';
 import { useMemo } from 'react';
 import { BarDataSeries, BarSeries } from '@/components/charts/interfaces';
-import { BarChart } from '@/components/charts/bar-chart';
 import dayjs from 'dayjs';
+import { NivoBarChart } from '@/components/charts/nivo-bar-chart';
 
 const monthOrder = [
   'Jan',
@@ -57,7 +57,7 @@ export function MonthlySpendingCard({
         <CardTitle>Monthly Spending</CardTitle>
       </CardHeader>
       <CardContent>
-        <BarChart series={series} hideLegend hideFilter />
+        <NivoBarChart series={series} hideFilter />
       </CardContent>
     </Card>
   );

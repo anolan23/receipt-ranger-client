@@ -1,4 +1,3 @@
-import { BarChart } from '@/components/charts/bar-chart';
 import { BarSeries, Datum } from '@/components/charts/interfaces';
 import { NivoBarChart } from '@/components/charts/nivo-bar-chart';
 import { DateRangePicker } from '@/components/date-range-picker';
@@ -7,10 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useSpendingExplorer } from '@/hooks/use-spending-explorer';
 import {
-  SpendingExplorerResult,
   SpendingExplorerCategoryResult,
+  SpendingExplorerResult,
 } from '@/lib/types';
-import { getRandomColor } from '@/lib/utils';
 import dayjs from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
@@ -122,7 +120,16 @@ export function Analytics({ ...props }: AnalyticsProps) {
             <CardTitle>Spending explorer</CardTitle>
           </CardHeader>
           <CardContent>
-            <NivoBarChart series={series} hideFilter height={450} />
+            <NivoBarChart
+              series={series}
+              hideFilter
+              height={450}
+              groupMode="stacked"
+              //   colors={(data) => {
+              //     console.log(data);
+              //     return categoryColors.get(data.id as string) || '';
+              //   }}
+            />
           </CardContent>
         </Card>
         <div className="hidden flex-col space-y-4 sm:flex md:order-2">
