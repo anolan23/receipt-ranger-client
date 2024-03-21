@@ -5,11 +5,13 @@ import { ResponsiveBar } from '@nivo/bar';
 import { Label } from '../ui/label';
 import { Filter } from './filter';
 import { NivoBarChartProps, NivoData, RechartsData } from './interfaces';
+import { Loader } from '../loader';
 
 export function NivoBarChart<T extends number | string>({
   series,
   hideFilter,
   height = 300,
+  loading,
   ...props
 }: NivoBarChartProps<T>) {
   const [filterValue, setFilterValue] = useState<string[]>([]);
@@ -70,6 +72,8 @@ export function NivoBarChart<T extends number | string>({
     return Array.from(uniqueKeys).sort((a, b) => b.localeCompare(a));
   }, [series]);
 
+  const isEmpty = !nivoData.length;
+
   return (
     <div style={{ height }}>
       {showFilter && (
@@ -84,74 +88,94 @@ export function NivoBarChart<T extends number | string>({
           </div>
         </div>
       )}
-      <ResponsiveBar
-        data={nivoData}
-        keys={keys}
-        groupMode="stacked"
-        indexBy="x"
-        margin={{ top: 10, right: 170, bottom: 50, left: 60 }}
-        padding={0.1}
-        // borderRadius={2}
-        valueScale={{ type: 'linear' }}
-        indexScale={{ type: 'band', round: true }}
-        colors={{ scheme: 'nivo' }}
-        axisTop={null}
-        axisRight={null}
-        axisBottom={{
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: 'Date',
-          legendPosition: 'middle',
-          legendOffset: 32,
-          truncateTickAt: 0,
-        }}
-        axisLeft={{
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: 'Total',
-          legendPosition: 'middle',
-          legendOffset: -40,
-          truncateTickAt: 0,
-        }}
-        labelSkipWidth={12}
-        labelSkipHeight={12}
-        labelTextColor={{
-          from: 'color',
-          modifiers: [['darker', 1.6]],
-        }}
-        legends={[
-          {
-            dataFrom: 'keys',
-            anchor: 'bottom-right',
-            direction: 'column',
-            justify: false,
-            translateX: 120,
-            translateY: 0,
-            itemsSpacing: 2,
-            itemWidth: 100,
-            itemHeight: 20,
-            itemDirection: 'left-to-right',
-            itemOpacity: 0.85,
-            symbolSize: 20,
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemOpacity: 1,
-                },
+      {loading ? (
+        <div className="h-full flex justify-center items-center">
+          <Loader size={24} />
+        </div>
+      ) : isEmpty ? (
+        <div className="h-full flex justify-center items-center">
+          No data for the selected Date range
+        </div>
+      ) : (
+        <ResponsiveBar
+          data={nivoData}
+          keys={keys}
+          groupMode="stacked"
+          motionConfig="stiff"
+          indexBy="x"
+          margin={{ top: 10, right: 170, bottom: 50, left: 60 }}
+          padding={0.1}
+          valueScale={{ type: 'linear' }}
+          indexScale={{ type: 'band', round: true }}
+          colors={{ scheme: 'dark2' }}
+          theme={{
+            text: {
+              fontFamily: 'inherit',
+              fontSize: 14,
+              color: 'inherit',
+              fill: 'hsl(var(--foreground))',
+            },
+            grid: {
+              line: {
+                stroke: 'hsl(var(--border))',
               },
-            ],
-          },
-        ]}
-        role="application"
-        ariaLabel="Spending Explorer"
-        barAriaLabel={(e) =>
-          e.id + ': ' + e.formattedValue + ' in time period: ' + e.indexValue
-        }
-        {...props}
-      />
+            },
+          }}
+          axisTop={null}
+          axisRight={null}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            truncateTickAt: 0,
+          }}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: 'Total ($)',
+            legendPosition: 'middle',
+            legendOffset: -50,
+            truncateTickAt: 0,
+          }}
+          labelSkipWidth={48}
+          labelSkipHeight={16}
+          labelTextColor={{
+            from: 'color',
+            modifiers: [['darker', 1.6]],
+          }}
+          legends={[
+            {
+              dataFrom: 'keys',
+              anchor: 'bottom-right',
+              direction: 'column',
+              justify: false,
+              translateX: 120,
+              translateY: 0,
+              itemsSpacing: 2,
+              itemWidth: 100,
+              itemHeight: 20,
+              itemDirection: 'left-to-right',
+              itemOpacity: 0.85,
+              symbolSize: 14,
+              effects: [
+                {
+                  on: 'hover',
+                  style: {
+                    itemOpacity: 1,
+                  },
+                },
+              ],
+            },
+          ]}
+          role="application"
+          ariaLabel="Spending Explorer"
+          barAriaLabel={(e) =>
+            e.id + ': ' + e.formattedValue + ' in time period: ' + e.indexValue
+          }
+          {...props}
+        />
+      )}
     </div>
   );
 }

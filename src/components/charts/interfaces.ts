@@ -38,6 +38,7 @@ export interface NivoBarChartProps<T extends ChartDataTypes>
   series: BarSeries<T>[];
   hideFilter?: boolean;
   height?: number;
+  loading?: boolean;
 }
 
 export type ChartDataTypes = number | string | Date;

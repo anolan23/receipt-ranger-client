@@ -4,13 +4,15 @@ import { Layout } from './layout/layout';
 import { ReceiptPage } from './pages/receipts/[receiptId]';
 import { ReceiptsPage } from './pages/receipts';
 import { UploadPage } from './pages/upload';
+import { SignupPage } from './pages/signup';
+import { LoginPage } from './pages/login';
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<div>Login</div>} />
-        <Route path="signup" element={<div>Signup</div>} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="signup" element={<SignupPage />} />
         <Route element={<Layout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="receipts" element={<ReceiptsPage />} />

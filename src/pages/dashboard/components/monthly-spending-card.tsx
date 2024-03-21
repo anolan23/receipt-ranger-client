@@ -54,10 +54,10 @@ export function MonthlySpendingCard({
   return (
     <Card className="col-span-4">
       <CardHeader>
-        <CardTitle>Monthly Spending</CardTitle>
+        <CardTitle>Monthly Overview</CardTitle>
       </CardHeader>
       <CardContent>
-        <NivoBarChart series={series} hideFilter />
+        <NivoBarChart series={series} hideFilter label={(d) => `$${d.value}`} />
       </CardContent>
     </Card>
   );

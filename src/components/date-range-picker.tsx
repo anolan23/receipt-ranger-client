@@ -13,11 +13,13 @@ import {
 } from '@/components/ui/popover';
 
 interface DateRangePickerProps {
+  className?: string;
   dateRange?: DateRange;
   onRangeSelect?: SelectRangeEventHandler;
 }
 
 export function DateRangePicker({
+  className,
   dateRange = {
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date(),
@@ -33,7 +35,8 @@ export function DateRangePicker({
             variant={'outline'}
             className={cn(
               'w-[300px] justify-start text-left font-normal',
-              !dateRange && 'text-muted-foreground'
+              !dateRange && 'text-muted-foreground',
+              className
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -51,7 +54,7 @@ export function DateRangePicker({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0" align="end">
           <Calendar
             initialFocus
             mode="range"
