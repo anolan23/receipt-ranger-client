@@ -75,3 +75,8 @@ export type SpendingExplorerCategoryResult = {
 export type SpendingExplorerResult =
   | SpendingExplorerResultBase
   | SpendingExplorerCategoryResult;
+
+export type Credentials = {
+  email: string;
+  password: string;
+};

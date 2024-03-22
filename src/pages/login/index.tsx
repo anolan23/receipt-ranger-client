@@ -13,24 +13,22 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-
-type LoginFormValues = {
-  email: string;
-  password: string;
-};
+import { loginUser } from '@/lib/cognito';
+import { Credentials } from '@/lib/types';
 
 interface LoginPageProps {}
 
 export function LoginPage({ ...props }: LoginPageProps) {
-  const form = useForm<LoginFormValues>({
+  const form = useForm<Credentials>({
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  function onSubmit(values: LoginFormValues) {
+  function onSubmit(values: Credentials) {
     console.log(values);
+    loginUser(values);
   }
   return (
     <AuthLayout
@@ -94,7 +92,7 @@ export function LoginPage({ ...props }: LoginPageProps) {
                       )}
                     />
                   </div>
-                  <Button>Log in</Button>
+                  <Button>Log in with Email</Button>
                 </div>
               </form>
             </Form>
