@@ -6,6 +6,7 @@ import { ReceiptsPage } from './pages/receipts';
 import { UploadPage } from './pages/upload';
 import { SignupPage } from './pages/signup';
 import { LoginPage } from './pages/login';
+import { ConfirmPage } from './pages/confirm';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="signup" element={<SignupPage />} />
+        <Route path="confirm" element={<ConfirmPage />} />
         <Route element={<Layout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="receipts" element={<ReceiptsPage />} />

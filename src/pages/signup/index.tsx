@@ -1,13 +1,29 @@
 import { Link } from '@/components/link';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { AuthLayout } from '@/layout/auth-layout';
+import { signUpUser } from '@/lib/api/auth';
+import { Credentials } from '@/lib/types';
+import { useNavigate } from 'react-router-dom';
+import { CredentialsForm } from './components/credentials-form';
 
 interface SignupPageProps {}
-
 export function SignupPage({ ...props }: SignupPageProps) {
+  const navigate = useNavigate();
+
+  async function handleCredentialsSubmit(values: Credentials) {
+    const { nextStep } = await signUpUser(values);
+    if (nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
+      navigate('/confirm', { state: { username: values.email } });
+    }
+  }
+
   return (
     <AuthLayout
+      action={
+        <Button variant="ghost" asChild>
+          <Link to={'/'}>Log in</Link>
+        </Button>
+      }
       content={
         <>
           <div className="flex flex-col space-y-2 text-center">
@@ -19,27 +35,7 @@ export function SignupPage({ ...props }: SignupPageProps) {
             </p>
           </div>
           <div className="grid gap-6">
-            <form>
-              <div className="grid gap-2">
-                <div className="grid gap-1">
-                  <label
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 sr-only"
-                    htmlFor="email"
-                  >
-                    Email
-                  </label>
-                  <Input
-                    id="email"
-                    placeholder="name@example.com"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    autoCorrect="off"
-                    type="email"
-                  />
-                </div>
-                <Button>Sign up with Email</Button>
-              </div>
-            </form>
+            <CredentialsForm onSubmit={handleCredentialsSubmit} />
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t"></span>

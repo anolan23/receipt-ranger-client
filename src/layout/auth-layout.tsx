@@ -1,10 +1,13 @@
+import { Button } from '@/components/ui/button';
 import { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
 interface AuthLayoutProps {
   content: ReactNode;
+  action?: ReactNode;
 }
 
-export function AuthLayout({ content, ...props }: AuthLayoutProps) {
+export function AuthLayout({ content, action, ...props }: AuthLayoutProps) {
   return (
     <div className="min-h-screen container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
@@ -35,6 +38,11 @@ export function AuthLayout({ content, ...props }: AuthLayoutProps) {
           </blockquote>
         </div>
       </div>
+      {action && (
+        <div className="absolute right-4 top-4 md:right-8 md:top-8">
+          {action}
+        </div>
+      )}
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           {content}

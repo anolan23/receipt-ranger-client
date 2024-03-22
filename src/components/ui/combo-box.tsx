@@ -50,15 +50,15 @@ export function Combobox() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[250px] justify-between"
         >
           {value
             ? frameworks.find((framework) => framework.value === value)?.label
-            : 'Aaron Nolan'}
+            : 'aaron.nolan23@yahoo.com'}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
         <Command>
           <CommandInput placeholder="Search team..." className="h-9" />
           <CommandEmpty>No team found.</CommandEmpty>

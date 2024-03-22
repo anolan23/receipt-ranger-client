@@ -28,6 +28,8 @@ export function Layout({ ...props }: LayoutProps) {
       console.error(error);
     }
   };
+
+  const email = user?.signInDetails?.loginId;
   return (
     <div className="min-h-screen flex flex-col">
       <header className="h-16 flex items-center px-4 border-b fixed top-0 left-0 right-0 bg-[hsl(var(--background))] z-50">
@@ -51,14 +53,12 @@ export function Layout({ ...props }: LayoutProps) {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>
-                {user?.signInDetails?.loginId}
-              </DropdownMenuLabel>
+              <DropdownMenuLabel>{email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
+              <DropdownMenuItem>Organization</DropdownMenuItem>
               <DropdownMenuItem>Subscription</DropdownMenuItem>
+              <DropdownMenuItem>Display</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={handleLogoutSelect}>
                 Log out

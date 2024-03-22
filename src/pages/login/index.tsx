@@ -31,16 +31,33 @@ export function LoginPage({ ...props }: LoginPageProps) {
 
   async function onSubmit(values: Credentials) {
     try {
-      await loginUser({ username: values.email, password: values.password });
-      navigate('/dashboard');
+      const { isSignedIn, nextStep } = await loginUser({
+        username: values.email,
+        password: values.password,
+      });
+      if (nextStep.signInStep === 'CONFIRM_SIGN_UP') {
+        navigate('/confirm', { state: { username: values.email } });
+      } else {
+        navigate('/dashboard');
+      }
     } catch (error) {
       console.error(error);
+      if (error instanceof Error) {
+        form.setError('root', {
+          message: error.message,
+        });
+      }
     }
   }
-  const { isSubmitting } = form.formState;
+  const { isSubmitting, errors } = form.formState;
 
   return (
     <AuthLayout
+      action={
+        <Button variant="ghost" asChild>
+          <Link to={'/signup'}>Sign up</Link>
+        </Button>
+      }
       content={
         <>
           <div className="flex flex-col space-y-2 text-center">
@@ -53,16 +70,22 @@ export function LoginPage({ ...props }: LoginPageProps) {
           </div>
           <div className="grid gap-6">
             <Form {...form}>
+              {errors.root?.message && (
+                <FormMessage>{errors.root.message}</FormMessage>
+              )}
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="grid gap-2">
                   <div className="grid gap-1">
                     <FormField
                       control={form.control}
                       name="email"
+                      rules={{
+                        required: true,
+                      }}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 sr-only">
-                            Username
+                            Email
                           </FormLabel>
                           <FormControl>
                             <Input
@@ -74,13 +97,16 @@ export function LoginPage({ ...props }: LoginPageProps) {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage>{errors.email?.message}</FormMessage>
                         </FormItem>
                       )}
                     />
                     <FormField
                       control={form.control}
                       name="password"
+                      rules={{
+                        required: true,
+                      }}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 sr-only">
@@ -96,7 +122,7 @@ export function LoginPage({ ...props }: LoginPageProps) {
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage>{errors.password?.message}</FormMessage>
                         </FormItem>
                       )}
                     />
