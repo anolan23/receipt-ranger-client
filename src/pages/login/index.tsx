@@ -13,12 +13,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { loginUser } from '@/lib/cognito';
 import { Credentials } from '@/lib/types';
+import { loginUser } from '@/lib/api/auth';
+import { useNavigate } from 'react-router-dom';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 interface LoginPageProps {}
 
 export function LoginPage({ ...props }: LoginPageProps) {
+  const navigate = useNavigate();
   const form = useForm<Credentials>({
     defaultValues: {
       email: '',
@@ -26,10 +29,16 @@ export function LoginPage({ ...props }: LoginPageProps) {
     },
   });
 
-  function onSubmit(values: Credentials) {
-    console.log(values);
-    loginUser(values);
+  async function onSubmit(values: Credentials) {
+    try {
+      await loginUser({ username: values.email, password: values.password });
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(error);
+    }
   }
+  const { isSubmitting } = form.formState;
+
   return (
     <AuthLayout
       content={
@@ -92,7 +101,12 @@ export function LoginPage({ ...props }: LoginPageProps) {
                       )}
                     />
                   </div>
-                  <Button>Log in with Email</Button>
+                  <Button>
+                    {isSubmitting && (
+                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Log in with Email
+                  </Button>
                 </div>
               </form>
             </Form>

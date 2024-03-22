@@ -1,12 +1,33 @@
 import { HeaderLink } from '@/components/header-link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Combobox } from '@/components/ui/combo-box';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { Outlet } from 'react-router-dom';
+import { useUser } from '@/hooks/use-user';
+import { signOutUser } from '@/lib/api/auth';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 interface LayoutProps {}
 
 export function Layout({ ...props }: LayoutProps) {
+  const navigate = useNavigate();
+  const { user } = useUser();
+
+  const handleLogoutSelect = async function () {
+    try {
+      await signOutUser();
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="min-h-screen flex flex-col">
       <header className="h-16 flex items-center px-4 border-b fixed top-0 left-0 right-0 bg-[hsl(var(--background))] z-50">
@@ -22,10 +43,28 @@ export function Layout({ ...props }: LayoutProps) {
             className="md:w-[100px] lg:w-[300px]"
             placeholder="Search..."
           />
-          <Avatar className="relative flex shrink-0 overflow-hidden rounded-full h-8 w-8">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>AN</AvatarFallback>
-          </Avatar>
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger>
+              <Avatar className="relative flex shrink-0 overflow-hidden rounded-full h-8 w-8">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>AN</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                {user?.signInDetails?.loginId}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>Billing</DropdownMenuItem>
+              <DropdownMenuItem>Team</DropdownMenuItem>
+              <DropdownMenuItem>Subscription</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={handleLogoutSelect}>
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
       <main className="flex-1 space-y-4 p-8 pt-20">{<Outlet />}</main>
