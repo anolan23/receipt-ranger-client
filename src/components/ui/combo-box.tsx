@@ -38,10 +38,12 @@ const frameworks = [
     label: 'Astro',
   },
 ];
-
-export function Combobox() {
+interface ComboboxProps {
+  value?: string;
+  onValueChange?: (newValue: string) => void;
+}
+export function Combobox({ value, onValueChange }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -50,11 +52,12 @@ export function Combobox() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[250px] justify-between"
+          className="min-w-[250px] justify-between"
         >
-          {value
+          {value}
+          {/* {value
             ? frameworks.find((framework) => framework.value === value)?.label
-            : 'aaron.nolan23@yahoo.com'}
+            : 'aaron.nolan23@yahoo.com'} */}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -68,7 +71,8 @@ export function Combobox() {
                 key={framework.value}
                 value={framework.value}
                 onSelect={(currentValue) => {
-                  setValue(currentValue === value ? '' : currentValue);
+                  onValueChange &&
+                    onValueChange(currentValue === value ? '' : currentValue);
                   setOpen(false);
                 }}
               >

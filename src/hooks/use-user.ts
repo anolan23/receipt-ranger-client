@@ -3,12 +3,18 @@ import { useEffect, useState } from 'react';
 
 export function useUser() {
   const [user, setUser] = useState<AuthUser>();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
   useEffect(() => {
     const start = async () => {
-      const user = await getCurrentUser();
-      setUser(user);
+      try {
+        const user = await getCurrentUser();
+        setUser(user);
+        setIsAuthenticated(true);
+      } catch (error) {
+        setIsAuthenticated(false);
+      }
     };
     start();
   }, []);
-  return { user };
+  return { user, isAuthenticated };
 }

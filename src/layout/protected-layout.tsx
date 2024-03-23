@@ -12,13 +12,13 @@ import {
 import { Input } from '@/components/ui/input';
 import { useUser } from '@/hooks/use-user';
 import { signOutUser } from '@/lib/api/auth';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
-interface LayoutProps {}
+interface ProtectedLayoutProps {}
 
-export function Layout({ ...props }: LayoutProps) {
+export function ProtectedLayout({ ...props }: ProtectedLayoutProps) {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
 
   const handleLogoutSelect = async function () {
     try {
@@ -29,11 +29,15 @@ export function Layout({ ...props }: LayoutProps) {
     }
   };
 
+  //AWS Bug on signInDetails
   const email = user?.signInDetails?.loginId;
+
+  if (isAuthenticated === false) return <Navigate to="/" />;
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="h-16 flex items-center px-4 border-b fixed top-0 left-0 right-0 bg-[hsl(var(--background))] z-50">
-        <Combobox />
+        <Combobox value={email} />
         <nav className="flex items-center space-x-4 lg:space-x-6 mx-6">
           <HeaderLink to="/dashboard">Overview</HeaderLink>
           <HeaderLink to="/receipts">Receipts</HeaderLink>
@@ -48,7 +52,7 @@ export function Layout({ ...props }: LayoutProps) {
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger>
               <Avatar className="relative flex shrink-0 overflow-hidden rounded-full h-8 w-8">
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src="" />
                 <AvatarFallback>AN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
