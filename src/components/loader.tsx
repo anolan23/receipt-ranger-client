@@ -5,7 +5,7 @@ interface LoaderProps {
 }
 
 export function Loader({
-  size = 24,
+  size = 16,
   borderWidth = 2,
   speedMultiplier = 1,
   ...props

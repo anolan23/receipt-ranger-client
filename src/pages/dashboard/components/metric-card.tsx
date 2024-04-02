@@ -1,3 +1,4 @@
+import { Loader } from '@/components/loader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 type Metric = {
@@ -8,10 +9,24 @@ type Metric = {
 
 interface MetricCardProps {
   metric: Metric;
+  loading?: boolean;
 }
 
-export function MetricCard({ metric }: MetricCardProps) {
+export function MetricCard({ metric, loading }: MetricCardProps) {
   const { title, value, description } = metric;
+  const renderValue = function () {
+    if (loading) {
+      return <Loader />;
+    }
+    return (
+      <>
+        <div className="text-2xl font-bold">{value}</div>
+        {description && (
+          <p className="text-xs text-muted-foreground">{description}</p>
+        )}
+      </>
+    );
+  };
   return (
     <Card>
       <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
@@ -19,12 +34,7 @@ export function MetricCard({ metric }: MetricCardProps) {
           {title}
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
-        )}
-      </CardContent>
+      <CardContent>{renderValue()}</CardContent>
     </Card>
   );
 }

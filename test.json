@@ -1,0 +1,97 @@
+{
+  "notificationType": "Received",
+  "mail": {
+    "timestamp": "2024-04-02T16:15:48.755Z",
+    "source": "receiptrangerupload@gmail.com",
+    "messageId": "i1ho7lp16blnhtdk7p8m5bkpg1gt7gsgsqo24701",
+    "destination": ["uploader@paperly.ai"],
+    "headersTruncated": false,
+    "headers": [
+      { "name": "Return-Path", "value": "<receiptrangerupload@gmail.com>" },
+      {
+        "name": "Received",
+        "value": "from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173]) by inbound-smtp.us-east-1.amazonaws.com with SMTP id i1ho7lp16blnhtdk7p8m5bkpg1gt7gsgsqo24701 for uploader@paperly.ai; Tue, 02 Apr 2024 16:15:48 +0000 (UTC)"
+      },
+      { "name": "X-SES-Spam-Verdict", "value": "PASS" },
+      { "name": "X-SES-Virus-Verdict", "value": "PASS" },
+      {
+        "name": "Received-SPF",
+        "value": "pass (spfCheck: domain of _spf.google.com designates 209.85.208.173 as permitted sender) client-ip=209.85.208.173; envelope-from=receiptrangerupload@gmail.com; helo=mail-lj1-f173.google.com;"
+      },
+      {
+        "name": "Authentication-Results",
+        "value": "amazonses.com; spf=pass (spfCheck: domain of _spf.google.com designates 209.85.208.173 as permitted sender) client-ip=209.85.208.173; envelope-from=receiptrangerupload@gmail.com; helo=mail-lj1-f173.google.com; dkim=pass header.i=@gmail.com; dmarc=pass header.from=gmail.com;"
+      },
+      {
+        "name": "X-SES-RECEIPT",
+        "value": "AEFBQUFBQUFBQUFFYkZTR3dvNzhSTklkV21KK0hybTVGclUzNGt0VkNXWU9ST2VMekQwVzJzbyszcWlXU0VzaEpGNFl0dU9pN0w0ZEx0K3l1UGRGNlBwTUdNckpHNXpRSDdpWERPSHNuVXZXRmcyU1BqNGhKcVpPTzM1TDhINUhnNmk5WXRXcTlkb251L3E3b0ltajAvcVF3RUFGSHd4K0tESTl2OVVnTkk3akdwMlJUVWI3eU1KdXdoRGJGSldkNGZGVlNoWjVVL21iWUVENlFVTThGYVFja0dRRWQ1eXBUZVZldHlCUFdBSkpIWklyUTZWWmRpcEdIaG0xcXltNnNVSzkwbWFma09HNWh4RDV2TTdYK0xiTzA3Qmo4NktPbG1ZOWN0L1VZVnZrdlBQUzJZM0FSWVE9PQ=="
+      },
+      {
+        "name": "X-SES-DKIM-SIGNATURE",
+        "value": "a=rsa-sha256; q=dns/txt; b=EYlOpqFD17fyiyZdsTY96pC6zW7TiDpKXY60dAMdddY3BYldfis+g1wM97iR3HhSQFBge2n/ngUUnQnriOENQ0CFRro1WNwFqcEKXsXi3tPZMRnKa5peyvjJwrCsisphJMBi/tcQCT8+1vvHaeshAkQJwj/H15uVrot4RljtCTk=; c=relaxed/simple; s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1712074549; v=1; bh=l8TXu+hlc0+MK47zvxArnCmiIsTUrNWfM1+x6+nUS2g=; h=From:To:Cc:Bcc:Subject:Date:Message-ID:MIME-Version:Content-Type:X-SES-RECEIPT;"
+      },
+      {
+        "name": "Received",
+        "value": "by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2d6eedf3e99so57500971fa.1 for <uploader@paperly.ai>; Tue, 02 Apr 2024 09:15:48 -0700 (PDT)"
+      },
+      {
+        "name": "DKIM-Signature",
+        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20230601; t=1712074547; x=1712679347; darn=paperly.ai; h=to:subject:message-id:date:from:mime-version:from:to:cc:subject:date:message-id:reply-to; bh=l8TXu+hlc0+MK47zvxArnCmiIsTUrNWfM1+x6+nUS2g=; b=lybTXBJoUZfzZqo5YgpZfTxxQqdm5nCv989HQodDBN270n1CpSZj3GO46L3B1kxIpIbZ3DLG2ee3XQHfopLV7Z3LoPZoMAGRzpuPkKYKW6cRgy+YDCbIgdC0RW192QOl8bUfgS5OuDsC0wFPtt8kKfrTpqItmpM4HS5wT6E16Nzv+bOzh/Wmmqma7jqegCC1p3KRbPmAEvmfW/TCOMxW6CLwbaarR4OeN1/ZoTdwSSdAtrY6hYVGJ/RfG5l7NJWGhn7Ygfda2rynk6VRIKls2niIcXSbyzFx1YahP807QRKUfq+Id0NuIuPZZMCpjFfC4RC5LUOf47Y0KeW0hUdFIA=="
+      },
+      {
+        "name": "X-Google-DKIM-Signature",
+        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed; d=1e100.net; s=20230601; t=1712074547; x=1712679347; h=to:subject:message-id:date:from:mime-version:x-gm-message-state :from:to:cc:subject:date:message-id:reply-to; bh=l8TXu+hlc0+MK47zvxArnCmiIsTUrNWfM1+x6+nUS2g=; b=hz7lFaz5VwpBz+6lWK7kf+gdpAeF5DwzbZq2lWlBf+gwzSTvJB9w0Wo/PCFy5PD7T7 8CtqgIAYykxEE1K+YMXJERBVKrykXHElW2iuVOVls6rxDtHwVwB6WgcPyU5R/s0dDRU4 rkLqN6pgLqs8vhJm7m8qF6PEpBDMbP62qOVFSPi2xl2YlrpWuebeGAHMUI7IoMbROE+a iAO1Q69wHas9mr7nLYcWsAl9JXix6SHXW4mIPfFX4C5+Fs/683ODUNlfJ5PF3gnT6qSK QhMIhADmD5r7rcr4WfK61Tmtk2p3aANcjPx6bemndhuDYPINS/F4Pmn/acu12hNtgrZe gl2w=="
+      },
+      {
+        "name": "X-Gm-Message-State",
+        "value": "AOJu0Yx2Csa1YFN8EskStEBSR4Ewr87bWO2x+YiVn4KCKoHI4J/gFxSq WJf1jHA1h/A5xWO0oe5/m274wxhGYqmiZhTf+Sb4AUTKNfjrrxdK3uo09ySIpgcLc47Wp44QJD4 6i6cMZSNLOuFisAfa4s+UBzb/rGpxpTnViRB9Hg=="
+      },
+      {
+        "name": "X-Google-Smtp-Source",
+        "value": "AGHT+IHW/NGde+GrKEZglOU/Uxetw6n1jjP3Z96iqNAP1tU7nEz51/YGiAL9H/utGz9avrNbxn3yohtxuxBySwyJxUk="
+      },
+      {
+        "name": "X-Received",
+        "value": "by 2002:a2e:90c2:0:b0:2d6:c1fa:f2bd with SMTP id o2-20020a2e90c2000000b002d6c1faf2bdmr4517946ljg.2.1712074546477; Tue, 02 Apr 2024 09:15:46 -0700 (PDT)"
+      },
+      { "name": "MIME-Version", "value": "1.0" },
+      { "name": "From", "value": "Aaron <receiptrangerupload@gmail.com>" },
+      { "name": "Date", "value": "Tue, 2 Apr 2024 11:15:35 -0500" },
+      {
+        "name": "Message-ID",
+        "value": "<CAAUAmHZQhbYj662UsZD1MyOj_j3S5AHQ7U13KQ1Xo1O6=oVMJw@mail.gmail.com>"
+      },
+      { "name": "Subject", "value": "Tester" },
+      { "name": "To", "value": "uploader@paperly.ai" },
+      {
+        "name": "Content-Type",
+        "value": "multipart/alternative; boundary=0000000000002c039906151f6b2e"
+      }
+    ],
+    "commonHeaders": {
+      "returnPath": "receiptrangerupload@gmail.com",
+      "from": ["Aaron <receiptrangerupload@gmail.com>"],
+      "date": "Tue, 2 Apr 2024 11:15:35 -0500",
+      "to": ["uploader@paperly.ai"],
+      "messageId": "<CAAUAmHZQhbYj662UsZD1MyOj_j3S5AHQ7U13KQ1Xo1O6=oVMJw@mail.gmail.com>",
+      "subject": "Tester"
+    }
+  },
+  "receipt": {
+    "timestamp": "2024-04-02T16:15:48.755Z",
+    "processingTimeMillis": 930,
+    "recipients": ["uploader@paperly.ai"],
+    "spamVerdict": { "status": "PASS" },
+    "virusVerdict": { "status": "PASS" },
+    "spfVerdict": { "status": "PASS" },
+    "dkimVerdict": { "status": "PASS" },
+    "dmarcVerdict": { "status": "PASS" },
+    "action": {
+      "type": "S3",
+      "topicArn": "arn:aws:sns:us-east-1:038702824272:receipt_upload_topic",
+      "bucketName": "receipt-ranger",
+      "objectKeyPrefix": "receipts/",
+      "objectKey": "receipts/i1ho7lp16blnhtdk7p8m5bkpg1gt7gsgsqo24701"
+    }
+  }
+}

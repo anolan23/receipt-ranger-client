@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
+import { mutate } from 'swr';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -12,4 +13,8 @@ export function getRandomColor() {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
+}
+
+export function clearSWRCache() {
+  mutate(() => true, undefined, { revalidate: false });
 }

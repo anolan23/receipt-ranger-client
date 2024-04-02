@@ -22,10 +22,12 @@ const monthOrder = [
 
 interface MonthlySpendingCardProps {
   monthlySpending?: MonthySpendingData[];
+  loading?: boolean;
 }
 
 export function MonthlySpendingCard({
   monthlySpending,
+  loading,
   ...props
 }: MonthlySpendingCardProps) {
   const series = useMemo<BarSeries<string>[]>(() => {
@@ -57,7 +59,12 @@ export function MonthlySpendingCard({
         <CardTitle>Monthly Overview</CardTitle>
       </CardHeader>
       <CardContent>
-        <NivoBarChart series={series} hideFilter label={(d) => `$${d.value}`} />
+        <NivoBarChart
+          series={series}
+          hideFilter
+          label={(d) => `$${d.value}`}
+          loading={loading}
+        />
       </CardContent>
     </Card>
   );

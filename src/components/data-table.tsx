@@ -26,6 +26,7 @@ import { cn } from '@/lib/utils';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import React, { ReactNode } from 'react';
 import { Button } from './ui/button';
+import { Loader } from './loader';
 
 type ColumnVisibilty<TData> = {
   [Key in keyof TData]?: boolean;
@@ -38,6 +39,7 @@ export interface DataTableProps<TData> {
   rowSelection?: RowSelectionState;
   variant?: 'default' | 'embedded';
   initialColumnVisibility?: ColumnVisibilty<TData>;
+  loading?: boolean;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   filter?: (table: ITable<TData>) => ReactNode;
   footerControls?: (table: ITable<TData>) => ReactNode;
@@ -50,6 +52,7 @@ export function DataTable<TData>({
   rowSelection = {},
   variant = 'default',
   initialColumnVisibility,
+  loading,
   onRowSelectionChange,
   filter,
   footerControls,
@@ -92,63 +95,69 @@ export function DataTable<TData>({
     <div>
       {filter && <div className="flex items-center py-4">{filter(table)}</div>}
       <div className={cn(variant === 'default' && 'rounded-md border')}>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <HeaderCell
-                          sortable={header.column.getCanSort()}
-                          onClick={() =>
-                            header.column.toggleSorting(
-                              header.column.getIsSorted() === 'asc'
-                            )
-                          }
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                        </HeaderCell>
-                      )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+        {loading ? (
+          <div className="h-[100px] flex justify-center items-center">
+            <Loader size={24} />
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder ? null : (
+                          <HeaderCell
+                            sortable={header.column.getCanSort()}
+                            onClick={() =>
+                              header.column.toggleSorting(
+                                header.column.getIsSorted() === 'asc'
+                              )
+                            }
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                          </HeaderCell>
+                        )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        )}
       </div>
       {footerControls && (
         <div className="flex items-center justify-between px-2 mt-4">

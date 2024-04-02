@@ -11,7 +11,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { useUser } from '@/hooks/use-user';
+import { useUserAttributes } from '@/hooks/use-user-attributes';
 import { signOutUser } from '@/lib/api/auth';
+import { clearSWRCache } from '@/lib/utils';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 interface ProtectedLayoutProps {}
@@ -19,10 +21,12 @@ interface ProtectedLayoutProps {}
 export function ProtectedLayout({ ...props }: ProtectedLayoutProps) {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useUser();
+  const { data: userAttributes } = useUserAttributes();
 
   const handleLogoutSelect = async function () {
     try {
       await signOutUser();
+      clearSWRCache();
       navigate('/');
     } catch (error) {
       console.error(error);
@@ -30,7 +34,7 @@ export function ProtectedLayout({ ...props }: ProtectedLayoutProps) {
   };
 
   //AWS Bug on signInDetails
-  const email = user?.signInDetails?.loginId;
+  const email = userAttributes?.email;
 
   if (isAuthenticated === false) return <Navigate to="/" />;
 

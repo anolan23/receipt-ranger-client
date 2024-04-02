@@ -1,16 +1,6 @@
 import { DataTable, DataTableProps } from '@/components/data-table';
 import { Link } from '@/components/link';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
 import { ReceiptData } from '@/lib/types';
-import { MixerVerticalIcon } from '@radix-ui/react-icons';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { ActionsDropdown } from './actions-dropdown';

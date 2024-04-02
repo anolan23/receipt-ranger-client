@@ -82,7 +82,11 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
         </div>
         <div className="flex items-center space-x-3 ml-auto">
           <Button variant="outline">View receipt</Button>
-          <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+          <DropdownMenu
+            open={dropdownOpen}
+            onOpenChange={setDropdownOpen}
+            modal={false}
+          >
             <DropdownMenuTrigger asChild>
               <Button>Receipt actions</Button>
             </DropdownMenuTrigger>

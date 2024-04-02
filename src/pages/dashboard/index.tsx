@@ -1,21 +1,13 @@
+import { Link } from '@/components/link';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useReceipts } from '@/hooks/use-receipts';
 import { UploadIcon } from '@radix-ui/react-icons';
-import { Overview } from './components/overview';
-import { Link } from '@/components/link';
-import { useMonthlySpending } from '@/hooks/use-monthly-spending';
-import { useSpendingOverview } from '@/hooks/use-spending-overview';
 import { Analytics } from './components/analytics';
+import { Overview } from './components/overview';
 
 interface DashboardProps {}
 
 export function Dashboard({ ...props }: DashboardProps) {
-  const { data: receipts } = useReceipts();
-  const { data: monthlySpending } = useMonthlySpending(
-    new Date().getFullYear()
-  );
-  const { data: spendingOverview } = useSpendingOverview();
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
@@ -38,11 +30,7 @@ export function Dashboard({ ...props }: DashboardProps) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
-          <Overview
-            receipts={receipts}
-            monthlySpending={monthlySpending}
-            spendingOverview={spendingOverview}
-          />
+          <Overview />
         </TabsContent>
         <TabsContent value="analytics" className="space-y-4">
           <Analytics />

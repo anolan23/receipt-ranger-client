@@ -11,10 +11,12 @@ import { ReceiptsTable } from '@/pages/receipts/components/receipts-table';
 
 interface RecentReceiptsCardProps {
   receipts?: ReceiptData[];
+  loading?: boolean;
 }
 
 export function RecentReceiptsCard({
   receipts,
+  loading,
   ...props
 }: RecentReceiptsCardProps) {
   return (
@@ -33,6 +35,7 @@ export function RecentReceiptsCard({
           initialColumnVisibility={{
             created_at: false,
           }}
+          loading={loading}
         />
       </CardContent>
     </Card>
