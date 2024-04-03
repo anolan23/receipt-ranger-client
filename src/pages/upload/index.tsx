@@ -20,6 +20,7 @@ export function UploadPage({ ...props }: UploadPageProps) {
           <h2 className="text-2xl font-bold tracking-tight">Upload receipts</h2>
         </div>
       </div>
+
       <Alert>
         <RocketIcon className="h-4 w-4" />
         <AlertTitle>Receipt upload via email now supported</AlertTitle>
@@ -30,38 +31,28 @@ export function UploadPage({ ...props }: UploadPageProps) {
           need to transfer files to your computer or log in.
         </AlertDescription>
       </Alert>
-      <Card>
-        <CardHeader>
-          <CardTitle>Upload</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <UploadArea onFileProcessed={handleFileDrop} />
-          {uploadFiles.map((uploadFile, index) => {
-            return (
+      <UploadArea onFileProcessed={handleFileDrop} />
+      {uploadFiles.map((uploadFile, index) => {
+        return (
+          <div>
+            <div key={uploadFile.id} className="flex items-center py-4 px-6">
               <div>
-                <div
-                  key={uploadFile.id}
-                  className="flex items-center py-4 px-6"
-                >
-                  <div>
-                    <div>{uploadFile.file.name}</div>
-                    <div className="text-muted-foreground">
-                      {formatBytes(uploadFile.file.size)}
-                    </div>
-                  </div>
-                  <div className="ml-auto flex items-center space-x-2">
-                    {uploadFile.status === 'processing' ||
-                    uploadFile.status === 'uploading' ? (
-                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                    ) : null}
-                    {uploadFile.status}
-                  </div>
+                <div>{uploadFile.file.name}</div>
+                <div className="text-muted-foreground">
+                  {formatBytes(uploadFile.file.size)}
                 </div>
               </div>
-            );
-          })}
-        </CardContent>
-      </Card>
+              <div className="ml-auto flex items-center space-x-2">
+                {uploadFile.status === 'processing' ||
+                uploadFile.status === 'uploading' ? (
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
+                {uploadFile.status}
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </>
   );
 }

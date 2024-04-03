@@ -33,6 +33,14 @@ export type ItemData = {
   total_price: string | null;
 };
 
+export type GoalData = {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  user_id: string;
+  amount: string;
+};
+
 export type UploadFileStatus =
   | 'uploading'
   | 'processing'
@@ -56,6 +64,8 @@ export type SpendingOverviewResult = {
   current_month_spend: string;
   forecasted_spend: string;
   comparison: string;
+  goal_budget: string;
+  remaining_budget: string;
 };
 
 export interface SpendingExplorerParams {

@@ -19,7 +19,7 @@ export function SettingsPage({ ...props }: SettingsPageProps) {
         <aside className="-mx-4 lg:w-1/5 lg:max-w-[250px]">
           <nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
             <NavButton to="/settings">Profile</NavButton>
-            <NavButton to="/settings/organization">Organization</NavButton>
+            <NavButton to="/settings/goals">Goals</NavButton>
             <NavButton to="/settings/subscription">Subscription</NavButton>
             <NavButton to="/settings/appearance">Appearance</NavButton>
           </nav>

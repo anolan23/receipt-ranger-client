@@ -13,14 +13,13 @@ export function Overview({ ...props }: OverviewProps) {
     useMonthlySpending(new Date().getFullYear());
   const { data: spendingOverview, isLoading: isSpendingOverviewLoading } =
     useSpendingOverview();
-  const renderComparisonString = function (comparison?: string) {
-    if (!comparison) return;
-    const comparisonNum = +comparison;
-    if (comparisonNum >= 0) {
-      return `+$${comparisonNum.toFixed(2)} from last month`;
-    } else {
-      return `-$${Math.abs(comparisonNum).toFixed(2)} from last month`;
-    }
+
+  const formatDollarString = (value?: string) => {
+    if (!value) return;
+    const comparisonNum = +value;
+    return `${comparisonNum >= 0 ? '+' : '-'}$${Math.abs(comparisonNum).toFixed(
+      2
+    )}`;
   };
   return (
     <>
@@ -30,7 +29,11 @@ export function Overview({ ...props }: OverviewProps) {
           metric={{
             title: 'This Month’s Spending',
             value: `$${spendingOverview?.current_month_spend}`,
-            description: '$249 remaining in budget',
+            description: spendingOverview?.remaining_budget
+              ? `${formatDollarString(
+                  spendingOverview.remaining_budget
+                )} remaining in budget`
+              : undefined,
           }}
         />
         <MetricCard
@@ -38,7 +41,11 @@ export function Overview({ ...props }: OverviewProps) {
           metric={{
             title: 'Forecasted Month Spend',
             value: `$${spendingOverview?.forecasted_spend}`,
-            description: renderComparisonString(spendingOverview?.comparison),
+            description: spendingOverview?.comparison
+              ? `${formatDollarString(
+                  spendingOverview.comparison
+                )} from last month`
+              : undefined,
           }}
         />
         <MetricCard

@@ -10,6 +10,7 @@ import { UploadPage } from './pages/upload';
 import { SettingsPage } from './pages/settings';
 import { AppearanceSettings } from './pages/settings/appearance';
 import { ProfileSettings } from './pages/settings/profile-settings';
+import { GoalsSettings } from './pages/settings/goals';
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
           <Route path="receipts/:receiptId" element={<ReceiptPage />} />
           <Route path="settings" element={<SettingsPage />}>
             <Route index element={<ProfileSettings />} />
-            <Route path="organization" element={<div>organization</div>} />
+            <Route path="goals" element={<GoalsSettings />} />
             <Route path="subscription" element={<div>subscription</div>} />
             <Route path="appearance" element={<AppearanceSettings />} />
           </Route>

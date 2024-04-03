@@ -64,9 +64,9 @@ export function ProtectedLayout({ ...props }: ProtectedLayoutProps) {
               <DropdownMenuLabel>{email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Organization</DropdownMenuItem>
+              <DropdownMenuItem>Goals</DropdownMenuItem>
               <DropdownMenuItem>Subscription</DropdownMenuItem>
-              <DropdownMenuItem>Display</DropdownMenuItem>
+              <DropdownMenuItem>Appearance</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={handleLogoutSelect}>
                 Log out
