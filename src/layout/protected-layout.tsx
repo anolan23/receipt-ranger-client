@@ -14,7 +14,7 @@ import { useUser } from '@/hooks/use-user';
 import { useUserAttributes } from '@/hooks/use-user-attributes';
 import { signOutUser } from '@/lib/api/auth';
 import { clearSWRCache } from '@/lib/utils';
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 interface ProtectedLayoutProps {}
 
@@ -63,10 +63,18 @@ export function ProtectedLayout({ ...props }: ProtectedLayoutProps) {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Goals</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
-              <DropdownMenuItem>Appearance</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/settings">Profile</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/settings/goals">Goals</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/settings/subscription">Subscription</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/settings/appearance">Appearance</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={handleLogoutSelect}>
                 Log out
