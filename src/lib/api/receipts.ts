@@ -1,8 +1,11 @@
 import { backend } from '../backend';
 import { ItemData, MonthySpendingData, ReceiptData } from '../types';
 
-export async function getReceipts() {
-  const response = await backend.get<ReceiptData[]>('/receipts');
+interface GetReceiptsParams {
+  limit?: number;
+}
+export async function getReceipts(params?: GetReceiptsParams) {
+  const response = await backend.get<ReceiptData[]>('/receipts', { params });
   return response.data;
 }
 

@@ -41,6 +41,17 @@ export type GoalData = {
   amount: string;
 };
 
+export type SubscriptionRecordData = {
+  created_at: string;
+  end_date: string;
+  id: number;
+  stripe_customer_id: string;
+  stripe_subscription_id: string;
+  subscription_status: string;
+  updated_at: string;
+  user_id: string;
+};
+
 export type UploadFileStatus =
   | 'uploading'
   | 'processing'
@@ -64,8 +75,8 @@ export type SpendingOverviewResult = {
   current_month_spend: string;
   forecasted_spend: string;
   comparison: string;
-  goal_budget: string;
-  remaining_budget: string;
+  goal_budget: string | null;
+  remaining_budget: string | null;
 };
 
 export interface SpendingExplorerParams {

@@ -11,6 +11,8 @@ import { SettingsPage } from './pages/settings';
 import { AppearanceSettings } from './pages/settings/appearance';
 import { ProfileSettings } from './pages/settings/profile-settings';
 import { GoalsSettings } from './pages/settings/goals';
+import { SubscriptionSettings } from './pages/settings/subscription';
+import { MembershipPage } from './pages/membership';
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="signup" element={<SignupPage />} />
         <Route path="confirm" element={<ConfirmPage />} />
+        <Route path="membership" element={<MembershipPage />} />
         <Route element={<ProtectedLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="receipts" element={<ReceiptsPage />} />
@@ -26,7 +29,7 @@ function App() {
           <Route path="settings" element={<SettingsPage />}>
             <Route index element={<ProfileSettings />} />
             <Route path="goals" element={<GoalsSettings />} />
-            <Route path="subscription" element={<div>subscription</div>} />
+            <Route path="subscription" element={<SubscriptionSettings />} />
             <Route path="appearance" element={<AppearanceSettings />} />
           </Route>
           <Route path="upload" element={<UploadPage />} />

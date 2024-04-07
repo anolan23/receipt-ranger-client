@@ -23,7 +23,9 @@ export function RecentReceiptsCard({
     <Card className="col-span-3">
       <CardHeader>
         <CardTitle>Recent Receipts</CardTitle>
-        <CardDescription>You scanned 9 receipts this month.</CardDescription>
+        <CardDescription>
+          Showing the five most recent receipts by Document date
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
         {/* {receipts?.map((receipt) => (

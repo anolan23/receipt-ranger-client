@@ -8,7 +8,9 @@ import { RecentReceiptsCard } from './recent-receipts-card';
 interface OverviewProps {}
 
 export function Overview({ ...props }: OverviewProps) {
-  const { data: receipts, isLoading: isReceiptsLoading } = useReceipts();
+  const { data: receipts, isLoading: isReceiptsLoading } = useReceipts({
+    limit: 5,
+  });
   const { data: monthlySpending, isLoading: isMonthlySpendingLoading } =
     useMonthlySpending(new Date().getFullYear());
   const { data: spendingOverview, isLoading: isSpendingOverviewLoading } =
