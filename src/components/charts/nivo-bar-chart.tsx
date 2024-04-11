@@ -6,12 +6,13 @@ import { Label } from '../ui/label';
 import { Filter } from './filter';
 import { NivoBarChartProps, NivoData, RechartsData } from './interfaces';
 import { Loader } from '../loader';
+import { cn } from '@/lib/utils';
 
 export function NivoBarChart<T extends number | string>({
   series,
   hideFilter,
-  height = 300,
   loading,
+  className,
   ...props
 }: NivoBarChartProps<T>) {
   const [filterValue, setFilterValue] = useState<string[]>([]);
@@ -75,7 +76,7 @@ export function NivoBarChart<T extends number | string>({
   const isEmpty = !nivoData.length;
 
   return (
-    <div style={{ height }}>
+    <div className={cn('h-[300px]', className)}>
       {showFilter && (
         <div className="flex flex-wrap mb-5">
           <div className="flex-grow-0 flex-shrink basis-[280px] space-y-2 flex flex-col">
@@ -103,9 +104,10 @@ export function NivoBarChart<T extends number | string>({
           groupMode="stacked"
           motionConfig="stiff"
           indexBy="x"
-          margin={{ top: 10, right: 170, bottom: 50, left: 60 }}
+          margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
           padding={0.1}
           valueScale={{ type: 'linear' }}
+          valueFormat=">-$.2f"
           indexScale={{ type: 'band', round: true }}
           colors={{ scheme: 'dark2' }}
           theme={{
@@ -144,30 +146,6 @@ export function NivoBarChart<T extends number | string>({
             from: 'color',
             modifiers: [['darker', 1.6]],
           }}
-          legends={[
-            {
-              dataFrom: 'keys',
-              anchor: 'bottom-right',
-              direction: 'column',
-              justify: false,
-              translateX: 120,
-              translateY: 0,
-              itemsSpacing: 2,
-              itemWidth: 100,
-              itemHeight: 20,
-              itemDirection: 'left-to-right',
-              itemOpacity: 0.85,
-              symbolSize: 14,
-              effects: [
-                {
-                  on: 'hover',
-                  style: {
-                    itemOpacity: 1,
-                  },
-                },
-              ],
-            },
-          ]}
           role="application"
           ariaLabel="Spending Explorer"
           barAriaLabel={(e) =>

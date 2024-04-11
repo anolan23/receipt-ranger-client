@@ -37,8 +37,8 @@ export interface NivoBarChartProps<T extends ChartDataTypes>
   extends Omit<ResponsiveBarSvgProps<BarDatum>, 'data'> {
   series: BarSeries<T>[];
   hideFilter?: boolean;
-  height?: number;
   loading?: boolean;
+  className?: string;
 }
 
 export type ChartDataTypes = number | string | Date;

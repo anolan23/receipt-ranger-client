@@ -10,8 +10,8 @@ interface DashboardProps {}
 export function Dashboard({ ...props }: DashboardProps) {
   return (
     <>
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <h2 className="text-2xl font-bold tracking-tight">Dashboard</h2>
         <Button asChild>
           <Link to="/upload">
             <UploadIcon className="mr-2 h-4 w-4" /> Upload receipt
@@ -25,9 +25,6 @@ export function Dashboard({ ...props }: DashboardProps) {
           <TabsTrigger value="reports" disabled>
             Reports
           </TabsTrigger>
-          <TabsTrigger value="notifications" disabled>
-            Notifications
-          </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <Overview />
@@ -37,9 +34,6 @@ export function Dashboard({ ...props }: DashboardProps) {
         </TabsContent>
         <TabsContent value="reports" className="space-y-4">
           Reports
-        </TabsContent>
-        <TabsContent value="notifications" className="space-y-4">
-          Notifications
         </TabsContent>
       </Tabs>
     </>

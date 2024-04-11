@@ -35,7 +35,7 @@ export function PriceCard({
   const intervalText = interval === 'monthly' ? 'month' : 'year';
   const [dollar, cents] = price.split('.');
   return (
-    <Card className="w-[350px]">
+    <Card className="max-w-[350px]">
       <CardHeader>
         {badge && (
           <div>

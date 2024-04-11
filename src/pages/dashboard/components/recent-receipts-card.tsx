@@ -20,7 +20,7 @@ export function RecentReceiptsCard({
   ...props
 }: RecentReceiptsCardProps) {
   return (
-    <Card className="col-span-3">
+    <Card className="min-w-0 md:col-span-1 lg:col-span-3">
       <CardHeader>
         <CardTitle>Recent Receipts</CardTitle>
         <CardDescription>

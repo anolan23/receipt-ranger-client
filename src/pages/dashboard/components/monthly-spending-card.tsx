@@ -54,16 +54,25 @@ export function MonthlySpendingCard({
     return Object.values(groupedData);
   }, [monthlySpending]);
   return (
-    <Card className="col-span-4">
+    <Card className="min-w-0 md:col-span-1 lg:col-span-4">
       <CardHeader>
-        <CardTitle>Monthly Overview</CardTitle>
+        <CardTitle>Monthly Totals ($)</CardTitle>
       </CardHeader>
       <CardContent>
         <NivoBarChart
+          className="h-[200px] sm:h-[300px]"
           series={series}
           hideFilter
-          label={(d) => `$${d.value}`}
           loading={loading}
+          margin={{ top: 10, right: 0, bottom: 50, left: 50 }}
+          gridYValues={5}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            truncateTickAt: 0,
+            tickValues: 5,
+          }}
         />
       </CardContent>
     </Card>

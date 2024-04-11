@@ -27,8 +27,8 @@ export function UploadPage({ ...props }: UploadPageProps) {
         <AlertDescription>
           Quickly add receipts to your account by emailing receipt images
           directly from your phone to{' '}
-          <Link to="mailto:uploader@paperly.ai">uploader@paperly.ai</Link>. No
-          need to transfer files to your computer or log in.
+          <Link to="mailto:uploader@snapceipt.com">uploader@snapceipt.com</Link>
+          . No need to transfer files to your computer or log in.
         </AlertDescription>
       </Alert>
       <UploadArea onFileProcessed={handleFileDrop} />

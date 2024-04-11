@@ -4,13 +4,13 @@
     "timestamp": "2024-04-02T16:15:48.755Z",
     "source": "receiptrangerupload@gmail.com",
     "messageId": "i1ho7lp16blnhtdk7p8m5bkpg1gt7gsgsqo24701",
-    "destination": ["uploader@paperly.ai"],
+    "destination": ["uploader@snapceipt.com"],
     "headersTruncated": false,
     "headers": [
       { "name": "Return-Path", "value": "<receiptrangerupload@gmail.com>" },
       {
         "name": "Received",
-        "value": "from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173]) by inbound-smtp.us-east-1.amazonaws.com with SMTP id i1ho7lp16blnhtdk7p8m5bkpg1gt7gsgsqo24701 for uploader@paperly.ai; Tue, 02 Apr 2024 16:15:48 +0000 (UTC)"
+        "value": "from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173]) by inbound-smtp.us-east-1.amazonaws.com with SMTP id i1ho7lp16blnhtdk7p8m5bkpg1gt7gsgsqo24701 for uploader@snapceipt.com; Tue, 02 Apr 2024 16:15:48 +0000 (UTC)"
       },
       { "name": "X-SES-Spam-Verdict", "value": "PASS" },
       { "name": "X-SES-Virus-Verdict", "value": "PASS" },
@@ -32,7 +32,7 @@
       },
       {
         "name": "Received",
-        "value": "by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2d6eedf3e99so57500971fa.1 for <uploader@paperly.ai>; Tue, 02 Apr 2024 09:15:48 -0700 (PDT)"
+        "value": "by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2d6eedf3e99so57500971fa.1 for <uploader@snapceipt.com>; Tue, 02 Apr 2024 09:15:48 -0700 (PDT)"
       },
       {
         "name": "DKIM-Signature",
@@ -62,7 +62,7 @@
         "value": "<CAAUAmHZQhbYj662UsZD1MyOj_j3S5AHQ7U13KQ1Xo1O6=oVMJw@mail.gmail.com>"
       },
       { "name": "Subject", "value": "Tester" },
-      { "name": "To", "value": "uploader@paperly.ai" },
+      { "name": "To", "value": "uploader@snapceipt.com" },
       {
         "name": "Content-Type",
         "value": "multipart/alternative; boundary=0000000000002c039906151f6b2e"
@@ -72,7 +72,7 @@
       "returnPath": "receiptrangerupload@gmail.com",
       "from": ["Aaron <receiptrangerupload@gmail.com>"],
       "date": "Tue, 2 Apr 2024 11:15:35 -0500",
-      "to": ["uploader@paperly.ai"],
+      "to": ["uploader@snapceipt.com"],
       "messageId": "<CAAUAmHZQhbYj662UsZD1MyOj_j3S5AHQ7U13KQ1Xo1O6=oVMJw@mail.gmail.com>",
       "subject": "Tester"
     }
@@ -80,7 +80,7 @@
   "receipt": {
     "timestamp": "2024-04-02T16:15:48.755Z",
     "processingTimeMillis": 930,
-    "recipients": ["uploader@paperly.ai"],
+    "recipients": ["uploader@snapceipt.com"],
     "spamVerdict": { "status": "PASS" },
     "virusVerdict": { "status": "PASS" },
     "spfVerdict": { "status": "PASS" },

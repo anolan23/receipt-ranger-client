@@ -162,18 +162,27 @@ export function Analytics({ ...props }: AnalyticsProps) {
   return (
     <>
       <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr_300px]">
-        <Card>
+        <Card className=" min-w-0">
           <CardHeader>
             <CardTitle>Spending explorer</CardTitle>
           </CardHeader>
           <CardContent>
             <NivoBarChart
+              className="h-[250px] sm:h-[400px]"
               loading={isLoading}
               series={series}
               hideFilter
-              height={450}
               groupMode={groupMode}
               label={(d) => `$${d.value}`}
+              margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
+              gridYValues={5}
+              axisLeft={{
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                truncateTickAt: 0,
+                tickValues: 5,
+              }}
               axisBottom={{
                 tickSize: 5,
                 tickPadding: 5,
@@ -192,7 +201,7 @@ export function Analytics({ ...props }: AnalyticsProps) {
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="hidden flex-col space-y-4 sm:flex md:order-2">
+            <div className="flex-col space-y-4 sm:flex md:order-2">
               <div className="grid gap-2">
                 <Label>Date range</Label>
                 <DateRangePicker

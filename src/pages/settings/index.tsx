@@ -16,8 +16,8 @@ export function SettingsPage({ ...props }: SettingsPageProps) {
       </div>
       <Separator className="w-full" />
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-        <aside className="-mx-4 lg:w-1/5 lg:max-w-[250px]">
-          <nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
+        <aside className="lg:w-1/5 lg:max-w-[250px]">
+          <nav className="flex gap-2 flex-wrap lg:flex-col lg:space-x-0 lg:space-y-1">
             <NavButton to="/settings">Profile</NavButton>
             <NavButton to="/settings/goals">Goals</NavButton>
             <NavButton to="/settings/subscription">Subscription</NavButton>

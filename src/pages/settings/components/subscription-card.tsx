@@ -21,7 +21,7 @@ export function SubscriptionCard({
   const hasSubscription = !!subscription;
   return (
     <Card className="w-full">
-      <CardContent className="flex justify-between items-center p-6">
+      <CardContent className="flex justify-between items-center p-6 gap-2">
         {loading ? (
           <Loader />
         ) : (

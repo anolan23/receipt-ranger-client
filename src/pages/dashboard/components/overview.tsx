@@ -66,7 +66,7 @@ export function Overview({ ...props }: OverviewProps) {
           }}
         />
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-7">
         <MonthlySpendingCard
           monthlySpending={monthlySpending}
           loading={isMonthlySpendingLoading}

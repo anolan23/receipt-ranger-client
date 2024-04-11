@@ -74,7 +74,7 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Monthly Budget ($)</FormLabel>
+                    <FormLabel>Monthly Budget Goal ($)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
