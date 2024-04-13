@@ -48,16 +48,16 @@ export function UploadArea({ onFileProcessed }: UploadAreaProps) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="flex flex-col space-y-3 p-8 shrink-0 items-center justify-center rounded-md border border-dashed"
+      className="flex flex-col space-y-3 py-4 px-6 shrink-0 items-center justify-center rounded-md border border-dashed"
     >
       <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-        <UploadIcon height={24} width={24} />
-        <h3 className="mt-4 text-lg font-semibold">Drag & drop</h3>
+        <h3 className="mt-2 text-lg font-semibold">Drag & drop</h3>
         <p className="mb-4 mt-2 text-sm text-muted-foreground">
-          Image filetypes supported (png, jpg, bmp, tiff, webp). Max 5MB.
+          Image file types supported (png, jpg, bmp, tiff, webp). 5MB max file
+          size.
         </p>
         <Button size="sm" onClick={handleClick}>
-          Add receipt
+          Add receipts
         </Button>
         <input
           ref={fileInputRef}

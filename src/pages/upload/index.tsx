@@ -46,7 +46,7 @@ export function UploadPage({ ...props }: UploadPageProps) {
   return (
     <div className="max-w-[800px] space-y-4">
       <Header title="Upload receipts" />
-      <Alert>
+      {/* <Alert>
         <RocketIcon className="h-4 w-4" />
         <AlertTitle>Receipt upload via email now supported</AlertTitle>
         <AlertDescription>
@@ -55,22 +55,7 @@ export function UploadPage({ ...props }: UploadPageProps) {
           <Link to="mailto:uploader@snapceipt.com">uploader@snapceipt.com</Link>
           . No need to transfer files to your computer or log in.
         </AlertDescription>
-      </Alert>
-      {/* {!!errors.length && (
-        <Alert variant="destructive">
-          <ExclamationTriangleIcon className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>
-            {errors.map((error) => {
-              return (
-                <div>
-                  Failed to upload {error.file.name}: {error.message}
-                </div>
-              );
-            })}
-          </AlertDescription>
-        </Alert>
-      )} */}
+      </Alert> */}
       <div className="space-y-4">
         <UploadArea onFileProcessed={handleFileDrop} />
         {uploadFiles.map((uploadFile, index) => {
@@ -84,7 +69,9 @@ export function UploadPage({ ...props }: UploadPageProps) {
                 <img className="w-full h-full grayscale rounded-sm" src={url} />
               </div>
               <div>
-                <div className="font-medium">{uploadFile.file.name}</div>
+                <div className="font-normal text-sm">
+                  {uploadFile.file.name}
+                </div>
                 <div className="text-muted-foreground text-xs">
                   {formatBytes(uploadFile.file.size)}
                 </div>
@@ -99,6 +86,10 @@ export function UploadPage({ ...props }: UploadPageProps) {
             </div>
           );
         })}
+      </div>
+      <div className="space-x-2">
+        <Button variant="outline">Clear</Button>
+        <Button>Upload receipts</Button>
       </div>
     </div>
   );
