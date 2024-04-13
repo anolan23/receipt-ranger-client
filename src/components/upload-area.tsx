@@ -50,18 +50,25 @@ export function UploadArea({ onFileProcessed }: UploadAreaProps) {
       onDrop={handleDrop}
       className="flex flex-col space-y-3 p-8 shrink-0 items-center justify-center rounded-md border border-dashed"
     >
-      <UploadIcon height={24} width={24} />
-      <div>PNG, JPEG, GIF filetypes supported. Max 5MB.</div>
-      <Button onClick={handleClick}>Choose files</Button>
-      <input
-        ref={fileInputRef}
-        type="file"
-        multiple
-        accept="image/jpeg, image/png, image/gif, image/webp"
-        style={{ display: 'none' }}
-        onChange={handleFileSelect}
-        hidden
-      />
+      <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
+        <UploadIcon height={24} width={24} />
+        <h3 className="mt-4 text-lg font-semibold">Drag & drop</h3>
+        <p className="mb-4 mt-2 text-sm text-muted-foreground">
+          Image filetypes supported (png, jpg, bmp, tiff, webp). Max 5MB.
+        </p>
+        <Button size="sm" onClick={handleClick}>
+          Add receipt
+        </Button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept="image/jpeg, image/png, image/gif, image/webp"
+          style={{ display: 'none' }}
+          onChange={handleFileSelect}
+          hidden
+        />
+      </div>
     </div>
   );
 }

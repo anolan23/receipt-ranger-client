@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MixerVerticalIcon } from '@radix-ui/react-icons';
+import { Header } from '@/components/header';
 
 interface ReceiptsPageProps {}
 
@@ -17,14 +18,10 @@ export function ReceiptsPage({ ...props }: ReceiptsPageProps) {
 
   return (
     <>
-      <div className="flex items-center space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Receipts</h2>
-          <p className="text-muted-foreground">
-            Here's a list of your uploaded receipts
-          </p>
-        </div>
-      </div>
+      <Header
+        title="Receipts"
+        description="Here's a list of your uploaded receipts"
+      />
       <ReceiptsTable
         data={receipts || []}
         filter={(table) => (

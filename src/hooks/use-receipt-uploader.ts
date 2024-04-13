@@ -3,8 +3,18 @@ import { uploadFile } from '../lib/api/files';
 import { createReceipt } from '../lib/api/receipts';
 import { UploadFile, UploadFileStatus } from '../lib/types';
 
+class FileUploadError extends Error {
+  constructor(public file: File, message: string) {
+    super(message);
+    this.name = 'FileUploadError';
+  }
+}
+
 export function useReceiptUploader() {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
+  const [fileUploadErrors, setFileUploadErrors] = useState<FileUploadError[]>(
+    []
+  );
 
   const addFileToUpload = function (file: File) {
     const id = file.name; //unique ID
@@ -22,8 +32,10 @@ export function useReceiptUploader() {
     newStatus: UploadFileStatus
   ) {
     setUploadFiles((prevState) =>
-      prevState.map((file) =>
-        file.id === fileId ? { ...file, status: newStatus } : file
+      prevState.map((uploadFile) =>
+        uploadFile.id === fileId
+          ? { ...uploadFile, status: newStatus }
+          : uploadFile
       )
     );
   };
@@ -31,20 +43,40 @@ export function useReceiptUploader() {
   const upload = async function (file: File) {
     const fileId = addFileToUpload(file);
     try {
-      const uploadResult = await uploadFile(file);
       updateFileStatus(fileId, 'processing');
-      const createResult = await createReceipt(uploadResult.key);
+      const result = await createReceipt(file);
       updateFileStatus(fileId, 'complete');
+      return result;
     } catch (error) {
-      console.error(error);
       updateFileStatus(fileId, 'error');
+      throw new FileUploadError(
+        file,
+        error instanceof Error ? error.message : 'Unknown error'
+      );
     }
   };
 
   const uploadAll = async function (fileList: FileList) {
     const promises = Array.from(fileList).map(upload);
     const results = await Promise.allSettled(promises);
+
+    const failedUploads = results
+      .filter(
+        (result): result is PromiseRejectedResult =>
+          result.status === 'rejected'
+      )
+      .map((result) => result.reason as FileUploadError);
+
+    const fulfilled = results
+      .filter(
+        (result): result is PromiseFulfilledResult<any> =>
+          result.status === 'fulfilled'
+      )
+      .map((result) => result.value);
+
+    setFileUploadErrors(failedUploads);
+    return { failedUploads, fulfilled };
   };
 
-  return { uploadFiles, uploadAll };
+  return { uploadFiles, uploadAll, errors: fileUploadErrors };
 }

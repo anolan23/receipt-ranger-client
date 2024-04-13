@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { backend } from '../backend';
 import { ItemData, MonthySpendingData, ReceiptData } from '../types';
 
@@ -21,9 +22,31 @@ export async function getReceiptItems(receiptId: string) {
   return response.data;
 }
 
-export async function createReceipt(object_key: string) {
-  const response = await backend.post(`/receipts`, { object_key });
-  return response.data;
+type CreateReceiptResult = {
+  receipt_id: string;
+};
+export async function createReceipt(file: File) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await backend.post<CreateReceiptResult>(
+      '/receipts',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 429) {
+        throw new Error('Maximum number of receipt uploads reached');
+      }
+    }
+    throw error;
+  }
 }
 
 export async function deleteReceipt(receipt_id: number) {

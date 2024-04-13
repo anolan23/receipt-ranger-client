@@ -8,12 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useToast } from '@/components/ui/use-toast';
 import { deleteReceipt } from '@/lib/api/receipts';
 import { ReceiptData } from '@/lib/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { useCallback, useState } from 'react';
 import { useSWRConfig } from 'swr';
+import { toast } from 'sonner';
 
 interface ActionsDropdownProps {
   receipt: ReceiptData;
@@ -23,7 +23,6 @@ export function ActionsDropdown({ receipt, ...props }: ActionsDropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [hasOpenDialog, setHasOpenDialog] = useState(false);
 
-  const { toast } = useToast();
   const { mutate } = useSWRConfig();
 
   function handleDialogItemOpenChange(open: boolean) {
@@ -42,21 +41,16 @@ export function ActionsDropdown({ receipt, ...props }: ActionsDropdownProps) {
         if (!receipt?.id) return;
         await deleteReceipt(receipt.id);
         mutate('/receipts');
-        toast({
-          description: 'Receipt deleted',
-        });
+        toast('Receipt deleted');
       } catch (error) {
         let message = 'Something went wrong';
         if (error instanceof Error) {
           message = error.message;
         }
-        toast({
-          variant: 'destructive',
-          description: message,
-        });
+        toast.error(message);
       }
     },
-    [mutate, toast]
+    [mutate]
   );
 
   return (

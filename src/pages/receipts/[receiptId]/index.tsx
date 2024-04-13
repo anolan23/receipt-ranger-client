@@ -11,11 +11,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceiptItems } from '@/hooks/use-receipt-items';
 import dayjs from 'dayjs';
+import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ReceiptItemsDataTable } from './components/receipt-items-data-table';
 import { ReceiptData } from '@/lib/types';
 import { deleteReceipt } from '@/lib/api/receipts';
-import { useToast } from '@/components/ui/use-toast';
 import { useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -27,7 +27,6 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
   const [hasOpenDialog, setHasOpenDialog] = useState(false);
 
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   const { data: receipt } = useReceipt(receiptId);
   const { data: items } = useReceiptItems(receiptId);
@@ -54,18 +53,13 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
       if (!receipt?.id) return;
       await deleteReceipt(receipt.id);
       navigate('/receipts');
-      toast({
-        description: 'Receipt deleted',
-      });
+      toast('Receipt deleted');
     } catch (error) {
       let message = 'Something went wrong';
       if (error instanceof Error) {
         message = error.message;
       }
-      toast({
-        variant: 'destructive',
-        description: message,
-      });
+      toast.error(message);
     }
   };
   return (

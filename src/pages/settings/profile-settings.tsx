@@ -11,13 +11,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
 import { useUserAttributes } from '@/hooks/use-user-attributes';
 import { SettingsLayout } from '@/layout/settings-layout';
 import { ExclamationTriangleIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { updateUserAttributes } from 'aws-amplify/auth';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type ProfileSettingsValues = {
   name: string;
@@ -28,7 +28,6 @@ type ProfileSettingsValues = {
 interface ProfileSettingsProps {}
 
 export function ProfileSettings({ ...props }: ProfileSettingsProps) {
-  const { toast } = useToast();
   const { data, isLoading } = useUserAttributes();
 
   const defaultValues = useMemo<ProfileSettingsValues>(() => {
@@ -55,9 +54,7 @@ export function ProfileSettings({ ...props }: ProfileSettingsProps) {
         },
       });
       console.log(attributes);
-      toast({
-        description: 'Profile updated',
-      });
+      toast('Profile updated');
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {

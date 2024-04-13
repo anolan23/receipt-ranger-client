@@ -7,11 +7,11 @@ import {
   FormLabel,
 } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useToast } from '@/components/ui/use-toast';
 import { useTheme } from '@/hooks/use-theme';
 import { SettingsLayout } from '@/layout/settings-layout';
 import { Theme } from '@/lib/types';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type AppearanceSettingsValues = {
   theme: Theme;
@@ -21,7 +21,6 @@ interface AppearanceSettingsProps {}
 
 export function AppearanceSettings({ ...props }: AppearanceSettingsProps) {
   const { setTheme, theme } = useTheme();
-  const { toast } = useToast();
 
   const form = useForm<AppearanceSettingsValues>({
     defaultValues: {
@@ -32,15 +31,10 @@ export function AppearanceSettings({ ...props }: AppearanceSettingsProps) {
   async function onSubmit(values: AppearanceSettingsValues) {
     try {
       setTheme(values.theme);
-      toast({
-        description: 'Preferences updated',
-      });
+      toast('Preferences updated');
     } catch (error) {
       if (error instanceof Error) {
-        toast({
-          variant: 'destructive',
-          description: error.message,
-        });
+        toast.error(error.message);
       }
     }
   }

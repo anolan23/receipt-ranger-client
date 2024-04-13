@@ -1,5 +1,6 @@
 import { HeaderLink } from '@/components/header-link';
 import { Logo } from '@/components/logo';
+import { LogoLink } from '@/components/logo-link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -35,6 +36,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { Toaster } from '@/components/ui/sonner';
 import { useUser } from '@/hooks/use-user';
 import { useUserAttributes } from '@/hooks/use-user-attributes';
 import { signOutUser } from '@/lib/api/auth';
@@ -74,12 +76,7 @@ export function ProtectedLayout({ ...props }: ProtectedLayoutProps) {
     <div className="min-h-screen flex flex-col">
       <header className="h-16 flex items-center px-4 sm:px-4 md:px-8 lg:px-8 border-b fixed top-0 left-0 right-0 bg-[hsl(var(--background))] z-50">
         <div className="mr-4">
-          <Link to="/dashboard" className="flex space-x-1 items-center">
-            <Logo />
-            <span className="font-bold text-lg tracking-tighter">
-              snapceipt.
-            </span>
-          </Link>
+          <LogoLink />
         </div>
         {/* <Combobox value={email} /> */}
 
@@ -186,6 +183,7 @@ export function ProtectedLayout({ ...props }: ProtectedLayoutProps) {
       <main className="flex-1 space-y-4 p-4 pt-20 sm:p-4 sm:pt-20 md:p-8 md:pt-20 lg:p-8 lg:pt-20">
         {<Outlet />}
       </main>
+      <Toaster duration={10000} />
     </div>
   );
 }

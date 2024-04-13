@@ -4,20 +4,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { UploadIcon } from '@radix-ui/react-icons';
 import { Analytics } from './components/analytics';
 import { Overview } from './components/overview';
+import { Header } from '@/components/header';
 
 interface DashboardProps {}
 
 export function Dashboard({ ...props }: DashboardProps) {
   return (
     <>
-      <div className="flex items-center justify-between flex-wrap gap-4">
-        <h2 className="text-2xl font-bold tracking-tight">Dashboard</h2>
-        <Button asChild>
-          <Link to="/upload">
-            <UploadIcon className="mr-2 h-4 w-4" /> Upload receipt
-          </Link>
-        </Button>
-      </div>
+      <Header
+        title="Dashboard"
+        actions={
+          <Button asChild>
+            <Link to="/upload">
+              <UploadIcon className="mr-2 h-4 w-4" />
+              Upload receipt
+            </Link>
+          </Button>
+        }
+      />
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
