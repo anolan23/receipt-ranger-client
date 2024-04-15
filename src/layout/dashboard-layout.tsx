@@ -47,11 +47,12 @@ export function DashboardLayout({
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
           <Link
-            to="/dashboard-test"
+            to="/dashboard-test/scanner"
             className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
           >
-            <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
-            <span className="sr-only">Acme Inc</span>
+            <ScanText className="h-4 w-4 transition-all group-hover:scale-110" />
+            {/* <Package2 className="h-4 w-4 transition-all group-hover:scale-110" /> */}
+            <span className="sr-only">Scanceipt</span>
           </Link>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -129,10 +130,11 @@ export function DashboardLayout({
             <SheetContent side="left" className="sm:max-w-xs">
               <nav className="grid gap-6 text-lg font-medium">
                 <Link
-                  to="#"
+                  to="/dashboard-test/scanner"
                   className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
                 >
-                  <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
+                  {/* <Package2 className="h-5 w-5 transition-all group-hover:scale-110" /> */}
+                  <ScanText className="h-5 w-5 transition-all group-hover:scale-110" />
                   <span className="sr-only">Acme Inc</span>
                 </Link>
                 <Link
@@ -174,7 +176,7 @@ export function DashboardLayout({
                   to="#"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
-                  <LineChart className="h-5 w-5" />
+                  <Settings className="h-5 w-5" />
                   Settings
                 </Link>
               </nav>
