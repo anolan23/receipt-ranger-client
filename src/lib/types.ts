@@ -1,5 +1,5 @@
 export type ReceiptData = {
-  id: number;
+  id: string;
   created_at: string;
   updated_at: string;
   object_key: string | null;
@@ -9,6 +9,7 @@ export type ReceiptData = {
   transaction_date: string | null;
   user_id: number | null;
   ocr_text: string | null;
+  items: ItemData[] | null;
 };
 
 type MerchantData = {
@@ -73,6 +74,7 @@ export type MonthySpendingData = {
 
 export type SpendingOverviewResult = {
   current_month_spend: string;
+  previous_month_spend: string;
   forecasted_spend: string;
   comparison: string;
   goal_budget: string | null;

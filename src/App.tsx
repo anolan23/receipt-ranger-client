@@ -13,6 +13,10 @@ import { ProfileSettings } from './pages/settings/profile-settings';
 import { GoalsSettings } from './pages/settings/goals';
 import { SubscriptionSettings } from './pages/settings/subscription';
 import { MembershipPage } from './pages/membership';
+import { DashboardLayout } from './layout/dashboard-layout';
+import { ReceiptsTestPage } from './pages/dashboard-test/receipts';
+import { ScannerPage } from './pages/scanner';
+import { DashboardTestPage } from './pages/dashboard-test';
 
 function App() {
   return (
@@ -22,6 +26,11 @@ function App() {
         <Route path="signup" element={<SignupPage />} />
         <Route path="confirm" element={<ConfirmPage />} />
         <Route path="membership" element={<MembershipPage />} />
+        <Route path="dashboard-test">
+          <Route index element={<DashboardTestPage />} />
+          <Route path="receipts" element={<ReceiptsTestPage />} />
+          <Route path="scanner" element={<ScannerPage />} />
+        </Route>
         <Route element={<ProtectedLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="receipts" element={<ReceiptsPage />} />

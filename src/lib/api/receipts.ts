@@ -49,7 +49,7 @@ export async function createReceipt(file: File) {
   }
 }
 
-export async function deleteReceipt(receipt_id: number) {
+export async function deleteReceipt(receipt_id: string) {
   await backend.delete(`/receipts/${receipt_id}`);
 }
 

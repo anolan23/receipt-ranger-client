@@ -6,6 +6,7 @@ import {
   RowSelectionState,
   SortingState,
   VisibilityState,
+  createColumnHelper,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -24,9 +25,10 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { CaretSortIcon } from '@radix-ui/react-icons';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { Button } from './ui/button';
 import { Loader } from './loader';
+import { Checkbox } from './ui/checkbox';
 
 type ColumnVisibilty<TData> = {
   [Key in keyof TData]?: boolean;
@@ -64,9 +66,31 @@ export function DataTable<TData>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({ ...initialColumnVisibility });
 
+  const columnHelper = createColumnHelper<TData>();
+  const internalColumns = useMemo(() => {
+    if (selectionType === 'single') {
+      return [
+        columnHelper.display({
+          id: 'selection',
+          cell: ({ row }) => {
+            const toggleRow = row.getToggleSelectedHandler();
+
+            return (
+              <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(checked) => toggleRow(checked)}
+              />
+            );
+          },
+        }),
+        ...columns,
+      ];
+    } else return columns;
+  }, [columns, columnHelper, selectionType]);
+
   const table = useReactTable({
     data,
-    columns,
+    columns: internalColumns,
     enableMultiRowSelection: selectionType === 'multiple',
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

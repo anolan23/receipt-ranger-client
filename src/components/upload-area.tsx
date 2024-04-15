@@ -48,7 +48,7 @@ export function UploadArea({ onFileProcessed }: UploadAreaProps) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="flex flex-col space-y-3 py-4 px-6 shrink-0 items-center justify-center rounded-md border border-dashed"
+      className="flex flex-col space-y-3 py-4 px-6 shrink-0 items-center justify-center rounded-md border border-dashed bg-background"
     >
       <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
         <h3 className="mt-2 text-lg font-semibold">Drag & drop</h3>
@@ -57,7 +57,7 @@ export function UploadArea({ onFileProcessed }: UploadAreaProps) {
           size.
         </p>
         <Button size="sm" onClick={handleClick}>
-          Add receipts
+          Browse for receipts
         </Button>
         <input
           ref={fileInputRef}
