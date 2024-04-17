@@ -3,6 +3,7 @@ import {
   ChevronRight,
   Copy,
   CreditCard,
+  Edit2Icon,
   MoreVertical,
   ReceiptText,
   ScanEye,
@@ -31,12 +32,23 @@ import { ItemData, ReceiptData } from '@/lib/types';
 import { Loader } from './loader';
 import dayjs from 'dayjs';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 
 interface ReceiptCardProps {
+  title?: string;
   receipt?: ReceiptData;
+  className?: string;
+  headerHidden?: boolean;
 }
 
-export function ReceiptCard({ receipt, ...props }: ReceiptCardProps) {
+export function ReceiptCard({
+  receipt,
+  className,
+  headerHidden,
+  title,
+  ...props
+}: ReceiptCardProps) {
   if (!receipt) return <Loader />;
   const transactionDate = dayjs(receipt.transaction_date).format(
     'MMMM D, YYYY'
@@ -44,45 +56,51 @@ export function ReceiptCard({ receipt, ...props }: ReceiptCardProps) {
   const modifiedDateShort = dayjs(receipt.updated_at).format('YYYY-MM-DD');
   const modifiedDate = dayjs(receipt.updated_at).format('MMMM D, YYYY');
   return (
-    <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
-      <CardHeader className="flex flex-row items-start bg-muted/50 gap-2">
-        <div className="grid gap-0.5">
-          <CardTitle className="group flex items-center gap-2 text-lg overflow-hidden">
-            <div className="truncate flex-1">Receipt {receipt.id}</div>
-            <Button
-              size="icon"
-              variant="outline"
-              className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
-            >
-              <Copy className="h-3 w-3" />
-              <span className="sr-only">Copy Receipt ID</span>
-            </Button>
-          </CardTitle>
-          <CardDescription>{`Date: ${transactionDate}`}</CardDescription>
-        </div>
-        <div className="ml-auto flex items-center gap-1">
-          <Button size="sm" variant="outline" className="h-8 gap-1">
-            <ReceiptText className="h-3.5 w-3.5" />
-            <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-              View Receipt
-            </span>
-          </Button>
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="outline" className="h-8 w-8">
-                <MoreVertical className="h-3.5 w-3.5" />
-                <span className="sr-only">More</span>
+    <Card className={cn('overflow-hidden', className)}>
+      {!headerHidden && (
+        <CardHeader className="flex flex-row items-start bg-muted/50 gap-2">
+          <div className="grid gap-0.5">
+            <CardTitle className="group flex items-center gap-2 text-lg overflow-hidden">
+              <div className="truncate flex-1">Receipt {receipt.id}</div>
+              <Button
+                size="icon"
+                variant="outline"
+                className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
+              >
+                <Copy className="h-3 w-3" />
+                <span className="sr-only">Copy Receipt ID</span>
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Export</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Trash</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </CardHeader>
+            </CardTitle>
+            <CardDescription>{`Date: ${transactionDate}`}</CardDescription>
+          </div>
+          <div className="ml-auto flex items-center gap-1">
+            <Button size="sm" variant="outline" asChild>
+              <Link
+                to={`/dashboard/receipts/${receipt.id}`}
+                className="h-8 gap-1"
+              >
+                <Edit2Icon className="h-3.5 w-3.5" />
+                <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                  Edit Receipt
+                </span>
+              </Link>
+            </Button>
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="outline" className="h-8 w-8">
+                  <MoreVertical className="h-3.5 w-3.5" />
+                  <span className="sr-only">More</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>Export</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Trash</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </CardHeader>
+      )}
       <CardContent className="p-6 text-sm">
         <div className="grid gap-3">
           <div className="font-semibold">Line Items</div>

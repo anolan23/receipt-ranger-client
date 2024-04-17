@@ -2,10 +2,12 @@ import { BarSeries, Datum } from '@/components/charts/interfaces';
 import { NivoBarChart } from '@/components/charts/nivo-bar-chart';
 import { DateRangePicker } from '@/components/date-range-picker';
 import { Select } from '@/components/select';
+import SmartBreadcrumb from '@/components/smart-breadcrumb';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useSpendingExplorer } from '@/hooks/use-spending-explorer';
+import { DashboardLayout } from '@/layout/dashboard-layout';
 import {
   SpendingExplorerCategoryResult,
   SpendingExplorerResult,
@@ -62,7 +64,7 @@ const formatDate = (date: Date, granularity: Granularity): string => {
     : '';
 };
 
-export function Analytics({ ...props }: AnalyticsProps) {
+export function AnalyticsPage({ ...props }: AnalyticsProps) {
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date(),
@@ -160,111 +162,122 @@ export function Analytics({ ...props }: AnalyticsProps) {
   }, [dateRange?.from, dateRange?.to, granularity]);
 
   return (
-    <>
-      <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr_300px]">
-        <Card className=" min-w-0">
-          <CardHeader>
-            <CardTitle>Spending explorer</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <NivoBarChart
-              className="h-[250px] sm:h-[400px]"
-              loading={isLoading}
-              series={series}
-              hideFilter
-              groupMode={groupMode}
-              label={(d) => `$${d.value}`}
-              margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
-              gridYValues={5}
-              axisLeft={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                truncateTickAt: 0,
-                tickValues: 5,
-              }}
-              axisBottom={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                truncateTickAt: 30,
-                format: (val) => {
-                  return timeScaleTicks.includes(
-                    formatDate(new Date(val), granularity)
-                  )
-                    ? formatDate(new Date(val), granularity)
-                    : '';
-                },
-              }}
-            />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex-col space-y-4 sm:flex md:order-2">
-              <div className="grid gap-2">
-                <Label>Date range</Label>
-                <DateRangePicker
-                  className="w-full"
-                  dateRange={dateRange}
-                  onRangeSelect={setDateRange}
-                />
-                <p className="text-[0.8rem] text-muted-foreground">
-                  Displaying year to date
-                </p>
-              </div>
-              <div className="grid gap-2">
-                <Label>Granularity</Label>
-                <Select
-                  placeholder="Choose granularity"
-                  items={[
-                    { label: 'Daily', value: 'daily' },
-                    { label: 'Monthly', value: 'monthly' },
-                  ]}
-                  value={granularity}
-                  onValueChange={(value) => {
-                    if (!isGranularity(value)) return;
-                    setGranularity(value);
+    <DashboardLayout
+      breadcrumbs={<SmartBreadcrumb />}
+      content={
+        <>
+          <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr_300px]">
+            <Card className=" min-w-0">
+              <CardHeader>
+                <CardTitle>Receipts Explorer</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <NivoBarChart
+                  className="h-[250px] sm:h-[400px]"
+                  loading={isLoading}
+                  series={series}
+                  hideFilter
+                  groupMode={groupMode}
+                  label={(d) => `$${d.value}`}
+                  margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
+                  gridYValues={5}
+                  axisLeft={{
+                    tickSize: 5,
+                    tickPadding: 5,
+                    tickRotation: 0,
+                    truncateTickAt: 0,
+                    tickValues: 5,
+                  }}
+                  axisBottom={{
+                    tickSize: 5,
+                    tickPadding: 5,
+                    tickRotation: 0,
+                    truncateTickAt: 30,
+                    format: (val) => {
+                      return timeScaleTicks.includes(
+                        formatDate(new Date(val), granularity)
+                      )
+                        ? formatDate(new Date(val), granularity)
+                        : '';
+                    },
                   }}
                 />
-              </div>
-              <div className="grid gap-2">
-                <Label>Dimension</Label>
-                <Select
-                  placeholder="Choose Dimension"
-                  items={[
-                    { label: 'None', value: 'none' },
-                    { label: 'Category', value: 'category' },
-                  ]}
-                  value={dimension}
-                  onValueChange={(value) => {
-                    if (!isDimension(value)) return;
-                    setDimension(value);
-                  }}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label>Group mode</Label>
-                <ToggleGroup
-                  type="single"
-                  className="justify-start"
-                  value={groupMode}
-                  onValueChange={(value: GroupMode) => {
-                    setGroupMode(value);
-                  }}
-                >
-                  <ToggleGroupItem value="stacked" aria-label="Toggle stacked">
-                    {/* <BarChartIcon className="h-4 w-4" /> */}Stacked
-                  </ToggleGroupItem>
-                  <ToggleGroupItem value="grouped" aria-label="Toggle grouped">
-                    {/* <BarChartIcon className="h-4 w-4" /> */}Grouped
-                  </ToggleGroupItem>
-                </ToggleGroup>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex-col space-y-4 sm:flex md:order-2">
+                  <div className="grid gap-2">
+                    <Label>Date range</Label>
+                    <DateRangePicker
+                      className="w-full"
+                      dateRange={dateRange}
+                      onRangeSelect={setDateRange}
+                    />
+                    <p className="text-[0.8rem] text-muted-foreground">
+                      Displaying year to date
+                    </p>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Granularity</Label>
+                    <Select
+                      placeholder="Choose granularity"
+                      items={[
+                        { label: 'Daily', value: 'daily' },
+                        { label: 'Monthly', value: 'monthly' },
+                      ]}
+                      value={granularity}
+                      onValueChange={(value) => {
+                        if (!isGranularity(value)) return;
+                        setGranularity(value);
+                      }}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Dimension</Label>
+                    <Select
+                      placeholder="Choose Dimension"
+                      items={[
+                        { label: 'None', value: 'none' },
+                        { label: 'Category', value: 'category' },
+                      ]}
+                      value={dimension}
+                      onValueChange={(value) => {
+                        if (!isDimension(value)) return;
+                        setDimension(value);
+                      }}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Group mode</Label>
+                    <ToggleGroup
+                      type="single"
+                      className="justify-start"
+                      value={groupMode}
+                      onValueChange={(value: GroupMode) => {
+                        setGroupMode(value);
+                      }}
+                    >
+                      <ToggleGroupItem
+                        value="stacked"
+                        aria-label="Toggle stacked"
+                      >
+                        {/* <BarChartIcon className="h-4 w-4" /> */}Stacked
+                      </ToggleGroupItem>
+                      <ToggleGroupItem
+                        value="grouped"
+                        aria-label="Toggle grouped"
+                      >
+                        {/* <BarChartIcon className="h-4 w-4" /> */}Grouped
+                      </ToggleGroupItem>
+                    </ToggleGroup>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </>
+      }
+    />
   );
 }

@@ -54,7 +54,7 @@ export function MonthlySpendingCard({
     return Object.values(groupedData);
   }, [monthlySpending]);
   return (
-    <Card className="min-w-0 md:col-span-1 lg:col-span-4">
+    <Card className="min-w-0 md:col-span-1">
       <CardHeader>
         <CardTitle>Monthly Totals ($)</CardTitle>
       </CardHeader>

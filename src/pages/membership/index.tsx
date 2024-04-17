@@ -7,8 +7,8 @@ import { ArrowLeftIcon } from '@radix-ui/react-icons';
 
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useUser } from '@/hooks/use-user';
+import { ScanLogo } from '@/components/scan-logo';
 import { Logo } from '@/components/logo';
-import { LogoLink } from '@/components/logo-link';
 
 interface MembershipPageProps {}
 
@@ -52,7 +52,7 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
       <header className="p-5 sm:p-6 flex flex-col items-center space-y-8 sm:space-y-10">
         <nav className="flex justify-between items-center w-full">
           <div className="flex space-x-1 items-center">
-            <LogoLink />
+            <Logo />
           </div>
           <div>
             <Button variant="link" asChild>

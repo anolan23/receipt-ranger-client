@@ -31,8 +31,10 @@ import {
   Users2,
 } from 'lucide-react';
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import placeHolderUser from '@/assets/user.webp';
+import { signOutUser } from '@/lib/api/auth';
+import { clearSWRCache } from '@/lib/utils';
 
 interface DashboardLayoutProps {
   breadcrumbs?: ReactNode;
@@ -42,12 +44,23 @@ export function DashboardLayout({
   breadcrumbs,
   content,
 }: DashboardLayoutProps) {
+  const navigate = useNavigate();
+
+  const handleLogoutSelect = async function () {
+    try {
+      await signOutUser();
+      clearSWRCache();
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
           <Link
-            to="/dashboard-test/scanner"
+            to="/dashboard/scanner"
             className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
           >
             <ScanText className="h-4 w-4 transition-all group-hover:scale-110" />
@@ -56,7 +69,7 @@ export function DashboardLayout({
           </Link>
           <Tooltip>
             <TooltipTrigger asChild>
-              <DashboardLink to="/dashboard-test" end>
+              <DashboardLink to="/dashboard" end>
                 <Home className="h-5 w-5" />
                 <span className="sr-only">Dashboard</span>
               </DashboardLink>
@@ -65,7 +78,7 @@ export function DashboardLayout({
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <DashboardLink to="/dashboard-test/receipts">
+              <DashboardLink to="/dashboard/receipts">
                 <ReceiptText className="h-5 w-5" />
                 <span className="sr-only">Receipts</span>
               </DashboardLink>
@@ -74,7 +87,7 @@ export function DashboardLayout({
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <DashboardLink to="/dashboard-test/scanner">
+              <DashboardLink to="/dashboard/scanner">
                 <ScanText className="h-5 w-5" />
                 <span className="sr-only">Scanner</span>
               </DashboardLink>
@@ -83,7 +96,7 @@ export function DashboardLayout({
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <DashboardLink to="/dashboard-test/analytics">
+              <DashboardLink to="/dashboard/analytics">
                 <LineChart className="h-5 w-5" />
                 <span className="sr-only">Analytics</span>
               </DashboardLink>
@@ -107,7 +120,7 @@ export function DashboardLayout({
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                to="/dashboard-test/settings"
+                to="/dashboard/settings"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Settings className="h-5 w-5" />
@@ -130,7 +143,7 @@ export function DashboardLayout({
             <SheetContent side="left" className="sm:max-w-xs">
               <nav className="grid gap-6 text-lg font-medium">
                 <Link
-                  to="/dashboard-test/scanner"
+                  to="/dashboard/scanner"
                   className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
                 >
                   {/* <Package2 className="h-5 w-5 transition-all group-hover:scale-110" /> */}
@@ -159,7 +172,7 @@ export function DashboardLayout({
                   Scanner
                 </Link>
                 <Link
-                  to="/dashboard-test/analytics"
+                  to="/dashboard/analytics"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
                   <LineChart className="h-5 w-5" />
@@ -210,10 +223,14 @@ export function DashboardLayout({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/dashboard/settings">Settings</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onSelect={handleLogoutSelect}>
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>

@@ -1,4 +1,3 @@
-import { ReceiptItem } from '@/components/receipt-item';
 import {
   Card,
   CardContent,
@@ -7,7 +6,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { ReceiptData } from '@/lib/types';
-import { ReceiptsTable } from '@/pages/receipts/components/receipts-table';
+import { ReceiptsTable } from './receipts-table';
 
 interface RecentReceiptsCardProps {
   receipts?: ReceiptData[];
@@ -20,7 +19,7 @@ export function RecentReceiptsCard({
   ...props
 }: RecentReceiptsCardProps) {
   return (
-    <Card className="min-w-0 md:col-span-1 lg:col-span-3">
+    <Card className="min-w-0 md:col-span-1">
       <CardHeader>
         <CardTitle>Recent Receipts</CardTitle>
         <CardDescription>
@@ -28,9 +27,6 @@ export function RecentReceiptsCard({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
-        {/* {receipts?.map((receipt) => (
-          <ReceiptItem key={receipt.id} receipt={receipt} />
-        ))} */}
         <ReceiptsTable
           data={receipts || []}
           variant="embedded"

@@ -8,8 +8,8 @@ import {
 import { SelectProps as RadixSelectProps } from '@radix-ui/react-select';
 
 type SelectItemDefinition = {
-  value: string;
   label: string;
+  value: string;
 };
 
 interface SelectProps extends RadixSelectProps {
@@ -21,7 +21,9 @@ export function Select({ items, placeholder, ...props }: SelectProps) {
   return (
     <SelectPrimitive {...props}>
       <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={placeholder}>
+          {items.find((item) => item.value === props.value)?.label}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {items.map((item) => (

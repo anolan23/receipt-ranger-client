@@ -34,6 +34,13 @@ export type ItemData = {
   total_price: string | null;
 };
 
+export type CategoryData = {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  label: string;
+};
+
 export type GoalData = {
   id: number;
   created_at: string;

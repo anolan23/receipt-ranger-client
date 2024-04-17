@@ -5,6 +5,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { ActionsDropdown } from '../receipts/components/actions-dropdown';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface ReceiptsTableProps
   extends Omit<DataTableProps<ReceiptData>, 'columns'> {}
@@ -12,45 +13,26 @@ interface ReceiptsTableProps
 export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
   const columnHelper = createColumnHelper<ReceiptData>();
   const columns = [
-    // columnHelper.display({
-    //   id: 'select',
-    //   header: ({ table }) => (
-    //     <Checkbox
-    //       checked={
-    //         table.getIsAllPageRowsSelected() ||
-    //         (table.getIsSomePageRowsSelected() && 'indeterminate')
-    //       }
-    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-    //       aria-label="Select all"
-    //     />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <Checkbox
-    //       checked={row.getIsSelected()}
-    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-    //       aria-label="Select row"
-    //     />
-    //   ),
-    //   enableSorting: false,
-    //   enableHiding: false,
-    // }),
-    columnHelper.accessor('merchant.name', {
-      id: 'merchant',
-      header: 'Merchant',
+    columnHelper.accessor('id', {
+      id: 'id',
+      header: 'Receipt Id',
       cell: (info) => {
         const receipt = info.row.original;
         return (
-          // <div className="flex items-center space-x-3">
-          //   <Avatar className="h-8 w-8">
-          //     <AvatarImage src={receipt.merchant.logo_url || undefined} />
-          //     <AvatarFallback></AvatarFallback>
-          //   </Avatar>
-          //   <Link to={`/receipts/${receipt.id}`}>{info.getValue()}</Link>
-          // </div>
-          // <Link to={`/receipts/${receipt.id}`}>{info.getValue()}</Link>
-          <div className="font-medium">{info.getValue()}</div>
+          <Button asChild variant="link" className="whitespace-normal">
+            <Link to={`/dashboard/receipts/${receipt.id}`}>
+              {info.getValue()}
+            </Link>
+          </Button>
         );
       },
+      enableSorting: false,
+    }),
+
+    columnHelper.accessor('merchant.name', {
+      id: 'merchant',
+      header: 'Merchant',
+      
       enableSorting: false,
     }),
     columnHelper.accessor('transaction_date', {

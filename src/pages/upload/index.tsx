@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Loader } from '@/components/loader';
 import { Header } from '@/components/header';
 import { Card, CardContent } from '@/components/ui/card';
+import CameraCapture from '@/components/camera-capture';
 
 interface UploadPageProps {}
 

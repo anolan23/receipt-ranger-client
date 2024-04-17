@@ -19,6 +19,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import CameraCapture from '@/components/camera-capture';
 
 interface ScannerPageProps {}
 
@@ -58,7 +59,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/dashboard-test">Dashboard</Link>
+                <Link to="/dashboard">Dashboard</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -117,6 +118,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
               );
             })}
           </div>
+          <CameraCapture />
         </div>
       }
     />

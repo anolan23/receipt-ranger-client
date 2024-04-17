@@ -21,12 +21,12 @@ export function SettingsPage({ ...props }: SettingsPageProps) {
           <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
             <aside className="lg:w-1/5 lg:max-w-[250px]">
               <nav className="flex gap-2 flex-wrap lg:flex-col lg:space-x-0 lg:space-y-1">
-                <NavButton to="/dashboard-test/settings">Profile</NavButton>
-                <NavButton to="/dashboard-test/settings/goals">Goals</NavButton>
-                <NavButton to="/dashboard-test/settings/subscription">
+                <NavButton to="/dashboard/settings">Profile</NavButton>
+                <NavButton to="/dashboard/settings/goals">Goals</NavButton>
+                <NavButton to="/dashboard/settings/subscription">
                   Subscription
                 </NavButton>
-                <NavButton to="/dashboard-test/settings/appearance">
+                <NavButton to="/dashboard/settings/appearance">
                   Appearance
                 </NavButton>
               </nav>

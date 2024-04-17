@@ -6,6 +6,7 @@ import './index.css';
 import './lib/amplify-config.ts';
 import { ThemeProvider } from './components/context/theme-context.tsx';
 import { TooltipProvider } from './components/ui/tooltip.tsx';
+import { Toaster } from '@/components/ui/sonner';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <TooltipProvider>
         <BrowserRouter>
           <App />
+          <Toaster />
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>

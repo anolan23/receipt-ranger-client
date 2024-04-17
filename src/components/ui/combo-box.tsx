@@ -52,7 +52,7 @@ export function Combobox({ value, onValueChange }: ComboboxProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="min-w-[250px] justify-between"
+          className="flex w-full justify-between"
         >
           {value}
           {/* {value

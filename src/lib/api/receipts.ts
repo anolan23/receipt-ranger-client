@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { backend } from '../backend';
 import { ItemData, MonthySpendingData, ReceiptData } from '../types';
+import {
+  EditReceiptFormValues,
+  ItemUpdatePayload,
+} from '@/pages/dashboard/receipts/[receiptId]/edit/interfaces';
 
 interface GetReceiptsParams {
   limit?: number;
@@ -47,6 +51,15 @@ export async function createReceipt(file: File) {
     }
     throw error;
   }
+}
+
+type UpdateReceiptData = Partial<EditReceiptFormValues>;
+export async function updateReceipt(
+  receiptId: string,
+  updates: UpdateReceiptData
+) {
+  const response = await backend.put(`/receipts/${receiptId}`, updates);
+  return response.data;
 }
 
 export async function deleteReceipt(receipt_id: string) {

@@ -18,7 +18,7 @@ interface SmartBreadcrumbProps {
   excludedPathname?: string;
 }
 const SmartBreadcrumb = ({
-  excludedPathname = 'dashboard-test',
+  excludedPathname = 'dashboard',
 }: SmartBreadcrumbProps) => {
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x);
@@ -31,7 +31,7 @@ const SmartBreadcrumb = ({
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/dashboard-test">Dashboard</Link>
+            <Link to="/dashboard">Dashboard</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {filteredPathnames.map((name, index) => {

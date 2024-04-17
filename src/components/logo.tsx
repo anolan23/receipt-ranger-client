@@ -1,15 +1,15 @@
-import LogoSVG from '@/assets/logo.svg?react';
+import { Link } from 'react-router-dom';
+import { ScanLogo } from './scan-logo';
 
 interface LogoProps {
-  size?: number;
   fill?: string;
 }
 
-export function Logo({
-  size = 24,
-  fill = 'hsl(var(--foreground))',
-
-  ...props
-}: LogoProps) {
-  return <LogoSVG fill={fill} width={size} height={size} stroke={fill} />;
+export function Logo({ fill, ...props }: LogoProps) {
+  return (
+    <div className="flex space-x-2 items-center">
+      <ScanLogo fill={fill} />
+      <span className="font-bold tracking-tighter">snapceipt.</span>
+    </div>
+  );
 }
