@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import {
   SelectContent,
   SelectItem,
@@ -17,21 +18,23 @@ interface SelectProps extends RadixSelectProps {
   placeholder?: string;
 }
 
-export function Select({ items, placeholder, ...props }: SelectProps) {
-  return (
-    <SelectPrimitive {...props}>
-      <SelectTrigger>
-        <SelectValue placeholder={placeholder}>
-          {items.find((item) => item.value === props.value)?.label}
-        </SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        {items.map((item) => (
-          <SelectItem key={item.value} value={item.value}>
-            {item.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </SelectPrimitive>
-  );
-}
+export const Select = forwardRef<HTMLButtonElement, SelectProps>(
+  ({ items, placeholder, ...props }, ref) => {
+    return (
+      <SelectPrimitive {...props}>
+        <SelectTrigger ref={ref}>
+          <SelectValue placeholder={placeholder}>
+            {items.find((item) => item.value === props.value)?.label}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {items.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </SelectPrimitive>
+    );
+  }
+);

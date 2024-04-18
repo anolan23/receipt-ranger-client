@@ -3,6 +3,7 @@ import {
   ColumnFiltersState,
   Table as ITable,
   OnChangeFn,
+  Row,
   RowSelectionState,
   SortingState,
   VisibilityState,
@@ -45,6 +46,13 @@ export interface DataTableProps<TData> {
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   filter?: (table: ITable<TData>) => ReactNode;
   footerControls?: (table: ITable<TData>) => ReactNode;
+  getRowId?:
+    | ((
+        originalRow: TData,
+        index: number,
+        parent?: Row<TData> | undefined
+      ) => string)
+    | undefined;
 }
 
 export function DataTable<TData>({
@@ -58,6 +66,7 @@ export function DataTable<TData>({
   onRowSelectionChange,
   filter,
   footerControls,
+  getRowId,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -100,6 +109,7 @@ export function DataTable<TData>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    getRowId,
 
     state: {
       rowSelection,

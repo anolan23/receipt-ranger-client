@@ -35,7 +35,6 @@ export const LineItemsEditor = <T,>({
   const renderRowControls = function (item: T, itemIndex: number) {
     return definition.map((def, index) => {
       const key = `${itemIndex}-${index}`;
-      console.log(key);
       return (
         <FormField
           key={key}

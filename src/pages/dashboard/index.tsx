@@ -50,6 +50,7 @@ export function DashboardPage() {
       ((current_month_spend - previous_month_spend) / previous_month_spend) *
         100
     );
+    if (Number.isNaN(percent)) return 'More data needed';
     const sign = percent >= 0 ? '+' : '';
     return `${sign}${percent}% from last month`;
   };
@@ -75,6 +76,7 @@ export function DashboardPage() {
     forecasted_spend && current_month_spend
       ? getPercentDiff(+forecasted_spend, +current_month_spend)
       : 0;
+
   return (
     <DashboardLayout
       breadcrumbs={

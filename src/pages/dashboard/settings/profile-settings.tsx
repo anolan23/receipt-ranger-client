@@ -60,7 +60,6 @@ export function ProfileSettings({ ...props }: ProfileSettingsProps) {
           phone_number: values.phone,
         },
       });
-      console.log(attributes);
       toast('Profile updated');
     } catch (error) {
       console.error(error);

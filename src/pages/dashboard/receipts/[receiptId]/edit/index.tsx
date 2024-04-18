@@ -5,7 +5,7 @@ import { useReceipt } from '@/hooks/use-receipt';
 import { useReceiptItems } from '@/hooks/use-receipt-items';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { ChevronLeft } from 'lucide-react';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { LineItemsCard } from './components/line-items-card';
@@ -30,17 +30,18 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
   const { data: items } = useReceiptItems(receiptId);
   const { data: categories } = useCategories();
 
-  const transformItemToUpdatePayload = function (
-    item: ItemData
-  ): ItemUpdatePayload {
-    return {
-      name: item.generated_item_name || '',
-      item_id: item.id || undefined,
-      category_id: item.category_id || undefined,
-      quantity: item.quantity || undefined,
-      price: item.total_price || undefined,
-    };
-  };
+  const transformItemToUpdatePayload = useCallback(
+    (item: ItemData): ItemUpdatePayload => {
+      return {
+        name: item.generated_item_name || '',
+        item_id: item.id || undefined,
+        category_id: item.category_id || undefined,
+        quantity: item.quantity || undefined,
+        price: item.total_price || undefined,
+      };
+    },
+    []
+  );
 
   const defaultValues = useMemo<EditReceiptFormValues>(() => {
     return {
@@ -53,7 +54,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
       merchant_logo_url: receipt?.merchant.logo_url || '',
       merchant_name: receipt?.merchant.name || '',
     };
-  }, [receipt, items]);
+  }, [receipt, items, transformItemToUpdatePayload]);
 
   const form = useForm<EditReceiptFormValues>({
     defaultValues,
@@ -69,7 +70,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
     try {
       if (!receipt?.id) return;
       const result = await updateReceipt(receipt.id, values);
-      toast('Receipt updated');
+      toast.success('Receipt updated');
     } catch (error) {
       console.error(error);
       toast.error('Failed to update Receipt');

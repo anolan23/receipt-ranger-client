@@ -6,12 +6,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  useFieldArray,
+  useFormContext,
+} from 'react-hook-form';
 import { CategoryData, ItemData, ReceiptData } from '@/lib/types';
 import { LineItemsEditor } from './line-items-editor';
 import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/data-table';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Trash2Icon } from 'lucide-react';
@@ -29,7 +33,15 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
     control,
     name: 'items',
   });
-  const columnHelper = createColumnHelper<ItemUpdatePayload>();
+
+  const columnHelper = useMemo(
+    () =>
+      createColumnHelper<
+        FieldArrayWithId<EditReceiptFormValues, 'items', 'id'>
+      >(),
+    []
+  );
+
   const columns = useMemo(() => {
     return [
       columnHelper.accessor('name', {
@@ -40,15 +52,13 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
               control={control}
               name={`items.${row.index}.name`}
               render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="Item name"
-                      value={field.value || ''}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
+                <Input
+                  type="text"
+                  placeholder="Item name"
+                  value={field.value || ''}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                />
               )}
             />
           );
@@ -64,21 +74,25 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
               name={`items.${row.index}.category_id`}
               render={({ field }) => {
                 return (
-                  <Select
-                    placeholder="Select category"
-                    items={
-                      categories?.map((cat) => {
-                        return {
-                          label: cat.label,
-                          value: cat.id.toString(),
-                        };
-                      }) || []
-                    }
-                    value={field.value?.toString() || undefined}
-                    onValueChange={(value) =>
-                      field.onChange(value ? +value : undefined)
-                    }
-                  />
+                  <FormItem>
+                    <FormControl>
+                      <Select
+                        placeholder="Select category"
+                        items={
+                          categories?.map((cat) => {
+                            return {
+                              label: cat.label,
+                              value: cat.id.toString(),
+                            };
+                          }) || []
+                        }
+                        value={field.value?.toString() || undefined}
+                        onValueChange={(value) =>
+                          field.onChange(value ? +value : undefined)
+                        }
+                      />
+                    </FormControl>
+                  </FormItem>
                 );
               }}
             />
@@ -94,12 +108,16 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
               control={control}
               name={`items.${row.index}.quantity`}
               render={({ field }) => (
-                <Input
-                  type="number"
-                  value={field.value}
-                  onChange={field.onChange}
-                  min={1}
-                />
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      value={field.value}
+                      onChange={field.onChange}
+                      min={1}
+                    />
+                  </FormControl>
+                </FormItem>
               )}
             />
           );
@@ -114,13 +132,17 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
               control={control}
               name={`items.${row.index}.price`}
               render={({ field }) => (
-                <Input
-                  type="number"
-                  step="0.01"
-                  min={0}
-                  value={field.value || ''}
-                  onChange={field.onChange}
-                />
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      min={0}
+                      value={field.value || ''}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
               )}
             />
           );
@@ -134,7 +156,9 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
           return (
             <Button
               type="button"
-              onClick={() => remove(row.index)}
+              onClick={() => {
+                remove(row.index);
+              }}
               variant="outline"
               size="icon"
               className="h-7 w-7"
@@ -147,8 +171,7 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
         size: 30,
       }),
     ];
-  }, [columnHelper, control, categories, remove]);
-
+  }, [control, categories, remove, columnHelper]);
   return (
     <Card>
       <CardHeader>
@@ -158,7 +181,12 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
         </CardDescription> */}
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={fields || []} variant="embedded" />
+        <DataTable
+          columns={columns}
+          data={fields}
+          variant="embedded"
+          getRowId={(originalRow) => originalRow.id}
+        />
       </CardContent>
       <CardFooter className="justify-center border-t p-4">
         <Button
