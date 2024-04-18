@@ -14,7 +14,7 @@ import { ProfileSettings } from './pages/dashboard/settings/profile-settings';
 import { GoalsSettings } from './pages/dashboard/settings/goals';
 import { SubscriptionSettings } from './pages/dashboard/settings/subscription';
 import { AppearanceSettings } from './pages/dashboard/settings/appearance';
-import { ReceiptPage } from './pages/dashboard/receipts/[receiptId]/edit';
+import { ReceiptPage } from './pages/dashboard/receipts/[receiptId]';
 
 function App() {
   return (

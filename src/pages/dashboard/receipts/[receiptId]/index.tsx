@@ -1,142 +1,125 @@
-import { DeleteReceiptDialog } from '@/components/delete-receipt-dialog';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import SmartBreadcrumb from '@/components/smart-breadcrumb';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Form } from '@/components/ui/form';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceiptItems } from '@/hooks/use-receipt-items';
-import dayjs from 'dayjs';
-import { toast } from 'sonner';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ReceiptItemsDataTable } from './components/receipt-items-data-table';
-import { ReceiptData } from '@/lib/types';
-import { deleteReceipt } from '@/lib/api/receipts';
-import { useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DashboardLayout } from '@/layout/dashboard-layout';
-import SmartBreadcrumb from '@/components/smart-breadcrumb';
-import { ReceiptCard } from '@/components/receipt-card';
-import { MoreVertical, ReceiptText } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
+import { LineItemsCard } from './components/line-items-card';
+import { MerchantInfoCard } from './components/merchant-info-card';
+import { PaymentInfoCard } from './components/payment-info-card';
+import { ReceiptInfoCard } from './components/receipt-info-card';
+import { StatusCard } from './components/status-card';
+import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
+import { useCategories } from '@/hooks/use-categories';
+import { ItemData } from '@/lib/types';
+import { updateReceipt } from '@/lib/api/receipts';
+import { toast } from 'sonner';
 
 interface ReceiptPageProps {}
 
 export function ReceiptPage({ ...props }: ReceiptPageProps) {
   const { receiptId } = useParams();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [hasOpenDialog, setHasOpenDialog] = useState(false);
 
   const navigate = useNavigate();
 
   const { data: receipt } = useReceipt(receiptId);
   const { data: items } = useReceiptItems(receiptId);
-  const calculatedTotal = useMemo(() => {
-    if (!items) return;
-    return items.reduce((prev, curr) => +(curr.total_price || 0) + prev, 0);
-  }, [items])?.toFixed(2);
+  const { data: categories } = useCategories();
 
-  if (!receipt) return <div>Loading...</div>;
-  const date = dayjs(receipt.transaction_date).format('MMM D, YYYY');
-  const transactionDate = dayjs(receipt.transaction_date).format(
-    'MMMM D, YYYY'
+  const transformItemToUpdatePayload = useCallback(
+    (item: ItemData): ItemUpdatePayload => {
+      return {
+        name: item.generated_item_name || '',
+        item_id: item.id || undefined,
+        category_id: item.category_id || undefined,
+        quantity: item.quantity || undefined,
+        price: item.total_price || undefined,
+      };
+    },
+    []
   );
 
-  function handleDialogItemOpenChange(open: boolean) {
-    if (open === false) {
-      setDropdownOpen(false);
-      //Because of dropdown content exit animation
-      setTimeout(() => setHasOpenDialog(false), 1000);
-    } else {
-      setHasOpenDialog(open);
+  const defaultValues = useMemo<EditReceiptFormValues>(() => {
+    return {
+      transaction_date: receipt?.transaction_date
+        ? new Date(receipt.transaction_date)
+        : undefined,
+      items: items?.map(transformItemToUpdatePayload) || [],
+      receipt_status: '',
+      payment_card_number: '',
+      merchant_logo_url: receipt?.merchant.logo_url || '',
+      merchant_name: receipt?.merchant.name || '',
+    };
+  }, [receipt, items, transformItemToUpdatePayload]);
+
+  const form = useForm<EditReceiptFormValues>({
+    defaultValues,
+  });
+
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [form, defaultValues]);
+
+  if (!receipt) return <div>Loading...</div>;
+
+  async function onSubmit(values: EditReceiptFormValues) {
+    try {
+      if (!receipt?.id) return;
+      const result = await updateReceipt(receipt.id, values);
+      toast.success('Receipt updated');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to update Receipt');
     }
   }
 
-  const handleDeleteSubmit = async function (receipt: ReceiptData) {
-    try {
-      if (!receipt?.id) return;
-      await deleteReceipt(receipt.id);
-      navigate('/receipts');
-      toast('Receipt deleted');
-    } catch (error) {
-      let message = 'Something went wrong';
-      if (error instanceof Error) {
-        message = error.message;
-      }
-      toast.error(message);
-    }
-  };
   return (
     <DashboardLayout
       breadcrumbs={<SmartBreadcrumb />}
       content={
-        <div className="space-y-4">
+        <div className="space-y-4 mx-auto">
           <div className="flex items-center gap-4">
-            <div className="flex items-center space-x-4 overflow-hidden">
-              <h2 className=" text-xl font-semibold tracking-tight truncate">
-                {/* {`${receipt.merchant.name}, ${date} - $${receipt.total_amount}`} */}
-                {`Receipt ${receipt.id}`}
-              </h2>
-            </div>
-            <div className="flex items-center space-x-3 ml-auto">
-              <Button size="sm" variant="outline" asChild>
-                <Link to="edit">Edit Receipt</Link>
+            <Button
+              onClick={() => navigate(-1)}
+              variant="outline"
+              size="icon"
+              className="h-7 w-7"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span className="sr-only">Back</span>
+            </Button>
+            <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight">
+              {`Receipt ${receipt.id}`}
+            </h1>
+            <div className="hidden items-center gap-2 md:ml-auto md:flex">
+              <Button onClick={() => navigate(-1)} variant="outline" size="sm">
+                Cancel
               </Button>
-              <DropdownMenu
-                open={dropdownOpen}
-                onOpenChange={setDropdownOpen}
-                modal={false}
-              >
-                <DropdownMenuTrigger asChild>
-                  <Button size="sm">Receipt actions</Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent hidden={hasOpenDialog}>
-                  <DropdownMenuItem asChild>
-                    <Link to="edit">Edit receipt</Link>
-                  </DropdownMenuItem>
-                  <DeleteReceiptDialog
-                    trigger={
-                      <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                        Delete
-                      </DropdownMenuItem>
-                    }
-                    receipt={receipt}
-                    onDeleteSubmit={handleDeleteSubmit}
-                    onOpenChange={handleDialogItemOpenChange}
-                  />
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button size="sm" form="edit-form" type="submit">
+                Save Receipt
+              </Button>
             </div>
           </div>
-          <Tabs defaultValue="receipt-data" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="receipt-data">Receipt data</TabsTrigger>
-              <TabsTrigger value="ocr-text">OCR text</TabsTrigger>
-            </TabsList>
-            <TabsContent value="receipt-data" className="space-y-4">
-              <ReceiptCard
-                receipt={receipt}
-                headerHidden
-                className="max-w-[500px]"
-              />
-              {/* <div>Calculated Subtotal: ${calculatedTotal}</div> */}
-            </TabsContent>
-            <TabsContent value="ocr-text" className="space-y-4">
-              <Card className="">
-                <CardContent className="p-6">
-                  <pre>
-                    <code className="relative px-[0.3rem] py-[0.2rem] font-mono text-xs">
-                      {receipt.ocr_text}
-                    </code>
-                  </pre>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+          <Form {...form}>
+            <form id="edit-form" onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
+                <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
+                  {/* <MerchantInfoCard /> */}
+                  <LineItemsCard categories={categories} />
+                </div>
+                <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
+                  {/* <StatusCard /> */}
+                  <ReceiptInfoCard />
+                  <MerchantInfoCard />
+                  <PaymentInfoCard />
+                </div>
+              </div>
+            </form>
+          </Form>
         </div>
       }
     />

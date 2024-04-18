@@ -75,7 +75,7 @@ export function DataTable<TData>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({ ...initialColumnVisibility });
 
-  const columnHelper = createColumnHelper<TData>();
+  const columnHelper = useMemo(() => createColumnHelper<TData>(), []);
   const internalColumns = useMemo(() => {
     if (selectionType === 'single') {
       return [

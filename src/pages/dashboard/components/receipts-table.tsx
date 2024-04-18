@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { ActionsDropdown } from '../receipts/components/actions-dropdown';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface ReceiptsTableProps
   extends Omit<DataTableProps<ReceiptData>, 'columns'> {}
@@ -32,7 +33,19 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
     columnHelper.accessor('merchant.name', {
       id: 'merchant',
       header: 'Merchant',
-      
+      cell: (info) => {
+        const value = info.getValue();
+        const logoUrl = info.row.original.merchant.logo_url;
+        return (
+          <div className="flex items-center gap-2">
+            <Avatar>
+              <AvatarImage src={logoUrl || undefined}></AvatarImage>
+              <AvatarFallback>AN</AvatarFallback>
+            </Avatar>
+            <div>{value}</div>
+          </div>
+        );
+      },
       enableSorting: false,
     }),
     columnHelper.accessor('transaction_date', {

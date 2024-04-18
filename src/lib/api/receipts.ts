@@ -4,7 +4,7 @@ import { ItemData, MonthySpendingData, ReceiptData } from '../types';
 import {
   EditReceiptFormValues,
   ItemUpdatePayload,
-} from '@/pages/dashboard/receipts/[receiptId]/edit/interfaces';
+} from '@/pages/dashboard/receipts/[receiptId]/interfaces';
 
 interface GetReceiptsParams {
   limit?: number;

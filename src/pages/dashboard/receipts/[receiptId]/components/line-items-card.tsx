@@ -42,6 +42,17 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
     []
   );
 
+  const selectItems = useMemo(() => {
+    return (
+      categories?.map((cat) => {
+        return {
+          label: cat.label,
+          value: cat.id.toString(),
+        };
+      }) || []
+    );
+  }, [categories]);
+
   const columns = useMemo(() => {
     return [
       columnHelper.accessor('name', {
@@ -67,32 +78,21 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
       }),
       columnHelper.accessor('category_id', {
         header: 'Category',
-        cell: ({ row }) => {
+        cell: ({ row, ...info }) => {
           return (
             <FormField
               control={control}
               name={`items.${row.index}.category_id`}
               render={({ field }) => {
                 return (
-                  <FormItem>
-                    <FormControl>
-                      <Select
-                        placeholder="Select category"
-                        items={
-                          categories?.map((cat) => {
-                            return {
-                              label: cat.label,
-                              value: cat.id.toString(),
-                            };
-                          }) || []
-                        }
-                        value={field.value?.toString() || undefined}
-                        onValueChange={(value) =>
-                          field.onChange(value ? +value : undefined)
-                        }
-                      />
-                    </FormControl>
-                  </FormItem>
+                  <Select
+                    placeholder="Select category"
+                    items={selectItems}
+                    value={field.value?.toString()}
+                    onValueChange={(value) => {
+                      field.onChange(+value);
+                    }}
+                  />
                 );
               }}
             />
@@ -171,7 +171,8 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
         size: 30,
       }),
     ];
-  }, [control, categories, remove, columnHelper]);
+  }, [control, remove, columnHelper, selectItems]);
+
   return (
     <Card>
       <CardHeader>

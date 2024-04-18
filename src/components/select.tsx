@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 import {
   SelectContent,
   SelectItem,
@@ -16,15 +16,20 @@ type SelectItemDefinition = {
 interface SelectProps extends RadixSelectProps {
   items: SelectItemDefinition[];
   placeholder?: string;
+  id?: any;
 }
 
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(
-  ({ items, placeholder, ...props }, ref) => {
+  ({ items, placeholder, id, value, ...props }, ref) => {
+    const selectedItem = useMemo(
+      () => items.find((item) => item.value === value),
+      [items, value]
+    );
     return (
-      <SelectPrimitive {...props}>
-        <SelectTrigger ref={ref}>
+      <SelectPrimitive value={value} {...props}>
+        <SelectTrigger ref={ref} id={id}>
           <SelectValue placeholder={placeholder}>
-            {items.find((item) => item.value === props.value)?.label}
+            {selectedItem?.label || ''}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
