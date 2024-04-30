@@ -113,11 +113,11 @@ export function ReceiptCard({
           <ul className="grid gap-3">
             <li className="flex items-center justify-between">
               <span className="text-muted-foreground">Subtotal</span>
-              <span>$299.00</span>
+              <span>{`$${receipt.subtotal}`}</span>
             </li>
             <li className="flex items-center justify-between">
               <span className="text-muted-foreground">Tax</span>
-              <span>$25.00</span>
+              <span>{`$${receipt.sales_tax}`}</span>
             </li>
             <li className="flex items-center justify-between font-semibold">
               <span className="text-muted-foreground">Total</span>

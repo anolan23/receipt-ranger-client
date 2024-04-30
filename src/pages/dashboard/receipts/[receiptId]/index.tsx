@@ -53,6 +53,9 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
       payment_card_number: '',
       merchant_logo_url: receipt?.merchant.logo_url || '',
       merchant_name: receipt?.merchant.name || '',
+      subtotal: receipt?.subtotal || '',
+      sales_tax: receipt?.sales_tax || '',
+      total: receipt?.total_amount || '',
     };
   }, [receipt, items, transformItemToUpdatePayload]);
 
@@ -63,6 +66,18 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
   useEffect(() => {
     form.reset(defaultValues);
   }, [form, defaultValues]);
+
+  const formValues = form.watch();
+
+  const calculatedSubtotal = useMemo<string>(() => {
+    const { items } = formValues;
+    if (!items?.length) return '0';
+    const sum = items.reduce(
+      (prev, curr) => prev + (curr.price ? +curr.price : 0),
+      0
+    );
+    return sum.toFixed(2);
+  }, [formValues]);
 
   if (!receipt) return <div>Loading...</div>;
 
@@ -107,15 +122,18 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
           <Form {...form}>
             <form id="edit-form" onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
-                <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-                  {/* <MerchantInfoCard /> */}
-                  <LineItemsCard categories={categories} />
-                </div>
                 <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
                   {/* <StatusCard /> */}
                   <ReceiptInfoCard />
                   <MerchantInfoCard />
-                  <PaymentInfoCard />
+                  {/* <PaymentInfoCard /> */}
+                </div>
+                <div className="lg:col-span-2 space-y-2">
+                  {/* <MerchantInfoCard /> */}
+                  <LineItemsCard categories={categories} />
+                  <div className="text-muted-foreground text-sm">
+                    {`Calculated subtotal: $${calculatedSubtotal}`}
+                  </div>
                 </div>
               </div>
             </form>

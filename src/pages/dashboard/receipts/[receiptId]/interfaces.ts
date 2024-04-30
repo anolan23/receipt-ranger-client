@@ -13,4 +13,7 @@ export interface EditReceiptFormValues {
   merchant_logo_url: string;
   merchant_name: string;
   payment_card_number: string;
+  subtotal: string;
+  sales_tax: string;
+  total: string;
 }

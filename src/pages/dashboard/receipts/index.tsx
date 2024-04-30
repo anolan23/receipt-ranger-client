@@ -24,6 +24,7 @@ import { ReceiptsTable } from '../components/receipts-table';
 export function ReceiptsPage() {
   const { data: receipts } = useReceipts();
   const { rowSelection, setRowSelection, selectedRow } = useRowSelection({
+    selectFirstOnMOunt: true,
     data: receipts,
   });
   const { data: receipt } = useReceipt(selectedRow?.id.toString());
@@ -46,48 +47,52 @@ export function ReceiptsPage() {
         </Breadcrumb>
       }
       content={
-        <div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Receipts</CardTitle>
-              <CardDescription>All of your scanned receipts.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ReceiptsTable
-                rowSelection={rowSelection}
-                onRowSelectionChange={setRowSelection}
-                variant="embedded"
-                selectionType={undefined}
-                data={receipts || []}
-                footerControls={(table) => (
-                  <>
-                    <div className="flex-1 text-sm text-muted-foreground">
-                      {table.getFilteredSelectedRowModel().rows.length} of{' '}
-                      {table.getFilteredRowModel().rows.length} row(s) selected.
-                    </div>
-                    <div className="flex items-center justify-end space-x-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                      >
-                        Previous
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </>
-                )}
-              />
-            </CardContent>
-          </Card>
+        <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Receipts</CardTitle>
+                <CardDescription>All of your scanned receipts.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ReceiptsTable
+                  rowSelection={rowSelection}
+                  onRowSelectionChange={setRowSelection}
+                  variant="embedded"
+                  selectionType="single"
+                  data={receipts || []}
+                  footerControls={(table) => (
+                    <>
+                      <div className="flex-1 text-sm text-muted-foreground">
+                        {table.getFilteredSelectedRowModel().rows.length} of{' '}
+                        {table.getFilteredRowModel().rows.length} row(s)
+                        selected.
+                      </div>
+                      <div className="flex items-center justify-end space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => table.previousPage()}
+                          disabled={!table.getCanPreviousPage()}
+                        >
+                          Previous
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => table.nextPage()}
+                          disabled={!table.getCanNextPage()}
+                        >
+                          Next
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                />
+              </CardContent>
+            </Card>
+          </div>
+          <ReceiptCard receipt={receipt} />
         </div>
       }
     />

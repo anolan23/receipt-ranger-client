@@ -7,6 +7,7 @@ import { ActionsDropdown } from '../receipts/components/actions-dropdown';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ReceiptIcon, ReceiptTextIcon } from 'lucide-react';
 
 interface ReceiptsTableProps
   extends Omit<DataTableProps<ReceiptData>, 'columns'> {}
@@ -14,38 +15,66 @@ interface ReceiptsTableProps
 export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
   const columnHelper = createColumnHelper<ReceiptData>();
   const columns = [
-    columnHelper.accessor('id', {
-      id: 'id',
-      header: 'Receipt Id',
-      cell: (info) => {
-        const receipt = info.row.original;
+    // columnHelper.accessor('id', {
+    //   id: 'id',
+    //   header: 'Receipt Id',
+    //   cell: (info) => {
+    //     const receipt = info.row.original;
+    //     return (
+    //       <Button
+    //         asChild
+    //         variant="link"
+    //         className="whitespace-normal text-inherit"
+    //       >
+    //         <Link to={`/dashboard/receipts/${receipt.id}`}>
+    //           {info.getValue()}
+    //         </Link>
+    //       </Button>
+    //     );
+    //   },
+    //   enableSorting: false,
+    // }),
+    columnHelper.display({
+      id: 'action',
+      cell: ({ row }) => {
+        const receipt = row.original;
         return (
-          <Button asChild variant="link" className="whitespace-normal">
+          <Button asChild variant="outline" size="sm">
             <Link to={`/dashboard/receipts/${receipt.id}`}>
-              {info.getValue()}
+              <ReceiptTextIcon className="mr-2 h-4 w-4" />
+              View
             </Link>
           </Button>
         );
       },
       enableSorting: false,
+      enableHiding: false,
+    }),
+    columnHelper.display({
+      id: 'logo',
+      header: 'Logo',
+      cell: ({ row }) => {
+        const logoUrl = row.original.merchant.logo_url;
+        return (
+          // <Avatar>
+          //   <AvatarImage src={logoUrl || undefined}></AvatarImage>
+          //   <AvatarFallback>AN</AvatarFallback>
+          // </Avatar>
+          <div className="w-[64px] h-[64px]">
+            <img
+              className="w-full h-full rounded-md bg-muted p-2 object-cover aspect-square"
+              src={logoUrl || undefined}
+            />
+          </div>
+        );
+      },
+      enableSorting: false,
+      enableHiding: false,
     }),
 
     columnHelper.accessor('merchant.name', {
       id: 'merchant',
       header: 'Merchant',
-      cell: (info) => {
-        const value = info.getValue();
-        const logoUrl = info.row.original.merchant.logo_url;
-        return (
-          <div className="flex items-center gap-2">
-            <Avatar>
-              <AvatarImage src={logoUrl || undefined}></AvatarImage>
-              <AvatarFallback>AN</AvatarFallback>
-            </Avatar>
-            <div>{value}</div>
-          </div>
-        );
-      },
       enableSorting: false,
     }),
     columnHelper.accessor('transaction_date', {
@@ -56,14 +85,14 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       },
       enableSorting: false,
     }),
-    columnHelper.display({
-      id: 'status',
-      header: 'Status',
-      cell: () => {
-        return <Badge variant="outline">Reviewed</Badge>;
-        // return <Badge variant="destructive">Needs review</Badge>;
-      },
-    }),
+    // columnHelper.display({
+    //   id: 'status',
+    //   header: 'Status',
+    //   cell: () => {
+    //     return <Badge variant="outline">Reviewed</Badge>;
+    //     // return <Badge variant="destructive">Needs review</Badge>;
+    //   },
+    // }),
     columnHelper.accessor('total_amount', {
       id: 'total',
       header: 'Total',

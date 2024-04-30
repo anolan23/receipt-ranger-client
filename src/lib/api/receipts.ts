@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { backend } from '../backend';
-import { ItemData, MonthySpendingData, ReceiptData } from '../types';
+import {
+  ItemData,
+  MonthySpendingData,
+  ReceiptData,
+  UseMonthlyTotalsParams,
+} from '../types';
 import {
   EditReceiptFormValues,
   ItemUpdatePayload,
@@ -66,14 +71,10 @@ export async function deleteReceipt(receipt_id: string) {
   await backend.delete(`/receipts/${receipt_id}`);
 }
 
-export async function getMonthlySpending(year?: string | number) {
+export async function getMonthlyTotals(params: UseMonthlyTotalsParams) {
   const response = await backend.get<MonthySpendingData[]>(
     `/receipts/monthly-totals`,
-    year
-      ? {
-          params: { year },
-        }
-      : undefined
+    { params }
   );
   return response.data;
 }

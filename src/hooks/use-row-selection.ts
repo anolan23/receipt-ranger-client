@@ -1,11 +1,15 @@
 import { RowSelectionState } from '@tanstack/react-table';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface UseRowSelectionArgs<TData> {
   data?: TData[];
+  selectFirstOnMOunt?: boolean;
 }
 
-export function useRowSelection<T>({ data }: UseRowSelectionArgs<T>) {
+export function useRowSelection<T>({
+  data,
+  selectFirstOnMOunt,
+}: UseRowSelectionArgs<T>) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const selectedRow = useMemo(() => {
@@ -13,6 +17,12 @@ export function useRowSelection<T>({ data }: UseRowSelectionArgs<T>) {
     if (!index) return;
     return data?.[+index];
   }, [rowSelection, data]);
+
+  useEffect(() => {
+    if (!selectFirstOnMOunt) return;
+    if (!data?.length) return;
+    setRowSelection({ '0': true });
+  }, [data, selectFirstOnMOunt, setRowSelection]);
 
   return { rowSelection, setRowSelection, selectedRow };
 }

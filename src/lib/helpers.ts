@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return '0 Bytes';
 
@@ -8,6 +10,27 @@ export function formatBytes(bytes: number, decimals = 2) {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+}
+
+export const formatDate = (date: Date): string => {
+  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+  return dayjs(date).format('MMM YYYY');
+};
+
+export function getDates(startDate: Date, endDate: Date): Date[] {
+  const dates: Date[] = [];
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    dates.push(new Date(currentDate));
+    currentDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      1
+    );
+  }
+
+  return dates;
 }
 
 export const categoryColors = new Map([

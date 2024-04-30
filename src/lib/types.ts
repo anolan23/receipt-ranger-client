@@ -5,6 +5,8 @@ export type ReceiptData = {
   object_key: string | null;
   merchant_id: string | null;
   merchant: MerchantData;
+  subtotal: string | null;
+  sales_tax: string | null;
   total_amount: string | null;
   transaction_date: string | null;
   user_id: number | null;
@@ -73,12 +75,18 @@ export type UploadFile = {
 };
 
 export type MonthySpendingData = {
-  iso_date: string;
-  month_name: string;
+  month_date: string;
   total: string;
-  year: number;
 };
 
+export type CategoryTotalsResult = {
+  category: string;
+  total: string;
+};
+export type MerchantCountsResult = {
+  merchant: string;
+  count: number;
+};
 export type SpendingOverviewResult = {
   current_month_spend: string;
   previous_month_spend: string;
@@ -87,12 +95,41 @@ export type SpendingOverviewResult = {
   goal_budget: string | null;
   remaining_budget: string | null;
 };
+export type OverviewResult = {
+  avg_receipt_total: string;
+  total_amount: string;
+  receipt_count: number;
+};
 
 export interface SpendingExplorerParams {
   start_date: string;
   end_date: string;
   granularity: 'daily' | 'monthly';
   dimension?: 'category';
+}
+export interface GetOverviewParams {
+  start_date: string;
+  end_date: string;
+}
+
+export interface SpendingExplorerParams {
+  start_date: string;
+  end_date: string;
+  granularity: 'daily' | 'monthly';
+  dimension?: 'category';
+}
+
+export interface UseCategoryTotalsParams {
+  start_date: string;
+  end_date: string;
+}
+export interface UseMerchantCountsParams {
+  start_date: string;
+  end_date: string;
+}
+export interface UseMonthlyTotalsParams {
+  start_date: string;
+  end_date: string;
 }
 
 export type SpendingExplorerResultBase = {
@@ -112,3 +149,14 @@ export type Credentials = {
 };
 
 export type Theme = 'dark' | 'light' | 'system';
+
+export type DatePreset =
+  | '1-day'
+  | '7-days'
+  | 'mtd'
+  | '1-month'
+  | '3-months'
+  | '6-months'
+  | '1-year'
+  | '3-years'
+  | 'ytd';

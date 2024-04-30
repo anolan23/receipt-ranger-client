@@ -1,9 +1,7 @@
-import * as React from 'react';
 import { CalendarIcon } from '@radix-ui/react-icons';
-import { addDays, format } from 'date-fns';
+import { format } from 'date-fns';
 import { DateRange, SelectRangeEventHandler } from 'react-day-picker';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -11,21 +9,29 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { DatePreset } from '@/lib/types';
+import { cn } from '@/lib/utils';
+import { Label } from './ui/label';
+import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
 
-interface DateRangePickerProps {
+interface DateRangePickerPresetProps {
   className?: string;
   dateRange?: DateRange;
+  datePreset?: DatePreset;
   onRangeSelect?: SelectRangeEventHandler;
+  onDatePresetChange?: (preset: DatePreset) => void;
 }
 
-export function DateRangePicker({
+export function DateRangePickerPreset({
   className,
   dateRange = {
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date(),
   },
+  datePreset,
+  onDatePresetChange,
   onRangeSelect,
-}: DateRangePickerProps) {
+}: DateRangePickerPresetProps) {
   return (
     <div className={cn('grid gap-2')}>
       <Popover>
@@ -67,6 +73,25 @@ export function DateRangePicker({
             onSelect={onRangeSelect}
             numberOfMonths={2}
           />
+          <div className="p-4 space-y-2 max-w-[500px]">
+            <Label>Auto-select range (Relative)</Label>
+            <ToggleGroup
+              type="single"
+              value={datePreset}
+              onValueChange={onDatePresetChange}
+              className="flex flex-wrap justify-start"
+            >
+              <ToggleGroupItem value="1-day">1 Day</ToggleGroupItem>
+              <ToggleGroupItem value="7-days">7 Days</ToggleGroupItem>
+              <ToggleGroupItem value="mtd">Month to Date</ToggleGroupItem>
+              <ToggleGroupItem value="1-month">1 Month</ToggleGroupItem>
+              <ToggleGroupItem value="3-months">3 Months</ToggleGroupItem>
+              <ToggleGroupItem value="6-months">6 Months</ToggleGroupItem>
+              <ToggleGroupItem value="1-year">1 Year</ToggleGroupItem>
+              <ToggleGroupItem value="3-years">3 Years</ToggleGroupItem>
+              <ToggleGroupItem value="ytd">Year to Date</ToggleGroupItem>
+            </ToggleGroup>
+          </div>
         </PopoverContent>
       </Popover>
     </div>

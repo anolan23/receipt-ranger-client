@@ -115,6 +115,7 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
                       value={field.value}
                       onChange={field.onChange}
                       min={1}
+                      className="max-w-[75px]"
                     />
                   </FormControl>
                 </FormItem>
@@ -140,6 +141,7 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
                       min={0}
                       value={field.value || ''}
                       onChange={field.onChange}
+                      className="max-w-[75px]"
                     />
                   </FormControl>
                 </FormItem>

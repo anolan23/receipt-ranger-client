@@ -105,15 +105,16 @@ export function NivoBarChart<T extends number | string>({
           motionConfig="stiff"
           indexBy="x"
           margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
+          borderRadius={4}
           padding={0.1}
           valueScale={{ type: 'linear' }}
           valueFormat=">-$.2f"
           indexScale={{ type: 'band', round: true }}
-          colors={{ scheme: 'dark2' }}
+          colors={{ scheme: 'nivo' }}
           theme={{
             text: {
               fontFamily: 'inherit',
-              fontSize: 14,
+              fontSize: 12,
               color: 'inherit',
               fill: 'hsl(var(--foreground))',
             },

@@ -7,10 +7,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { Loader } from './loader';
 
 interface MetricCardProps {
   title: string;
-  value: string | number;
+  value?: string | number;
   description?: string;
   loading?: boolean;
   percent?: number;
@@ -21,23 +22,24 @@ export function MetricCard({
   value,
   description,
   loading,
-  percent = 1,
+  percent,
   ...props
 }: MetricCardProps) {
+  const hasPercentage = typeof percent === 'number';
   return (
     <Card>
       <CardHeader className="pb-2">
         <CardDescription>{title}</CardDescription>
         <CardTitle className="text-4xl">{value}</CardTitle>
       </CardHeader>
-      {description && (
-        <CardContent>
+      <CardContent>
+        {loading ? (
+          <Loader />
+        ) : (
           <div className="text-xs text-muted-foreground">{description}</div>
-        </CardContent>
-      )}
-      <CardFooter>
-        <Progress value={percent} />
-      </CardFooter>
+        )}
+      </CardContent>
+      <CardFooter>{hasPercentage && <Progress value={percent} />}</CardFooter>
     </Card>
   );
 }

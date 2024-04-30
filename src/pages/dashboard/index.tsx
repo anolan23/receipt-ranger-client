@@ -18,7 +18,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useMonthlySpending } from '@/hooks/use-monthly-spending';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
@@ -31,26 +30,18 @@ import { ReceiptsTable } from './components/receipts-table';
 export function DashboardPage() {
   const { data: receipts } = useReceipts({ limit: 5 });
   const { rowSelection, setRowSelection, selectedRow } = useRowSelection({
+    selectFirstOnMOunt: true,
     data: receipts,
   });
   const { data: receipt } = useReceipt(selectedRow?.id.toString());
 
-  const { data: monthlySpending, isLoading: isMonthlySpendingLoading } =
-    useMonthlySpending(new Date().getFullYear());
   const { data: spendingOverview, isLoading: isSpendingOverviewLoading } =
     useSpendingOverview();
 
-  const getMonlthySpendPercentDiff = (
-    current_month_spend: number,
-    previous_month_spend: number
-  ) => {
-    //Percent = (Current Month Spend - Previous Month Spend) / Previous Month Spend * 100
-
-    const percent = Math.round(
-      ((current_month_spend - previous_month_spend) / previous_month_spend) *
-        100
-    );
-    if (Number.isNaN(percent)) return 'More data needed';
+  const getMonlthySpendPercentDiff = (num1: number, num2: number) => {
+    const frac = (num1 - num2) / num2;
+    const percent = Math.round(frac * 100);
+    if (Number.isNaN(percent)) return 'Not enough data';
     const sign = percent >= 0 ? '+' : '';
     return `${sign}${percent}% from last month`;
   };
@@ -59,13 +50,17 @@ export function DashboardPage() {
     return Math.min(Math.round((num1 / num2) * 100), 100);
   };
 
-  useEffect(() => {
-    if (!receipts?.length) return;
-    setRowSelection({ '0': true });
-  }, [receipts, setRowSelection]);
-
   const { current_month_spend, forecasted_spend, previous_month_spend } =
     spendingOverview || {};
+
+  console.log(current_month_spend, previous_month_spend);
+
+  const currentMonthDescription =
+    current_month_spend && previous_month_spend
+      ? getMonlthySpendPercentDiff(+current_month_spend, +previous_month_spend)
+      : undefined;
+
+  console.log(currentMonthDescription);
 
   const percentMonth =
     current_month_spend && previous_month_spend
@@ -110,14 +105,7 @@ export function DashboardPage() {
                       ? `$${Math.round(+current_month_spend)}`
                       : ''
                   }
-                  description={
-                    current_month_spend && previous_month_spend
-                      ? getMonlthySpendPercentDiff(
-                          +current_month_spend,
-                          +previous_month_spend
-                        )
-                      : undefined
-                  }
+                  description={currentMonthDescription}
                   percent={percentMonth}
                 />
                 <MetricCard

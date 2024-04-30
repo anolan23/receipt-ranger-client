@@ -15,6 +15,7 @@ import { GoalsSettings } from './pages/dashboard/settings/goals';
 import { SubscriptionSettings } from './pages/dashboard/settings/subscription';
 import { AppearanceSettings } from './pages/dashboard/settings/appearance';
 import { ReceiptPage } from './pages/dashboard/receipts/[receiptId]';
+import { CategoryPage } from './pages/dashboard/categories/[categoryId]';
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
           <Route path="dashboard">
             <Route index element={<DashboardPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
+            <Route path="categories" element={<div>Categories</div>} />
+            <Route path="categories/:categoryId" element={<CategoryPage />} />
             <Route path="receipts" element={<ReceiptsPage />} />
             <Route path="receipts/:receiptId" element={<ReceiptPage />} />
             <Route path="scanner" element={<ScannerPage />} />

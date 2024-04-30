@@ -11,7 +11,7 @@ export function NavButton({ className, ...props }: NavButtonProps) {
     <Button
       variant="link"
       className={cn(
-        'justify-start',
+        'justify-start text-inherit',
         match ? 'bg-muted hover:bg-muted hover:no-underline' : '',
         className
       )}
