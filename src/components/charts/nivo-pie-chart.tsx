@@ -38,7 +38,7 @@ export function NivoPieChart<T extends number | string>({
           <Loader size={24} />
         </div>
       ) : isEmpty ? (
-        <div className="h-full flex justify-center items-center">
+        <div className="h-full flex justify-center items-center text-sm">
           No chart data
         </div>
       ) : (

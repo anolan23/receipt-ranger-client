@@ -43,6 +43,7 @@ export interface DataTableProps<TData> {
   variant?: 'default' | 'embedded';
   initialColumnVisibility?: ColumnVisibilty<TData>;
   loading?: boolean;
+  empty?: ReactNode;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   filter?: (table: ITable<TData>) => ReactNode;
   footerControls?: (table: ITable<TData>) => ReactNode;
@@ -63,6 +64,7 @@ export function DataTable<TData>({
   variant = 'default',
   initialColumnVisibility,
   loading,
+  empty,
   onRowSelectionChange,
   filter,
   footerControls,
@@ -192,10 +194,10 @@ export function DataTable<TData>({
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={columns.length}
+                    colSpan={columns.length + 1}
                     className="h-24 text-center"
                   >
-                    No results.
+                    {empty ? empty : 'No results.'}
                   </TableCell>
                 </TableRow>
               )}

@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { ReceiptData } from '@/lib/types';
-import { ReceiptsTable } from './receipts-table';
+import { ReceiptsTable } from '../../../components/receipts-table';
 
 interface RecentReceiptsCardProps {
   receipts?: ReceiptData[];

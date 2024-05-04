@@ -1,13 +1,11 @@
 import { DataTable, DataTableProps } from '@/components/data-table';
 import { Link } from '@/components/link';
+import { Button } from '@/components/ui/button';
 import { ReceiptData } from '@/lib/types';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { ActionsDropdown } from '../receipts/components/actions-dropdown';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ReceiptIcon, ReceiptTextIcon } from 'lucide-react';
+import { ReceiptTextIcon } from 'lucide-react';
+import { ImageLogo } from './image-logo';
 
 interface ReceiptsTableProps
   extends Omit<DataTableProps<ReceiptData>, 'columns'> {}
@@ -55,18 +53,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       header: 'Logo',
       cell: ({ row }) => {
         const logoUrl = row.original.merchant.logo_url;
-        return (
-          // <Avatar>
-          //   <AvatarImage src={logoUrl || undefined}></AvatarImage>
-          //   <AvatarFallback>AN</AvatarFallback>
-          // </Avatar>
-          <div className="w-[64px] h-[64px]">
-            <img
-              className="w-full h-full rounded-md bg-muted p-2 object-cover aspect-square"
-              src={logoUrl || undefined}
-            />
-          </div>
-        );
+        return <ImageLogo src={logoUrl || undefined} />;
       },
       enableSorting: false,
       enableHiding: false,
@@ -116,5 +103,21 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
     // }),
   ];
 
-  return <DataTable columns={columns} selectionType="single" {...props} />;
+  return (
+    <DataTable
+      columns={columns}
+      selectionType="single"
+      empty={
+        <div className="space-y-4 p-8">
+          <span>No Receipts found</span>
+          <div>
+            <Button size="sm" variant="outline" asChild>
+              <Link to="/dashboard/scanner">Scan New Receipt</Link>
+            </Button>
+          </div>
+        </div>
+      }
+      {...props}
+    />
+  );
 }

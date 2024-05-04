@@ -14,8 +14,8 @@ export type ReceiptData = {
   items: ItemData[] | null;
 };
 
-type MerchantData = {
-  id: number;
+export type MerchantData = {
+  id: string;
   created_at: string;
   updated_at: string;
   name: string;

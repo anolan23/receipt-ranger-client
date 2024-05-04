@@ -1,3 +1,6 @@
+import { ItemData, ReceiptData } from '@/lib/types';
+import { cn } from '@/lib/utils';
+import dayjs from 'dayjs';
 import {
   ChevronLeft,
   ChevronRight,
@@ -5,11 +8,11 @@ import {
   CreditCard,
   Edit2Icon,
   MoreVertical,
-  ReceiptText,
-  ScanEye,
-  Truck,
 } from 'lucide-react';
-import styles from './index.module.scss';
+import { Link } from 'react-router-dom';
+import { Loader } from './loader';
+import { StatusIndicator } from './status-indicator';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import {
   Card,
@@ -26,20 +29,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { Separator } from './ui/separator';
 import { Pagination, PaginationContent, PaginationItem } from './ui/pagination';
-import { ItemData, ReceiptData } from '@/lib/types';
-import { Loader } from './loader';
-import dayjs from 'dayjs';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { cn } from '@/lib/utils';
-import { Link } from 'react-router-dom';
+import { Separator } from './ui/separator';
+import { toDollar } from '@/lib/helpers';
 
 interface ReceiptCardProps {
   title?: string;
   receipt?: ReceiptData;
   className?: string;
   headerHidden?: boolean;
+  loading?: boolean;
 }
 
 export function ReceiptCard({
@@ -47,143 +46,175 @@ export function ReceiptCard({
   className,
   headerHidden,
   title,
+  loading,
   ...props
 }: ReceiptCardProps) {
-  if (!receipt) return <Loader />;
-  const transactionDate = dayjs(receipt.transaction_date).format(
-    'MMMM D, YYYY'
-  );
-  const modifiedDateShort = dayjs(receipt.updated_at).format('YYYY-MM-DD');
-  const modifiedDate = dayjs(receipt.updated_at).format('MMMM D, YYYY');
+  const transactionDate = receipt?.transaction_date
+    ? dayjs(receipt.transaction_date).format('MMMM D, YYYY')
+    : undefined;
+  const modifiedDateShort = dayjs(receipt?.updated_at).format('YYYY-MM-DD');
+  const modifiedDate = dayjs(receipt?.updated_at).format('MMMM D, YYYY');
+
   return (
     <Card className={cn('overflow-hidden', className)}>
-      {!headerHidden && (
-        <CardHeader className="flex flex-row items-start bg-muted/50 gap-2">
-          <div className="grid gap-0.5">
-            <CardTitle className="group flex items-center gap-2 text-lg overflow-hidden">
-              <div className="truncate flex-1">Receipt {receipt.id}</div>
-              <Button
-                size="icon"
-                variant="outline"
-                className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
-              >
-                <Copy className="h-3 w-3" />
-                <span className="sr-only">Copy Receipt ID</span>
-              </Button>
-            </CardTitle>
-            <CardDescription>{`Date: ${transactionDate}`}</CardDescription>
+      {loading ? (
+        <CardContent className="pt-6">
+          <StatusIndicator status="loading">Loading</StatusIndicator>
+        </CardContent>
+      ) : !receipt ? (
+        <CardContent className="pt-6 min-h-[600px] flex justify-center items-center">
+          <div className="text-center space-y-2">
+            <div className="text-sm">No Receipt selected</div>
+            <div className="text-xs text-muted-foreground">
+              Receipt preview will show up here
+            </div>
           </div>
-          <div className="ml-auto flex items-center gap-1">
-            <Button size="sm" variant="outline" asChild>
-              <Link
-                to={`/dashboard/receipts/${receipt.id}`}
-                className="h-8 gap-1"
-              >
-                <Edit2Icon className="h-3.5 w-3.5" />
-                <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                  Edit Receipt
-                </span>
-              </Link>
-            </Button>
-            <DropdownMenu modal={false}>
-              <DropdownMenuTrigger asChild>
-                <Button size="icon" variant="outline" className="h-8 w-8">
-                  <MoreVertical className="h-3.5 w-3.5" />
-                  <span className="sr-only">More</span>
+        </CardContent>
+      ) : (
+        <>
+          {!headerHidden && (
+            <CardHeader className="flex flex-row items-start bg-muted/50 gap-2">
+              <div className="grid gap-0.5">
+                <CardTitle className="group flex items-center gap-2 text-lg overflow-hidden">
+                  <div className="truncate flex-1">Receipt {receipt.id}</div>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    <Copy className="h-3 w-3" />
+                    <span className="sr-only">Copy Receipt ID</span>
+                  </Button>
+                </CardTitle>
+                <CardDescription>{`Date: ${transactionDate}`}</CardDescription>
+              </div>
+              <div className="ml-auto flex items-center gap-1">
+                <Button size="sm" variant="outline" asChild>
+                  <Link
+                    to={`/dashboard/receipts/${receipt.id}`}
+                    className="h-8 gap-1"
+                  >
+                    <Edit2Icon className="h-3.5 w-3.5" />
+                    <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                      Edit Receipt
+                    </span>
+                  </Link>
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Export</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Trash</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </CardHeader>
-      )}
-      <CardContent className="p-6 text-sm">
-        <div className="grid gap-3">
-          <div className="font-semibold">Line Items</div>
-          <ul className="grid gap-3">
-            {receipt.items?.map((item) => (
-              <LineItem key={item.id} item={item} />
-            ))}
-          </ul>
-          <Separator className="my-2" />
-          <ul className="grid gap-3">
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">Subtotal</span>
-              <span>{`$${receipt.subtotal}`}</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">Tax</span>
-              <span>{`$${receipt.sales_tax}`}</span>
-            </li>
-            <li className="flex items-center justify-between font-semibold">
-              <span className="text-muted-foreground">Total</span>
-              <span>{`$${receipt.total_amount}`}</span>
-            </li>
-          </ul>
-        </div>
-        <Separator className="my-4" />
-        <div className="grid gap-3">
-          <div className="font-semibold">Merchant Information</div>
-          <dl className="grid gap-3">
-            <div className="flex items-center justify-between">
-              <dt className="text-muted-foreground">Merchant</dt>
-              <dd>{receipt.merchant.name}</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="text-muted-foreground">Logo</dt>
-              <dd>
-                {receipt.merchant.logo_url && (
-                  <Avatar>
-                    <AvatarImage
-                      src={receipt.merchant.logo_url}
-                      alt="merchant logo"
-                    />
-                    <AvatarFallback>{'NA'}</AvatarFallback>
-                  </Avatar>
+                <DropdownMenu modal={false}>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="icon" variant="outline" className="h-8 w-8">
+                      <MoreVertical className="h-3.5 w-3.5" />
+                      <span className="sr-only">More</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>Export</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Trash</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </CardHeader>
+          )}
+          <CardContent className="p-6 text-sm">
+            <div className="grid gap-3">
+              <div className="font-semibold">Line Items</div>
+              <ul className="grid gap-3">
+                {receipt.items?.length ? (
+                  receipt.items.map((item) => (
+                    <LineItem key={item.id} item={item} />
+                  ))
+                ) : (
+                  <div className=" text-center">No line items</div>
                 )}
-              </dd>
+              </ul>
+              <Separator className="my-2" />
+              <ul className="grid gap-3">
+                <li className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span>
+                    {receipt.subtotal ? toDollar(receipt.subtotal) : '-'}
+                  </span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Tax</span>
+                  <span>
+                    {receipt.sales_tax ? toDollar(receipt.sales_tax) : '-'}
+                  </span>
+                </li>
+                <li className="flex items-center justify-between font-semibold">
+                  <span className="text-muted-foreground">Total</span>
+                  <span>
+                    {receipt.total_amount
+                      ? toDollar(receipt.total_amount)
+                      : '-'}
+                  </span>
+                </li>
+              </ul>
             </div>
-          </dl>
-        </div>
-        <Separator className="my-4" />
-        <div className="grid gap-3">
-          <div className="font-semibold">Payment Information</div>
-          <dl className="grid gap-3">
-            <div className="flex items-center justify-between">
-              <dt className="flex items-center gap-1 text-muted-foreground">
-                <CreditCard className="h-4 w-4" />
-                Visa
-              </dt>
-              <dd>**** **** **** 4532</dd>
+            <Separator className="my-4" />
+            <div className="grid gap-3">
+              <div className="font-semibold">Merchant Information</div>
+              <dl className="grid gap-3">
+                <div className="flex items-center justify-between">
+                  <dt className="text-muted-foreground">Merchant</dt>
+                  <dd>{receipt.merchant.name}</dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="text-muted-foreground">Logo</dt>
+                  <dd>
+                    {receipt?.merchant.logo_url ? (
+                      <Avatar>
+                        <AvatarImage
+                          src={receipt.merchant.logo_url}
+                          alt="merchant logo"
+                        />
+                        <AvatarFallback>{'NA'}</AvatarFallback>
+                      </Avatar>
+                    ) : (
+                      '-'
+                    )}
+                  </dd>
+                </div>
+              </dl>
             </div>
-          </dl>
-        </div>
-      </CardContent>
-      <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-        <div className="text-xs text-muted-foreground">
-          Updated <time dateTime={modifiedDateShort}>{modifiedDate}</time>
-        </div>
-        <Pagination className="ml-auto mr-0 w-auto">
-          <PaginationContent>
-            <PaginationItem>
-              <Button size="icon" variant="outline" className="h-6 w-6">
-                <ChevronLeft className="h-3.5 w-3.5" />
-                <span className="sr-only">Previous Receipt</span>
-              </Button>
-            </PaginationItem>
-            <PaginationItem>
-              <Button size="icon" variant="outline" className="h-6 w-6">
-                <ChevronRight className="h-3.5 w-3.5" />
-                <span className="sr-only">Next Receipt</span>
-              </Button>
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </CardFooter>
+            {/* <Separator className="my-4" />
+            <div className="grid gap-3">
+              <div className="font-semibold">Payment Information</div>
+              <dl className="grid gap-3">
+                <div className="flex items-center justify-between">
+                  <dt className="flex items-center gap-1 text-muted-foreground">
+                    <CreditCard className="h-4 w-4" />
+                    Visa
+                  </dt>
+                  <dd>**** **** **** 4532</dd>
+                </div>
+              </dl>
+            </div> */}
+          </CardContent>
+          <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
+            <div className="text-xs text-muted-foreground">
+              Updated <time dateTime={modifiedDateShort}>{modifiedDate}</time>
+            </div>
+            <Pagination className="ml-auto mr-0 w-auto">
+              <PaginationContent>
+                <PaginationItem>
+                  <Button size="icon" variant="outline" className="h-6 w-6">
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                    <span className="sr-only">Previous Receipt</span>
+                  </Button>
+                </PaginationItem>
+                <PaginationItem>
+                  <Button size="icon" variant="outline" className="h-6 w-6">
+                    <ChevronRight className="h-3.5 w-3.5" />
+                    <span className="sr-only">Next Receipt</span>
+                  </Button>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </CardFooter>
+        </>
+      )}
     </Card>
   );
 }
@@ -198,7 +229,7 @@ function LineItem({ item }: LineItemProps) {
       <span className="text-muted-foreground">
         {generated_item_name} x <span>{quantity}</span>
       </span>
-      <span>{`$${total_price}`}</span>
+      <span>{total_price ? toDollar(total_price) : '-'}</span>
     </li>
   );
 }

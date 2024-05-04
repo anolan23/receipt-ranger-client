@@ -1,11 +1,7 @@
 import { DatePicker } from '@/components/date-picker';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { OptionItemDefinition } from '@/components/option';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Combobox } from '@/components/ui/combo-box';
 import {
   FormControl,
   FormField,
@@ -13,20 +9,62 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useMerchantSearch } from '@/hooks/use-merchant-search';
+import { useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { EditReceiptFormValues } from '../interfaces';
-import { Input } from '@/components/ui/input';
 
 interface ReceiptInfoCardProps {}
 
 export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
   const form = useFormContext<EditReceiptFormValues>();
+  const [filterValue, setFilterValue] = useState('');
+  const { data: merchants, isLoading: isMerchantSearchLoading } =
+    useMerchantSearch(filterValue);
+
+  const options = useMemo<Array<OptionItemDefinition>>(() => {
+    if (!merchants?.length) return [];
+    return merchants.map<OptionItemDefinition>((merch) => {
+      return {
+        label: merch.name,
+        value: merch.name,
+        imgSrc: merch.logo_url || undefined,
+        description: merch.id,
+      };
+    });
+  }, [merchants]);
   return (
-    <Card>
-      {/* <CardHeader>
-        <CardTitle>Receipt Metadata</CardTitle>
-      </CardHeader> */}
-      <CardContent className="pt-6 space-y-2">
+    <Card className="min-w-0">
+      <CardHeader>
+        <CardTitle>Receipt Information</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <FormField
+          control={form.control}
+          name="merchantOption"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Merchant</FormLabel>
+                <FormControl>
+                  <Combobox
+                    options={options}
+                    selectedOption={field.value}
+                    onOptionChange={field.onChange}
+                    triggerVariant="option"
+                    searchPlaceHolder="Search Merchants..."
+                    empty="No Merchant found."
+                    filterValue={filterValue}
+                    loading={isMerchantSearchLoading}
+                    onFilterChange={setFilterValue}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
         <FormField
           control={form.control}
           name="transaction_date"

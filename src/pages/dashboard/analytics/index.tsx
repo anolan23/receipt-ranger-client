@@ -11,6 +11,7 @@ import { CategoriesCard } from './components/categories-card';
 import { MerchantsCard } from './components/merchants-card';
 import { MonthlyTotalsCard } from './components/monthly-totals-card';
 import { useOverview } from '@/hooks/use-overview';
+import { toDollar } from '@/lib/helpers';
 
 interface AnalyticsProps {}
 
@@ -82,22 +83,25 @@ export function AnalyticsPage({ ...props }: AnalyticsProps) {
               <MetricCard
                 title="Total amount"
                 value={
-                  overviewData?.total_amount && `$${overviewData.total_amount}`
+                  overviewData?.total_amount
+                    ? toDollar(overviewData.total_amount)
+                    : '$0'
                 }
                 loading={isOverviewLoading}
               />
               <MetricCard
                 title="Average receipt total"
                 value={
-                  overviewData?.avg_receipt_total &&
-                  `$${overviewData.avg_receipt_total}`
+                  overviewData?.avg_receipt_total
+                    ? toDollar(overviewData.avg_receipt_total)
+                    : '$0'
                 }
                 loading={isOverviewLoading}
               />
               <MetricCard
                 title="Receipt count"
                 value={
-                  overviewData?.receipt_count && `${overviewData.receipt_count}`
+                  overviewData?.receipt_count ? overviewData.receipt_count : '0'
                 }
                 loading={isOverviewLoading}
               />

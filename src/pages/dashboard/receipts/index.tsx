@@ -20,14 +20,16 @@ import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { Link } from 'react-router-dom';
-import { ReceiptsTable } from '../components/receipts-table';
+import { ReceiptsTable } from '../../../components/receipts-table';
 export function ReceiptsPage() {
   const { data: receipts } = useReceipts();
   const { rowSelection, setRowSelection, selectedRow } = useRowSelection({
     selectFirstOnMOunt: true,
     data: receipts,
   });
-  const { data: receipt } = useReceipt(selectedRow?.id.toString());
+  const { data: receipt, isLoading: isReceiptLoading } = useReceipt(
+    selectedRow?.id.toString()
+  );
 
   return (
     <DashboardLayout
@@ -92,7 +94,7 @@ export function ReceiptsPage() {
               </CardContent>
             </Card>
           </div>
-          <ReceiptCard receipt={receipt} />
+          <ReceiptCard receipt={receipt} loading={isReceiptLoading} />
         </div>
       }
     />

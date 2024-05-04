@@ -30,12 +30,14 @@ export function MetricCard({
     <Card>
       <CardHeader className="pb-2">
         <CardDescription>{title}</CardDescription>
-        <CardTitle className="text-4xl">{value}</CardTitle>
-      </CardHeader>
-      <CardContent>
         {loading ? (
           <Loader />
         ) : (
+          <CardTitle className="text-4xl">{value}</CardTitle>
+        )}
+      </CardHeader>
+      <CardContent>
+        {loading ? null : (
           <div className="text-xs text-muted-foreground">{description}</div>
         )}
       </CardContent>

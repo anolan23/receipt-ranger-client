@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 
 import { cn } from '@/lib/utils';
@@ -15,35 +14,35 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { Option, OptionItemDefinition } from '../option';
+import { ReactNode, useState } from 'react';
+import { StatusIndicator } from '../status-indicator';
 
-const frameworks = [
-  {
-    value: 'next.js',
-    label: 'Next.js',
-  },
-  {
-    value: 'sveltekit',
-    label: 'SvelteKit',
-  },
-  {
-    value: 'nuxt.js',
-    label: 'Nuxt.js',
-  },
-  {
-    value: 'remix',
-    label: 'Remix',
-  },
-  {
-    value: 'astro',
-    label: 'Astro',
-  },
-];
 interface ComboboxProps {
-  value?: string;
-  onValueChange?: (newValue: string) => void;
+  options?: Array<OptionItemDefinition>;
+  selectedOption?: OptionItemDefinition;
+  placeholder?: string;
+  triggerVariant?: 'label' | 'option';
+  searchPlaceHolder?: string;
+  empty?: ReactNode;
+  filterValue?: string;
+  loading?: boolean;
+  onFilterChange?: (newValue: string) => void;
+  onOptionChange?: (newOption: OptionItemDefinition) => void;
 }
-export function Combobox({ value, onValueChange }: ComboboxProps) {
-  const [open, setOpen] = React.useState(false);
+export function Combobox({
+  options,
+  selectedOption,
+  triggerVariant = 'label',
+  placeholder,
+  searchPlaceHolder = 'Search resources...',
+  empty = 'No resource found.',
+  filterValue,
+  loading,
+  onFilterChange,
+  onOptionChange,
+}: ComboboxProps) {
+  const [open, setOpen] = useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -52,35 +51,61 @@ export function Combobox({ value, onValueChange }: ComboboxProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="flex w-full justify-between"
+          className={cn('flex w-full justify-between', {
+            'h-auto text-left': triggerVariant === 'option',
+          })}
         >
-          {value}
-          {/* {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : 'aaron.nolan23@yahoo.com'} */}
+          {!selectedOption?.value ? (
+            placeholder
+          ) : triggerVariant === 'option' ? (
+            <Option option={selectedOption} />
+          ) : (
+            selectedOption.value
+          )}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
-        <Command>
-          <CommandInput placeholder="Search team..." className="h-9" />
-          <CommandEmpty>No team found.</CommandEmpty>
+      <PopoverContent
+        className="w-[var(--radix-popover-trigger-width)] p-0 max-h-[var(--radix-popover-content-available-height)]"
+        collisionPadding={32}
+      >
+        <Command shouldFilter={false}>
+          <CommandInput
+            placeholder={searchPlaceHolder}
+            className="h-9"
+            value={filterValue}
+            onValueChange={onFilterChange}
+          />
+          {/* {loading && (
+            <div className="py-6 flex justify-center items-center">
+              <StatusIndicator status="loading">Loading</StatusIndicator>
+            </div>
+          )} */}
+          <CommandEmpty>{empty}</CommandEmpty>
+
           <CommandGroup>
-            {frameworks.map((framework) => (
+            {options?.map((option) => (
               <CommandItem
-                key={framework.value}
-                value={framework.value}
+                key={option.value}
+                value={option.value}
                 onSelect={(currentValue) => {
-                  onValueChange &&
-                    onValueChange(currentValue === value ? '' : currentValue);
+                  const option = options.find((opt) => {
+                    return (
+                      opt.value.toLowerCase() === currentValue.toLowerCase()
+                    );
+                  });
+                  onOptionChange && option && onOptionChange(option);
                   setOpen(false);
                 }}
+                className="cursor-pointer"
               >
-                {framework.label}
+                <Option option={option} />
                 <CheckIcon
                   className={cn(
                     'ml-auto h-4 w-4',
-                    value === framework.value ? 'opacity-100' : 'opacity-0'
+                    selectedOption?.value === option.value
+                      ? 'opacity-100'
+                      : 'opacity-0'
                   )}
                 />
               </CommandItem>

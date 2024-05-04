@@ -26,14 +26,17 @@ import { DashboardLayout } from '@/layout/dashboard-layout';
 import { File, ListFilter } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ReceiptsTable } from './components/receipts-table';
+import { ReceiptsTable } from '../../components/receipts-table';
+import { toDollar } from '@/lib/helpers';
 export function DashboardPage() {
   const { data: receipts } = useReceipts({ limit: 5 });
   const { rowSelection, setRowSelection, selectedRow } = useRowSelection({
     selectFirstOnMOunt: true,
     data: receipts,
   });
-  const { data: receipt } = useReceipt(selectedRow?.id.toString());
+  const { data: receipt, isLoading: isReceiptLoading } = useReceipt(
+    selectedRow?.id.toString()
+  );
 
   const { data: spendingOverview, isLoading: isSpendingOverviewLoading } =
     useSpendingOverview();
@@ -99,19 +102,19 @@ export function DashboardPage() {
                   </CardFooter>
                 </Card>
                 <MetricCard
-                  title="Current Month Spend"
+                  title="Current Month Total"
                   value={
                     current_month_spend
-                      ? `$${Math.round(+current_month_spend)}`
+                      ? toDollar(current_month_spend, 'dollar')
                       : ''
                   }
                   description={currentMonthDescription}
                   percent={percentMonth}
                 />
                 <MetricCard
-                  title="Forecasted"
+                  title="Forecasted Month Total"
                   value={
-                    forecasted_spend ? `$${Math.round(+forecasted_spend)}` : ''
+                    forecasted_spend ? toDollar(forecasted_spend, 'dollar') : ''
                   }
                   description={
                     forecasted_spend && current_month_spend
@@ -216,7 +219,7 @@ export function DashboardPage() {
               </Tabs>
             </div>
             <div>
-              <ReceiptCard receipt={receipt} />
+              <ReceiptCard receipt={receipt} loading={isReceiptLoading} />
             </div>
           </div>
         </div>

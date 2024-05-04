@@ -16,13 +16,33 @@ import {
 import { useFormContext } from 'react-hook-form';
 import { EditReceiptFormValues } from '../interfaces';
 import { Combobox } from '@/components/ui/combo-box';
+import { MerchantData } from '@/lib/types';
+import { useMemo } from 'react';
+import { OptionItemDefinition } from '@/components/option';
 
-interface MerchantInfoCardProps {}
+interface MerchantInfoCardProps {
+  merchants?: MerchantData[];
+}
 
-export function MerchantInfoCard({ ...props }: MerchantInfoCardProps) {
+export function MerchantInfoCard({
+  merchants,
+  ...props
+}: MerchantInfoCardProps) {
   const form = useFormContext<EditReceiptFormValues>();
+
+  const options = useMemo<Array<OptionItemDefinition>>(() => {
+    if (!merchants?.length) return [];
+    return merchants.map<OptionItemDefinition>((merch) => {
+      return {
+        label: merch.name,
+        value: merch.name,
+        imgSrc: merch.logo_url || undefined,
+        description: merch.id,
+      };
+    });
+  }, [merchants]);
   return (
-    <Card>
+    <Card className="min-w-0">
       <CardHeader>
         <CardTitle>Merchant Information</CardTitle>
         <CardDescription>
@@ -32,31 +52,25 @@ export function MerchantInfoCard({ ...props }: MerchantInfoCardProps) {
       <CardContent className="space-y-2">
         <FormField
           control={form.control}
-          name="merchant_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Merchant</FormLabel>
-              <FormControl>
-                <Combobox value={field.value} onValueChange={field.onChange} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="merchant_logo_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Logo</FormLabel>
-              <FormControl>
-                <div className="w-[50px] h-[50px]">
-                  <img className="w-full h-full rounded-sm" src={field.value} />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          name="merchantOption"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Merchant</FormLabel>
+                <FormControl>
+                  <Combobox
+                    options={options}
+                    selectedOption={field.value}
+                    onOptionChange={field.onChange}
+                    triggerVariant="option"
+                    searchPlaceHolder="Search Merchants..."
+                    empty="No Merchant found."
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
         />
       </CardContent>
     </Card>

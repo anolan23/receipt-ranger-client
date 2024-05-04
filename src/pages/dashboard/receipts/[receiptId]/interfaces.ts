@@ -1,3 +1,6 @@
+import { OptionItemDefinition } from '@/components/option';
+import { MerchantData } from '@/lib/types';
+
 export type ItemUpdatePayload = {
   name: string;
   item_id?: number;
@@ -10,8 +13,7 @@ export interface EditReceiptFormValues {
   receipt_status: string;
   items: ItemUpdatePayload[];
   transaction_date?: Date;
-  merchant_logo_url: string;
-  merchant_name: string;
+  merchantOption?: OptionItemDefinition;
   payment_card_number: string;
   subtotal: string;
   sales_tax: string;

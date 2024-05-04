@@ -18,6 +18,9 @@ import { useCategories } from '@/hooks/use-categories';
 import { ItemData } from '@/lib/types';
 import { updateReceipt } from '@/lib/api/receipts';
 import { toast } from 'sonner';
+import { StatusIndicator } from '@/components/status-indicator';
+import { useMerchants } from '@/hooks/use-merchants';
+import { useMerchantSearch } from '@/hooks/use-merchant-search';
 
 interface ReceiptPageProps {}
 
@@ -51,8 +54,14 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
       items: items?.map(transformItemToUpdatePayload) || [],
       receipt_status: '',
       payment_card_number: '',
-      merchant_logo_url: receipt?.merchant.logo_url || '',
-      merchant_name: receipt?.merchant.name || '',
+      merchantOption: receipt?.merchant
+        ? {
+            label: receipt.merchant.name,
+            value: receipt.merchant.name,
+            imgSrc: receipt.merchant.logo_url || undefined,
+            description: receipt.merchant.id,
+          }
+        : undefined,
       subtotal: receipt?.subtotal || '',
       sales_tax: receipt?.sales_tax || '',
       total: receipt?.total_amount || '',
@@ -92,6 +101,9 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
     }
   }
 
+  const statusIndicatorStatus =
+    calculatedSubtotal === formValues.subtotal ? 'success' : 'warning';
+
   return (
     <DashboardLayout
       breadcrumbs={<SmartBreadcrumb />}
@@ -124,15 +136,17 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
               <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
                 <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
                   {/* <StatusCard /> */}
+                  {/* <MerchantInfoCard merchants={merchants} /> */}
                   <ReceiptInfoCard />
-                  <MerchantInfoCard />
                   {/* <PaymentInfoCard /> */}
                 </div>
                 <div className="lg:col-span-2 space-y-2">
                   {/* <MerchantInfoCard /> */}
                   <LineItemsCard categories={categories} />
-                  <div className="text-muted-foreground text-sm">
-                    {`Calculated subtotal: $${calculatedSubtotal}`}
+                  <div>
+                    <StatusIndicator
+                      status={statusIndicatorStatus}
+                    >{`Calculated subtotal: $${calculatedSubtotal}`}</StatusIndicator>
                   </div>
                 </div>
               </div>

@@ -33,6 +33,19 @@ export function getDates(startDate: Date, endDate: Date): Date[] {
   return dates;
 }
 
+export function toDollar(
+  value: string | number,
+  roundTo: 'dollar' | 'cent' = 'cent'
+): string {
+  const amount = typeof value === 'string' ? parseFloat(value) : value;
+
+  if (roundTo === 'dollar') {
+    return `$${amount.toFixed(0)}`;
+  } else {
+    return `$${amount.toFixed(2)}`;
+  }
+}
+
 export const categoryColors = new Map([
   ['Fruits', 'var(--color-charts-palette-categorical-1)'],
   ['Vegetables', 'var(--color-charts-palette-categorical-2)'],
