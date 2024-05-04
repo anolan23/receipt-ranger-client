@@ -14,14 +14,17 @@ import { useMerchantSearch } from '@/hooks/use-merchant-search';
 import { useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { EditReceiptFormValues } from '../interfaces';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 
 interface ReceiptInfoCardProps {}
 
 export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
   const form = useFormContext<EditReceiptFormValues>();
-  const [filterValue, setFilterValue] = useState('');
+  const [filterValue, setFilterValue] = useState<string>();
+  const debouncedFilterValue = useDebouncedValue(filterValue, 500);
+
   const { data: merchants, isLoading: isMerchantSearchLoading } =
-    useMerchantSearch(filterValue);
+    useMerchantSearch(debouncedFilterValue);
 
   const options = useMemo<Array<OptionItemDefinition>>(() => {
     if (!merchants?.length) return [];
@@ -55,8 +58,8 @@ export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
                     triggerVariant="option"
                     searchPlaceHolder="Search Merchants..."
                     empty="No Merchant found."
-                    filterValue={filterValue}
                     loading={isMerchantSearchLoading}
+                    filterValue={filterValue}
                     onFilterChange={setFilterValue}
                   />
                 </FormControl>

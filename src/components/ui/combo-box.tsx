@@ -17,6 +17,7 @@ import {
 import { Option, OptionItemDefinition } from '../option';
 import { ReactNode, useState } from 'react';
 import { StatusIndicator } from '../status-indicator';
+import { useCommandState } from 'cmdk';
 
 interface ComboboxProps {
   options?: Array<OptionItemDefinition>;
@@ -82,7 +83,6 @@ export function Combobox({
             </div>
           )} */}
           <CommandEmpty>{empty}</CommandEmpty>
-
           <CommandGroup>
             {options?.map((option) => (
               <CommandItem
@@ -94,7 +94,7 @@ export function Combobox({
                       opt.value.toLowerCase() === currentValue.toLowerCase()
                     );
                   });
-                  onOptionChange && option && onOptionChange(option);
+                  onOptionChange && option ? onOptionChange(option) : undefined;
                   setOpen(false);
                 }}
                 className="cursor-pointer"
