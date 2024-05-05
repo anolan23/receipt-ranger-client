@@ -56,9 +56,10 @@ export function MerchantInfoCard({
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel>Merchant</FormLabel>
+                <FormLabel htmlFor="merchantOption">Merchant</FormLabel>
                 <FormControl>
                   <Combobox
+                    id="merchantOption"
                     options={options}
                     selectedOption={field.value}
                     onOptionChange={field.onChange}

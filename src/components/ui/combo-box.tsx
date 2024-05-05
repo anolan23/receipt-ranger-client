@@ -20,6 +20,7 @@ import { StatusIndicator } from '../status-indicator';
 import { useCommandState } from 'cmdk';
 
 interface ComboboxProps {
+  id?: any;
   options?: Array<OptionItemDefinition>;
   selectedOption?: OptionItemDefinition;
   placeholder?: string;
@@ -32,6 +33,7 @@ interface ComboboxProps {
   onOptionChange?: (newOption: OptionItemDefinition) => void;
 }
 export function Combobox({
+  id,
   options,
   selectedOption,
   triggerVariant = 'label',
@@ -49,6 +51,7 @@ export function Combobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           variant="outline"
           role="combobox"
           aria-expanded={open}

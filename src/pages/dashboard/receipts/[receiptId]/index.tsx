@@ -1,26 +1,22 @@
 import SmartBreadcrumb from '@/components/smart-breadcrumb';
+import { StatusIndicator } from '@/components/status-indicator';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
+import { useCategories } from '@/hooks/use-categories';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceiptItems } from '@/hooks/use-receipt-items';
 import { DashboardLayout } from '@/layout/dashboard-layout';
+import { updateReceipt } from '@/lib/api/receipts';
+import { toDollar } from '@/lib/helpers';
+import { ItemData } from '@/lib/types';
 import { ChevronLeft } from 'lucide-react';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { LineItemsCard } from './components/line-items-card';
-import { MerchantInfoCard } from './components/merchant-info-card';
-import { PaymentInfoCard } from './components/payment-info-card';
-import { ReceiptInfoCard } from './components/receipt-info-card';
-import { StatusCard } from './components/status-card';
-import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
-import { useCategories } from '@/hooks/use-categories';
-import { ItemData } from '@/lib/types';
-import { updateReceipt } from '@/lib/api/receipts';
 import { toast } from 'sonner';
-import { StatusIndicator } from '@/components/status-indicator';
-import { useMerchants } from '@/hooks/use-merchants';
-import { useMerchantSearch } from '@/hooks/use-merchant-search';
+import { LineItemsCard } from './components/line-items-card';
+import { ReceiptInfoCard } from './components/receipt-info-card';
+import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
 
 interface ReceiptPageProps {}
 
@@ -146,7 +142,9 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                   <div>
                     <StatusIndicator
                       status={statusIndicatorStatus}
-                    >{`Calculated subtotal: $${calculatedSubtotal}`}</StatusIndicator>
+                    >{`Calculated subtotal: ${toDollar(
+                      calculatedSubtotal
+                    )}`}</StatusIndicator>
                   </div>
                 </div>
               </div>
