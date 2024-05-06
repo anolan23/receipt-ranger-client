@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import { LineItemsCard } from './components/line-items-card';
 import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
+import { useSubcategories } from '@/hooks/use-subcategories';
 
 interface ReceiptPageProps {}
 
@@ -27,14 +28,13 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
 
   const { data: receipt } = useReceipt(receiptId);
   const { data: items } = useReceiptItems(receiptId);
-  const { data: categories } = useCategories();
 
   const transformItemToUpdatePayload = useCallback(
     (item: ItemData): ItemUpdatePayload => {
       return {
         name: item.generated_item_name || '',
         item_id: item.id || undefined,
-        category_id: item.category_id || undefined,
+        subcategory_id: item.subcategory_id || undefined,
         quantity: item.quantity || undefined,
         price: item.total_price || undefined,
       };
@@ -48,12 +48,10 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
         ? new Date(receipt.transaction_date)
         : undefined,
       items: items?.map(transformItemToUpdatePayload) || [],
-      receipt_status: '',
-      payment_card_number: '',
       merchantOption: receipt?.merchant
         ? {
             label: receipt.merchant.name,
-            value: receipt.merchant.name,
+            value: receipt.merchant.id,
             imgSrc: receipt.merchant.logo_url || undefined,
             description: receipt.merchant.id,
           }
@@ -61,6 +59,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
       subtotal: receipt?.subtotal || '',
       sales_tax: receipt?.sales_tax || '',
       total: receipt?.total_amount || '',
+      category_id: receipt?.category_id?.toString() || '',
     };
   }, [receipt, items, transformItemToUpdatePayload]);
 
@@ -73,6 +72,8 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
   }, [form, defaultValues]);
 
   const formValues = form.watch();
+
+  const { data: subcategories } = useSubcategories(formValues.category_id);
 
   const calculatedSubtotal = useMemo<string>(() => {
     const { items } = formValues;
@@ -89,7 +90,11 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
   async function onSubmit(values: EditReceiptFormValues) {
     try {
       if (!receipt?.id) return;
-      const result = await updateReceipt(receipt.id, values);
+      const { merchantOption, ...rest } = values;
+      await updateReceipt(receipt.id, {
+        ...rest,
+        merchant_id: merchantOption?.value || '',
+      });
       toast.success('Receipt updated');
     } catch (error) {
       console.error(error);
@@ -104,7 +109,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
     <DashboardLayout
       breadcrumbs={<SmartBreadcrumb />}
       content={
-        <div className="space-y-4 mx-auto">
+        <div className="space-y-4 mx-auto max-w-[59rem]">
           <div className="flex items-center gap-4">
             <Button
               onClick={() => navigate(-1)}
@@ -122,23 +127,24 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
               <Button onClick={() => navigate(-1)} variant="outline" size="sm">
                 Cancel
               </Button>
-              <Button size="sm" form="edit-form" type="submit">
+              <Button
+                size="sm"
+                form="edit-form"
+                type="submit"
+                disabled={form.formState.isSubmitting}
+              >
                 Save Receipt
               </Button>
             </div>
           </div>
           <Form {...form}>
             <form id="edit-form" onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
-                <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-                  {/* <StatusCard /> */}
-                  {/* <MerchantInfoCard merchants={merchants} /> */}
+              <div className="grid gap-8">
+                <div className="">
                   <ReceiptInfoCard />
-                  {/* <PaymentInfoCard /> */}
                 </div>
-                <div className="lg:col-span-2 space-y-2">
-                  {/* <MerchantInfoCard /> */}
-                  <LineItemsCard categories={categories} />
+                <div className="space-y-2">
+                  <LineItemsCard subcategories={subcategories} />
                   <div>
                     <StatusIndicator
                       status={statusIndicatorStatus}

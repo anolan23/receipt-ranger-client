@@ -11,7 +11,12 @@ import {
   useFieldArray,
   useFormContext,
 } from 'react-hook-form';
-import { CategoryData, ItemData, ReceiptData } from '@/lib/types';
+import {
+  CategoryData,
+  ItemData,
+  ReceiptData,
+  SubcategoryData,
+} from '@/lib/types';
 import { LineItemsEditor } from './line-items-editor';
 import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/data-table';
@@ -24,10 +29,10 @@ import { FormControl, FormField, FormItem } from '@/components/ui/form';
 import { EditReceiptFormValues, ItemUpdatePayload } from '../interfaces';
 
 interface LineItemsCardProps {
-  categories?: CategoryData[];
+  subcategories?: SubcategoryData[];
 }
 
-export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
+export function LineItemsCard({ subcategories, ...props }: LineItemsCardProps) {
   const { control } = useFormContext<EditReceiptFormValues>();
   const { fields, append, remove } = useFieldArray<EditReceiptFormValues>({
     control,
@@ -44,14 +49,14 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
 
   const selectItems = useMemo(() => {
     return (
-      categories?.map((cat) => {
+      subcategories?.map((cat) => {
         return {
-          label: cat.label,
+          label: cat.name,
           value: cat.id.toString(),
         };
       }) || []
     );
-  }, [categories]);
+  }, [subcategories]);
 
   const columns = useMemo(() => {
     return [
@@ -76,21 +81,21 @@ export function LineItemsCard({ categories, ...props }: LineItemsCardProps) {
         },
         enableSorting: false,
       }),
-      columnHelper.accessor('category_id', {
+      columnHelper.accessor('subcategory_id', {
         header: 'Category',
         cell: ({ row, ...info }) => {
           return (
             <FormField
               control={control}
-              name={`items.${row.index}.category_id`}
+              name={`items.${row.index}.subcategory_id`}
               render={({ field }) => {
                 return (
                   <Select
-                    placeholder="Select category"
+                    placeholder="Select Item Category"
                     items={selectItems}
                     value={field.value?.toString()}
                     onValueChange={(value) => {
-                      field.onChange(+value);
+                      field.onChange(value);
                     }}
                   />
                 );

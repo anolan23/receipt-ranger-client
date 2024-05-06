@@ -1,3 +1,4 @@
+import { ItemUpdatePayload } from '@/pages/dashboard/receipts/[receiptId]/interfaces';
 import axios from 'axios';
 import { backend } from '../backend';
 import {
@@ -6,10 +7,6 @@ import {
   ReceiptData,
   UseMonthlyTotalsParams,
 } from '../types';
-import {
-  EditReceiptFormValues,
-  ItemUpdatePayload,
-} from '@/pages/dashboard/receipts/[receiptId]/interfaces';
 
 interface GetReceiptsParams {
   limit?: number;
@@ -58,10 +55,18 @@ export async function createReceipt(file: File) {
   }
 }
 
-type UpdateReceiptData = Partial<EditReceiptFormValues>;
+export interface ReceiptUpdatePayload {
+  items: ItemUpdatePayload[];
+  transaction_date?: Date;
+  merchant_id: string;
+  subtotal: string;
+  sales_tax: string;
+  total: string;
+}
+
 export async function updateReceipt(
   receiptId: string,
-  updates: UpdateReceiptData
+  updates: ReceiptUpdatePayload
 ) {
   const response = await backend.put(`/receipts/${receiptId}`, updates);
   return response.data;

@@ -12,6 +12,7 @@ export type ReceiptData = {
   user_id: number | null;
   ocr_text: string | null;
   items: ItemData[] | null;
+  category_id: number | null;
 };
 
 export type MerchantData = {
@@ -27,8 +28,8 @@ export type ItemData = {
   created_at: string;
   updated_at: string;
   receipt_id: number;
-  category: string | null;
-  category_id: number | null;
+  subcategory: string | null;
+  subcategory_id: number | null;
   generated_item_name: string | null;
   item_name_raw: string | null;
   price_per_unit: string | null;
@@ -41,6 +42,14 @@ export type CategoryData = {
   created_at: string;
   updated_at: string;
   label: string;
+};
+
+export type SubcategoryData = {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  category_id: string;
 };
 
 export type GoalData = {

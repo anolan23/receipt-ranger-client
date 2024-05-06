@@ -6,9 +6,11 @@ interface ImageLogoProps extends ImgHTMLAttributes<HTMLImageElement> {
 
 export function ImageLogo({ size = 64, ...props }: ImageLogoProps) {
   return (
-    <div className={`w-[${size}px] h-[${size}px]`}>
+    <div>
       <img
-        className="w-full h-full rounded-md bg-muted p-2 object-contain aspect-square"
+        className="rounded-md bg-muted p-2 object-contain aspect-square"
+        width={size}
+        height={size}
         {...props}
       />
     </div>

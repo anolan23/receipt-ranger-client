@@ -22,7 +22,10 @@ interface SelectProps extends RadixSelectProps {
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(
   ({ items, placeholder, id, value, ...props }, ref) => {
     const selectedItem = useMemo(
-      () => items.find((item) => item.value === value),
+      () =>
+        items.find((item) => {
+          return item.value === value;
+        }),
       [items, value]
     );
     return (
