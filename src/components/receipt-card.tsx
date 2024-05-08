@@ -1,3 +1,4 @@
+import { toDollar } from '@/lib/helpers';
 import { ItemData, ReceiptData } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
@@ -5,14 +6,12 @@ import {
   ChevronLeft,
   ChevronRight,
   Copy,
-  CreditCard,
   Edit2Icon,
   MoreVertical,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Loader } from './loader';
+import { ImageLogo } from './image-logo';
 import { StatusIndicator } from './status-indicator';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import {
   Card,
@@ -31,7 +30,14 @@ import {
 } from './ui/dropdown-menu';
 import { Pagination, PaginationContent, PaginationItem } from './ui/pagination';
 import { Separator } from './ui/separator';
-import { toDollar } from '@/lib/helpers';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from './ui/collapsible';
+import { useState } from 'react';
+
+const NUM_VISIBLE_ITEMS: number = 4;
 
 interface ReceiptCardProps {
   title?: string;
@@ -39,6 +45,8 @@ interface ReceiptCardProps {
   className?: string;
   headerHidden?: boolean;
   loading?: boolean;
+  onPreviousClick?: () => void;
+  onNextClick?: () => void;
 }
 
 export function ReceiptCard({
@@ -47,13 +55,57 @@ export function ReceiptCard({
   headerHidden,
   title,
   loading,
+  onPreviousClick,
+  onNextClick,
   ...props
 }: ReceiptCardProps) {
+  const [expanded, setExpanded] = useState(false);
   const transactionDate = receipt?.transaction_date
     ? dayjs(receipt.transaction_date).format('MMMM D, YYYY')
     : undefined;
   const modifiedDateShort = dayjs(receipt?.updated_at).format('YYYY-MM-DD');
   const modifiedDate = dayjs(receipt?.updated_at).format('MMMM D, YYYY');
+
+  const renderItemList = function () {
+    if (!receipt?.items?.length)
+      return (
+        <div className="p-4 flex items-center justify-center">
+          No Receipt Items
+        </div>
+      );
+    if (receipt?.items?.length <= NUM_VISIBLE_ITEMS) {
+      return (
+        <ul className="grid gap-3">
+          {receipt?.items?.slice(0, NUM_VISIBLE_ITEMS).map((item) => (
+            <LineItem key={item.id} item={item} />
+          ))}
+        </ul>
+      );
+    }
+    return (
+      <Collapsible open={expanded} onOpenChange={setExpanded}>
+        <ul className="grid gap-3">
+          {receipt?.items?.slice(0, NUM_VISIBLE_ITEMS).map((item) => (
+            <LineItem key={item.id} item={item} />
+          ))}
+        </ul>
+        <CollapsibleContent className="grid gap-3" asChild>
+          <ul className="mt-3">
+            {receipt?.items?.slice(NUM_VISIBLE_ITEMS).map((item) => (
+              <LineItem key={item.id} item={item} />
+            ))}
+          </ul>
+        </CollapsibleContent>
+        <div className="pt-4">
+          <CollapsibleTrigger asChild>
+            <Button variant="outline" size="sm">
+              {expanded ? 'Collapse' : 'Show all'}
+            </Button>
+          </CollapsibleTrigger>
+        </div>
+      </Collapsible>
+    );
+  };
 
   return (
     <Card className={cn('overflow-hidden', className)}>
@@ -119,16 +171,8 @@ export function ReceiptCard({
           <CardContent className="p-6 text-sm">
             <div className="grid gap-3">
               <div className="font-semibold">Line Items</div>
-              <ul className="grid gap-3">
-                {receipt.items?.length ? (
-                  receipt.items.map((item) => (
-                    <LineItem key={item.id} item={item} />
-                  ))
-                ) : (
-                  <div className=" text-center">No line items</div>
-                )}
-              </ul>
-              <Separator className="my-2" />
+              {renderItemList()}
+              <Separator className="my-4" />
               <ul className="grid gap-3">
                 <li className="flex items-center justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
@@ -164,13 +208,7 @@ export function ReceiptCard({
                   <dt className="text-muted-foreground">Logo</dt>
                   <dd>
                     {receipt?.merchant.logo_url ? (
-                      <Avatar>
-                        <AvatarImage
-                          src={receipt.merchant.logo_url}
-                          alt="merchant logo"
-                        />
-                        <AvatarFallback>{'NA'}</AvatarFallback>
-                      </Avatar>
+                      <ImageLogo src={receipt.merchant.logo_url} size={48} />
                     ) : (
                       '-'
                     )}
@@ -199,13 +237,23 @@ export function ReceiptCard({
             <Pagination className="ml-auto mr-0 w-auto">
               <PaginationContent>
                 <PaginationItem>
-                  <Button size="icon" variant="outline" className="h-6 w-6">
+                  <Button
+                    onClick={onPreviousClick}
+                    size="icon"
+                    variant="outline"
+                    className="h-6 w-6"
+                  >
                     <ChevronLeft className="h-3.5 w-3.5" />
                     <span className="sr-only">Previous Receipt</span>
                   </Button>
                 </PaginationItem>
                 <PaginationItem>
-                  <Button size="icon" variant="outline" className="h-6 w-6">
+                  <Button
+                    onClick={onNextClick}
+                    size="icon"
+                    variant="outline"
+                    className="h-6 w-6"
+                  >
                     <ChevronRight className="h-3.5 w-3.5" />
                     <span className="sr-only">Next Receipt</span>
                   </Button>

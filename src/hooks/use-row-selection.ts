@@ -24,5 +24,33 @@ export function useRowSelection<T>({
     setRowSelection({ '0': true });
   }, [data, selectFirstOnMOunt, setRowSelection]);
 
-  return { rowSelection, setRowSelection, selectedRow };
+  const prevRow = function (): void {
+    if (!data || data.length === 0) return;
+
+    const selectedIndex = Object.keys(rowSelection).at(0);
+
+    if (selectedIndex === undefined) {
+      setRowSelection({ [data.length - 1]: true });
+    } else {
+      const currentIndex = parseInt(selectedIndex, 10);
+      const prevIndex = (currentIndex - 1 + data.length) % data.length;
+      setRowSelection({ [prevIndex]: true });
+    }
+  };
+
+  const nextRow = function (): void {
+    if (!data || data.length === 0) return;
+
+    const selectedIndex = Object.keys(rowSelection).at(0);
+
+    if (selectedIndex === undefined) {
+      setRowSelection({ '0': true });
+    } else {
+      const currentIndex = parseInt(selectedIndex, 10);
+      const nextIndex = (currentIndex + 1) % data.length;
+      setRowSelection({ [nextIndex]: true });
+    }
+  };
+
+  return { rowSelection, setRowSelection, selectedRow, prevRow, nextRow };
 }

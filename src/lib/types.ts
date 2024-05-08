@@ -13,6 +13,7 @@ export type ReceiptData = {
   ocr_text: string | null;
   items: ItemData[] | null;
   category_id: number | null;
+  category: CategoryData | null;
 };
 
 export type MerchantData = {

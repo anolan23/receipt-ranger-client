@@ -114,6 +114,12 @@ export function AnalyticsPage({ ...props }: AnalyticsProps) {
                 datePreset={datePreset}
               />
             </div>
+            {/* <div>
+              <CategoriesCard
+                data={categoryTotalsResult || []}
+                loading={isCategoryTotalsLoading}
+              />
+            </div> */}
             <div className="grid gap-8 sm:grid-cols-2">
               <CategoriesCard
                 data={categoryTotalsResult || []}

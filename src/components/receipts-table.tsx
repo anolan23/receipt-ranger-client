@@ -6,6 +6,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { ReceiptTextIcon } from 'lucide-react';
 import { ImageLogo } from './image-logo';
+import { Badge } from './ui/badge';
 
 interface ReceiptsTableProps
   extends Omit<DataTableProps<ReceiptData>, 'columns'> {}
@@ -64,13 +65,29 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       header: 'Merchant',
       enableSorting: false,
     }),
+    columnHelper.accessor('category.label', {
+      id: 'category',
+      header: 'Category',
+      enableSorting: false,
+      cell: (info) => {
+        const value = info.getValue();
+        if (!value) return '-';
+        return <Badge variant="outline">{value}</Badge>;
+      },
+    }),
     columnHelper.accessor('transaction_date', {
       id: 'transaction_date',
       header: 'Transaction date',
       cell: (info) => {
         return dayjs(info.row.original.transaction_date).format('YYYY/MM/DD');
       },
-      enableSorting: false,
+      enableSorting: true,
+      sortingFn: (rowA, rowB, columnId) => {
+        const dateA = new Date(rowA.getValue(columnId));
+        const dateB = new Date(rowB.getValue(columnId));
+
+        return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
+      },
     }),
     // columnHelper.display({
     //   id: 'status',
@@ -84,7 +101,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       id: 'total',
       header: 'Total',
       cell: (info) => `$${info.getValue()}`,
-      enableSorting: false,
+      enableSorting: true,
     }),
     // columnHelper.accessor('created_at', {
     //   id: 'created_at',

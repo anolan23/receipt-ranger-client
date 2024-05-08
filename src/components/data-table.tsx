@@ -42,9 +42,11 @@ export interface DataTableProps<TData> {
   rowSelection?: RowSelectionState;
   variant?: 'default' | 'embedded';
   initialColumnVisibility?: ColumnVisibilty<TData>;
+  globalFilter?: string;
   loading?: boolean;
   empty?: ReactNode;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+  onGlobalFilterChange?: OnChangeFn<string>;
   filter?: (table: ITable<TData>) => ReactNode;
   footerControls?: (table: ITable<TData>) => ReactNode;
   getRowId?:
@@ -61,6 +63,7 @@ export function DataTable<TData>({
   columns,
   data,
   rowSelection = {},
+  globalFilter,
   variant = 'default',
   initialColumnVisibility,
   loading,
@@ -69,6 +72,7 @@ export function DataTable<TData>({
   filter,
   footerControls,
   getRowId,
+  onGlobalFilterChange,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -105,12 +109,13 @@ export function DataTable<TData>({
     enableMultiRowSelection: selectionType === 'multiple',
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onRowSelectionChange: onRowSelectionChange,
+    onRowSelectionChange,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange,
     getRowId,
 
     state: {
@@ -118,6 +123,7 @@ export function DataTable<TData>({
       sorting,
       columnFilters,
       columnVisibility,
+      globalFilter,
     },
     initialState: {
       pagination: {

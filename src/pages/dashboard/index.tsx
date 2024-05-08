@@ -30,10 +30,11 @@ import { ReceiptsTable } from '../../components/receipts-table';
 import { toDollar } from '@/lib/helpers';
 export function DashboardPage() {
   const { data: receipts } = useReceipts({ limit: 5 });
-  const { rowSelection, setRowSelection, selectedRow } = useRowSelection({
-    selectFirstOnMOunt: true,
-    data: receipts,
-  });
+  const { rowSelection, setRowSelection, selectedRow, nextRow, prevRow } =
+    useRowSelection({
+      selectFirstOnMOunt: true,
+      data: receipts,
+    });
   const { data: receipt, isLoading: isReceiptLoading } = useReceipt(
     selectedRow?.id.toString()
   );
@@ -219,7 +220,12 @@ export function DashboardPage() {
               </Tabs>
             </div>
             <div>
-              <ReceiptCard receipt={receipt} loading={isReceiptLoading} />
+              <ReceiptCard
+                receipt={receipt}
+                loading={isReceiptLoading}
+                onPreviousClick={prevRow}
+                onNextClick={nextRow}
+              />
             </div>
           </div>
         </div>

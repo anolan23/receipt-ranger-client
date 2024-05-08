@@ -83,3 +83,25 @@ export async function getMonthlyTotals(params: UseMonthlyTotalsParams) {
   );
   return response.data;
 }
+
+export async function downloadReceipts() {
+  const url = `/receipts/export`;
+
+  // Use Axios to make the GET request
+  const response = await backend.get<Blob>(url, { responseType: 'blob' });
+  // Create a temporary link element
+  const link = document.createElement('a');
+  link.href = window.URL.createObjectURL(response.data);
+
+  // Set the filename for the downloaded file
+  link.download = 'receipts.csv';
+
+  // Append the link to the document body
+  document.body.appendChild(link);
+
+  // Trigger the download
+  link.click();
+
+  // Remove the link from the document body
+  document.body.removeChild(link);
+}

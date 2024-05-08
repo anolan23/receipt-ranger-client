@@ -14,6 +14,7 @@ type SelectItemDefinition = {
 };
 
 interface SelectProps extends RadixSelectProps {
+  selectedItem?: SelectItemDefinition;
   items: SelectItemDefinition[];
   placeholder?: string;
   id?: any;

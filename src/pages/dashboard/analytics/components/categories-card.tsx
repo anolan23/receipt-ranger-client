@@ -27,7 +27,7 @@ export function CategoriesCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Category Totals</CardTitle>
+        <CardTitle>Top 5 Receipt Categories</CardTitle>
       </CardHeader>
       <CardContent>
         <NivoBarChart
@@ -38,7 +38,7 @@ export function CategoriesCard({
           series={series}
           hideFilter
           loading={loading}
-          margin={{ top: 10, right: 0, bottom: 100, left: 50 }}
+          margin={{ top: 10, right: 0, bottom: 50, left: 50 }}
           gridYValues={5}
           axisLeft={{
             tickSize: 5,
@@ -50,12 +50,13 @@ export function CategoriesCard({
           axisBottom={{
             tickSize: 5,
             tickPadding: 5,
-            tickRotation: 45,
+            tickRotation: 0,
             truncateTickAt: 0,
             tickValues: 5,
           }}
           //   axisBottom={null}
-          //   layout="horizontal"
+          // layout="horizontal"
+          // label={(val) => val.id.toString()}
         />
       </CardContent>
     </Card>
