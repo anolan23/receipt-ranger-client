@@ -30,7 +30,7 @@ import {
   ShoppingCart,
   Users2,
 } from 'lucide-react';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import placeHolderUser from '@/assets/user.webp';
 import { signOutUser } from '@/lib/api/auth';
@@ -44,6 +44,7 @@ export function DashboardLayout({
   breadcrumbs,
   content,
 }: DashboardLayoutProps) {
+  const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
   const handleLogoutSelect = async function () {
@@ -54,6 +55,17 @@ export function DashboardLayout({
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleSearchSubmit: React.FormEventHandler<HTMLFormElement> = function (
+    event
+  ) {
+    event.preventDefault();
+    if (!query.length) return;
+    navigate({
+      pathname: '/dashboard/receipts',
+      search: `q=${query.toLowerCase()}`,
+    });
   };
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -198,11 +210,15 @@ export function DashboardLayout({
           {breadcrumbs}
           <div className="relative ml-auto flex-1 md:grow-0">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search..."
-              className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-            />
+            <form onSubmit={handleSearchSubmit}>
+              <Input
+                type="search"
+                placeholder="Search by Merchant, Category, or total"
+                className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </form>
           </div>
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>

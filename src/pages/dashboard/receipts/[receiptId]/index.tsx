@@ -18,6 +18,7 @@ import { LineItemsCard } from './components/line-items-card';
 import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
 import { useSubcategories } from '@/hooks/use-subcategories';
+import { ActionsDropdown } from '../components/actions-dropdown';
 
 interface ReceiptPageProps {}
 
@@ -135,6 +136,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
               >
                 Save Receipt
               </Button>
+              <ActionsDropdown receipt={receipt} />
             </div>
           </div>
           <Form {...form}>

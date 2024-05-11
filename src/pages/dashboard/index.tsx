@@ -57,14 +57,10 @@ export function DashboardPage() {
   const { current_month_spend, forecasted_spend, previous_month_spend } =
     spendingOverview || {};
 
-  console.log(current_month_spend, previous_month_spend);
-
   const currentMonthDescription =
     current_month_spend && previous_month_spend
       ? getMonlthySpendPercentDiff(+current_month_spend, +previous_month_spend)
       : undefined;
-
-  console.log(currentMonthDescription);
 
   const percentMonth =
     current_month_spend && previous_month_spend
@@ -128,96 +124,48 @@ export function DashboardPage() {
                   percent={percentForcasted}
                 />
               </div>
-              <Tabs defaultValue="week">
-                <div className="flex items-center">
-                  <TabsList>
-                    <TabsTrigger value="week">Week</TabsTrigger>
-                    <TabsTrigger value="month">Month</TabsTrigger>
-                    <TabsTrigger value="year">Year</TabsTrigger>
-                  </TabsList>
-                  <div className="ml-auto flex items-center gap-2">
-                    <DropdownMenu modal={false}>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-7 gap-1 text-sm"
-                        >
-                          <ListFilter className="h-3.5 w-3.5" />
-                          <span className="sr-only sm:not-sr-only">Filter</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuCheckboxItem checked>
-                          Fulfilled
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>
-                          Declined
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem>
-                          Refunded
-                        </DropdownMenuCheckboxItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 gap-1 text-sm"
-                    >
-                      <File className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only">Export</span>
-                    </Button>
-                  </div>
-                </div>
-                <TabsContent value="week">
-                  <Card x-chunk="dashboard-05-chunk-3">
-                    <CardHeader className="px-7">
-                      <CardTitle>Receipts</CardTitle>
-                      <CardDescription>
-                        Recently scanned receipts.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <ReceiptsTable
-                        rowSelection={rowSelection}
-                        onRowSelectionChange={setRowSelection}
-                        variant="embedded"
-                        selectionType="single"
-                        data={receipts || []}
-                        footerControls={(table) => (
-                          <>
-                            <div className="flex-1 text-sm text-muted-foreground">
-                              {table.getFilteredSelectedRowModel().rows.length}{' '}
-                              of {table.getFilteredRowModel().rows.length}{' '}
-                              row(s) selected.
-                            </div>
-                            <div className="flex items-center justify-end space-x-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => table.previousPage()}
-                                disabled={!table.getCanPreviousPage()}
-                              >
-                                Previous
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => table.nextPage()}
-                                disabled={!table.getCanNextPage()}
-                              >
-                                Next
-                              </Button>
-                            </div>
-                          </>
-                        )}
-                      />
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </Tabs>
+              <Card x-chunk="dashboard-05-chunk-3">
+                <CardHeader className="px-7">
+                  <CardTitle>Receipts</CardTitle>
+                  <CardDescription>Recently scanned receipts.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ReceiptsTable
+                    rowSelection={rowSelection}
+                    onRowSelectionChange={setRowSelection}
+                    variant="embedded"
+                    selectionType="single"
+                    data={receipts || []}
+                    footerControls={(table) => (
+                      <>
+                        <div className="flex-1 text-sm text-muted-foreground">
+                          {table.getFilteredSelectedRowModel().rows.length} of{' '}
+                          {table.getFilteredRowModel().rows.length} row(s)
+                          selected.
+                        </div>
+                        <div className="flex items-center justify-end space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => table.previousPage()}
+                            disabled={!table.getCanPreviousPage()}
+                          >
+                            Previous
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => table.nextPage()}
+                            disabled={!table.getCanNextPage()}
+                          >
+                            Next
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                  />
+                </CardContent>
+              </Card>
             </div>
             <div>
               <ReceiptCard

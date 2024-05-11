@@ -128,7 +128,7 @@ export function DataTable<TData>({
     initialState: {
       pagination: {
         pageIndex: 0,
-        pageSize: 20,
+        pageSize: 10,
       },
     },
   });

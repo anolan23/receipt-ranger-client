@@ -40,8 +40,8 @@ export function DeleteReceiptDialog({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {receipt?.merchant?.name
-                ? `Permanently delete ${receipt?.merchant.name} receipt?`
+              {receipt?.id
+                ? `Permanently delete Receipt ${receipt?.id}?`
                 : 'Permanently delete receipt?'}
             </AlertDialogTitle>
             <AlertDialogDescription>

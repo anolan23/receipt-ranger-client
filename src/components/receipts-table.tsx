@@ -38,10 +38,12 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       cell: ({ row }) => {
         const receipt = row.original;
         return (
-          <Button asChild variant="outline" size="sm">
+          <Button asChild variant="outline" size="sm" className="h-7 gap-1">
             <Link to={`/dashboard/receipts/${receipt.id}`}>
-              <ReceiptTextIcon className="mr-2 h-4 w-4" />
-              View
+              <ReceiptTextIcon className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                View
+              </span>
             </Link>
           </Button>
         );
@@ -124,16 +126,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
     <DataTable
       columns={columns}
       selectionType="single"
-      empty={
-        <div className="space-y-4 p-8">
-          <span>No Receipts found</span>
-          <div>
-            <Button size="sm" variant="outline" asChild>
-              <Link to="/dashboard/scanner">Scan New Receipt</Link>
-            </Button>
-          </div>
-        </div>
-      }
+      empty={'No Receipts found'}
       {...props}
     />
   );

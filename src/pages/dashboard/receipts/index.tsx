@@ -21,17 +21,20 @@ import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { File, ScanText } from 'lucide-react';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ReceiptsTable } from '../../../components/receipts-table';
 import { downloadReceipts } from '@/lib/api/receipts';
 import { toast } from 'sonner';
 
 export function ReceiptsPage() {
   const { data: receipts } = useReceipts();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('q');
+
   const { rowSelection, setRowSelection, selectedRow, prevRow, nextRow } =
     useRowSelection({
-      selectFirstOnMOunt: true,
+      selectFirstOnMOunt: !query,
       data: receipts,
     });
   const { data: receipt, isLoading: isReceiptLoading } = useReceipt(
@@ -39,6 +42,11 @@ export function ReceiptsPage() {
   );
   const [globalFilter, setGlobalFilter] = useState('');
   const [downloading, setDownloading] = useState(false);
+
+  useEffect(() => {
+    if (!query) return;
+    setGlobalFilter(query);
+  }, [query, setRowSelection]);
 
   const handleExportClick = async function () {
     try {
@@ -73,6 +81,7 @@ export function ReceiptsPage() {
           <div className="lg:col-span-2">
             <div className="flex items-center pb-4">
               <Input
+                type="search"
                 placeholder="Filter Receipts..."
                 value={globalFilter}
                 onChange={(e) => setGlobalFilter(e.target.value)}

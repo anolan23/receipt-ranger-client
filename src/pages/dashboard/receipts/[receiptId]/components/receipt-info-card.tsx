@@ -17,6 +17,8 @@ import { EditReceiptFormValues } from '../interfaces';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { useCategories } from '@/hooks/use-categories';
 import { Select } from '@/components/select';
+import { DollarSign } from 'lucide-react';
+import { DollarInput } from '@/components/dollar-input';
 
 interface ReceiptInfoCardProps {}
 
@@ -133,21 +135,14 @@ export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
             <FormItem>
               <FormLabel htmlFor="subtotal">Subtotal</FormLabel>
               <FormControl>
-                <div className="flex">
-                  <div className=" basis-[66%]">
-                    <Input
-                      id="subtotal"
-                      value={field.value}
-                      onChange={(e) => {
-                        const value = parseFloat(e.target.value).toFixed(2);
-                        field.onChange(value);
-                      }}
-                      type="number"
-                      step={0.01}
-                      min={0}
-                    />
-                  </div>
-                </div>
+                <DollarInput
+                  className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+                  id="subtotal"
+                  type="number"
+                  step={0.01}
+                  min={0}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -160,21 +155,13 @@ export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
             <FormItem>
               <FormLabel htmlFor="sales_tax">Sales Tax</FormLabel>
               <FormControl>
-                <div className="flex">
-                  <div className=" basis-[66%]">
-                    <Input
-                      id="sales_tax"
-                      value={field.value}
-                      onChange={(e) => {
-                        const value = parseFloat(e.target.value).toFixed(2);
-                        field.onChange(value);
-                      }}
-                      type="number"
-                      step={0.01}
-                      min={0}
-                    />
-                  </div>
-                </div>
+                <DollarInput
+                  id="sales_tax"
+                  type="number"
+                  step={0.01}
+                  min={0}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -187,21 +174,13 @@ export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
             <FormItem>
               <FormLabel htmlFor="total">Total</FormLabel>
               <FormControl>
-                <div className="flex">
-                  <div className=" basis-[66%]">
-                    <Input
-                      id="total"
-                      value={field.value}
-                      onChange={(e) => {
-                        const value = parseFloat(e.target.value).toFixed(2);
-                        field.onChange(value);
-                      }}
-                      type="number"
-                      step={0.01}
-                      min={0}
-                    />
-                  </div>
-                </div>
+                <DollarInput
+                  id="total"
+                  type="number"
+                  step={0.01}
+                  min={0}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

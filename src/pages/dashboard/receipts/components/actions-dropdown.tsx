@@ -10,10 +10,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { deleteReceipt } from '@/lib/api/receipts';
 import { ReceiptData } from '@/lib/types';
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { MoreVertical } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import { useSWRConfig } from 'swr';
 import { toast } from 'sonner';
+import { useSWRConfig } from 'swr';
 
 interface ActionsDropdownProps {
   receipt: ReceiptData;
@@ -23,7 +23,8 @@ export function ActionsDropdown({ receipt, ...props }: ActionsDropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [hasOpenDialog, setHasOpenDialog] = useState(false);
 
-  const { mutate } = useSWRConfig();
+  const { mutate, cache } = useSWRConfig();
+  console.log(cache);
 
   function handleDialogItemOpenChange(open: boolean) {
     if (open === false) {
@@ -40,7 +41,7 @@ export function ActionsDropdown({ receipt, ...props }: ActionsDropdownProps) {
       try {
         if (!receipt?.id) return;
         await deleteReceipt(receipt.id);
-        mutate('/receipts');
+        mutate('/receipts?limit=5');
         toast('Receipt deleted');
       } catch (error) {
         let message = 'Something went wrong';
@@ -48,6 +49,8 @@ export function ActionsDropdown({ receipt, ...props }: ActionsDropdownProps) {
           message = error.message;
         }
         toast.error(message);
+      } finally {
+        setDropdownOpen(false);
       }
     },
     [mutate]
@@ -60,19 +63,18 @@ export function ActionsDropdown({ receipt, ...props }: ActionsDropdownProps) {
       modal={false}
     >
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <DotsHorizontalIcon className="h-4 w-4" />
+        <Button size="icon" variant="outline" className="h-8 w-8">
+          <MoreVertical className="h-3.5 w-3.5" />
+          <span className="sr-only">More</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" hidden={hasOpenDialog}>
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem disabled>Export</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Edit</DropdownMenuItem>
         <DeleteReceiptDialog
           trigger={
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              Delete
+              Trash
             </DropdownMenuItem>
           }
           receipt={receipt}

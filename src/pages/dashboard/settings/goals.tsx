@@ -1,3 +1,4 @@
+import { DollarInput } from '@/components/dollar-input';
 import { Loader } from '@/components/loader';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -83,9 +84,9 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Monthly Budget Goal ($)</FormLabel>
+                    <FormLabel>Monthly Budget Goal</FormLabel>
                     <FormControl>
-                      <Input
+                      <DollarInput
                         type="number"
                         placeholder="$0.00"
                         step="0.01"

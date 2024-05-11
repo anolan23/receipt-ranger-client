@@ -36,6 +36,7 @@ import {
   CollapsibleTrigger,
 } from './ui/collapsible';
 import { useState } from 'react';
+import { ActionsDropdown } from '@/pages/dashboard/receipts/components/actions-dropdown';
 
 const NUM_VISIBLE_ITEMS: number = 4;
 
@@ -60,6 +61,7 @@ export function ReceiptCard({
   ...props
 }: ReceiptCardProps) {
   const [expanded, setExpanded] = useState(false);
+  if (!receipt) return null;
   const transactionDate = receipt?.transaction_date
     ? dayjs(receipt.transaction_date).format('MMMM D, YYYY')
     : undefined;
@@ -152,7 +154,8 @@ export function ReceiptCard({
                     </span>
                   </Link>
                 </Button>
-                <DropdownMenu modal={false}>
+                <ActionsDropdown receipt={receipt} />
+                {/* <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>
                     <Button size="icon" variant="outline" className="h-8 w-8">
                       <MoreVertical className="h-3.5 w-3.5" />
@@ -164,7 +167,7 @@ export function ReceiptCard({
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>Trash</DropdownMenuItem>
                   </DropdownMenuContent>
-                </DropdownMenu>
+                </DropdownMenu> */}
               </div>
             </CardHeader>
           )}
