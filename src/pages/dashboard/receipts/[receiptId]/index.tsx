@@ -142,10 +142,8 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
           <Form {...form}>
             <form id="edit-form" onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-8">
-                <div className="">
-                  <ReceiptInfoCard />
-                </div>
-                <div className="space-y-2">
+                <ReceiptInfoCard />
+                <div className="space-y-2 min-w-0">
                   <LineItemsCard subcategories={subcategories} />
                   <div>
                     <StatusIndicator
