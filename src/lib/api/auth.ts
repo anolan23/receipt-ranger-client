@@ -4,6 +4,7 @@ import {
   signOut,
   signUp,
   resendSignUpCode,
+  signInWithRedirect,
   type ConfirmSignUpInput,
   type SignInInput,
   type ResendSignUpCodeInput,
@@ -55,4 +56,8 @@ export async function resendSignUpCodeToEmail({
 }: ResendSignUpCodeInput) {
   const result = await resendSignUpCode({ username });
   return result;
+}
+
+export async function googleSignIn() {
+  await signInWithRedirect({ provider: 'Google' });
 }

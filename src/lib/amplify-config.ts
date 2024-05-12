@@ -12,6 +12,17 @@ Amplify.configure({
       // OPTIONAL - This is used when autoSignIn is enabled for Auth.signUp
       // 'code' is used for Auth.confirmSignUp, 'link' is used for email link verification
       signUpVerificationMethod: 'code', // 'code' | 'link'
+      loginWith: {
+        email: true,
+        oauth: {
+          providers: ['Google'],
+          domain: import.meta.env.VITE_COGNITO_DOMAIN,
+          scopes: ['email', 'aws.cognito.signin.user.admin'],
+          redirectSignIn: [`${import.meta.env.VITE_APP_DOMAIN}/dashboard`],
+          redirectSignOut: [],
+          responseType: 'code',
+        },
+      },
     },
   },
 });

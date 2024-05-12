@@ -49,9 +49,9 @@ export function DashboardLayout({
 
   const handleLogoutSelect = async function () {
     try {
+      navigate('/');
       await signOutUser();
       clearSWRCache();
-      navigate('/');
     } catch (error) {
       console.error(error);
     }

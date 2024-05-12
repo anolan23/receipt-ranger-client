@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Credentials } from '@/lib/types';
-import { loginUser } from '@/lib/api/auth';
+import { googleSignIn, loginUser } from '@/lib/api/auth';
 import { useNavigate } from 'react-router-dom';
 import { ReloadIcon } from '@radix-ui/react-icons';
 
@@ -147,8 +147,7 @@ export function LoginPage({ ...props }: LoginPageProps) {
                 </span>
               </div>
             </div>
-            <Button variant="outline" type="button">
-              {' '}
+            <Button variant="outline" type="button" onClick={googleSignIn}>
               Google
             </Button>
           </div>

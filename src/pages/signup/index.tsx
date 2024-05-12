@@ -1,7 +1,7 @@
 import { Link } from '@/components/link';
 import { Button } from '@/components/ui/button';
 import { AuthLayout } from '@/layout/auth-layout';
-import { signUpUser } from '@/lib/api/auth';
+import { googleSignIn, signUpUser } from '@/lib/api/auth';
 import { Credentials } from '@/lib/types';
 import { useNavigate } from 'react-router-dom';
 import { CredentialsForm } from './components/credentials-form';
@@ -46,8 +46,7 @@ export function SignupPage({ ...props }: SignupPageProps) {
                 </span>
               </div>
             </div>
-            <Button variant="outline" type="button">
-              {' '}
+            <Button variant="outline" type="button" onClick={googleSignIn}>
               Google
             </Button>
           </div>
