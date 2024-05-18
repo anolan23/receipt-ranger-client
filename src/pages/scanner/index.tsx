@@ -1,15 +1,8 @@
 import { Link } from '@/components/link';
 import { toast } from 'sonner';
 
-import { Header } from '@/components/header';
 import { Loader } from '@/components/loader';
-import { Button } from '@/components/ui/button';
-import UploadArea from '@/components/upload-area';
-import { useReceiptUploader } from '@/hooks/use-receipt-uploader';
-import { formatBytes } from '@/lib/helpers';
-import { RocketIcon } from '@radix-ui/react-icons';
-import { useNavigate } from 'react-router-dom';
-import { DashboardLayout } from '@/layout/dashboard-layout';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,8 +11,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import CameraCapture from '@/components/camera-capture';
+import { Button } from '@/components/ui/button';
+import UploadArea from '@/components/upload-area';
+import { useReceiptUploader } from '@/hooks/use-receipt-uploader';
+import { DashboardLayout } from '@/layout/dashboard-layout';
+import { formatBytes } from '@/lib/helpers';
+import { RocketIcon } from '@radix-ui/react-icons';
+import { useNavigate } from 'react-router-dom';
 
 interface ScannerPageProps {}
 
@@ -118,7 +116,6 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
               );
             })}
           </div>
-          <CameraCapture />
         </div>
       }
     />
