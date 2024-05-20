@@ -25,11 +25,13 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ReceiptsTable } from '../../../components/receipts-table';
 import { downloadReceipts } from '@/lib/api/receipts';
-import { toast } from 'sonner';
+import { useToast } from '@/components/ui/use-toast';
 
 export function ReceiptsPage() {
   const { data: receipts } = useReceipts();
   const [searchParams] = useSearchParams();
+  const { toast } = useToast();
+
   const query = searchParams.get('q');
 
   const { rowSelection, setRowSelection, selectedRow, prevRow, nextRow } =
@@ -53,7 +55,11 @@ export function ReceiptsPage() {
       setDownloading(true);
       await downloadReceipts();
     } catch (error) {
-      toast.error('Failed to export Receipts');
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to export Receipts',
+      });
     } finally {
       setDownloading(false);
     }

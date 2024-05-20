@@ -1,5 +1,4 @@
 import { Link } from '@/components/link';
-import { toast } from 'sonner';
 
 import { Loader } from '@/components/loader';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -12,6 +11,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 import UploadArea from '@/components/upload-area';
 import { useReceiptUploader } from '@/hooks/use-receipt-uploader';
 import { DashboardLayout } from '@/layout/dashboard-layout';
@@ -24,29 +24,15 @@ interface ScannerPageProps {}
 export function ScannerPage({ ...props }: ScannerPageProps) {
   const navigate = useNavigate();
   const { uploadFiles, uploadAll, errors } = useReceiptUploader();
+  const { toast } = useToast();
 
   const handleFileDrop = async function (files: FileList) {
     const { failedUploads, fulfilled } = await uploadAll(files);
     failedUploads.forEach((failedUpload) => {
-      const id = failedUpload.file.name + failedUpload.file.size;
-      toast.error(`Failed to upload ${failedUpload.file.name}`, {
-        id,
+      toast({
+        variant: 'destructive',
+        title: `Failed to upload ${failedUpload.file.name}`,
         description: failedUpload.message,
-        action:
-          failedUpload.message ===
-          'Maximum number of receipt uploads reached' ? (
-            <Button
-              key={id}
-              size="sm"
-              onClick={() => toast.dismiss(id)}
-              asChild
-            >
-              <Link to="/membership">
-                <RocketIcon className="mr-2 w-4 h-4" />
-                Try Pro
-              </Link>
-            </Button>
-          ) : undefined,
       });
     });
   };

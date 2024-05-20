@@ -13,12 +13,12 @@ import { ChevronLeft } from 'lucide-react';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'sonner';
 import { LineItemsCard } from './components/line-items-card';
 import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
 import { useSubcategories } from '@/hooks/use-subcategories';
 import { ActionsDropdown } from '../components/actions-dropdown';
+import { useToast } from '@/components/ui/use-toast';
 
 interface ReceiptPageProps {}
 
@@ -26,6 +26,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
   const { receiptId } = useParams();
 
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const { data: receipt } = useReceipt(receiptId);
   const { data: items } = useReceiptItems(receiptId);
@@ -96,10 +97,14 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
         ...rest,
         merchant_id: merchantOption?.value || '',
       });
-      toast.success('Receipt updated');
+      toast({ title: 'Receipt successfully updated' });
     } catch (error) {
       console.error(error);
-      toast.error('Failed to update Receipt');
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to update Receipt',
+      });
     }
   }
 

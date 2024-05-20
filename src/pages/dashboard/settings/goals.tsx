@@ -19,13 +19,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
 import { useGoal } from '@/hooks/use-goal';
 import { SettingsLayout } from '@/layout/settings-layout';
 import { createOrUpdateGoal } from '@/lib/api/goals';
 import { ExclamationTriangleIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 
 type GoalsSettingsValues = {
   amount: string;
@@ -35,6 +35,7 @@ interface GoalsSettingsProps {}
 
 export function GoalsSettings({ ...props }: GoalsSettingsProps) {
   const { data: goal, isLoading } = useGoal();
+  const { toast } = useToast();
 
   const defaultValues = useMemo<GoalsSettingsValues>(() => {
     return {
@@ -52,7 +53,7 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
   async function onSubmit(values: GoalsSettingsValues) {
     try {
       const result = await createOrUpdateGoal(values.amount);
-      toast('Goals updated');
+      toast({ variant: 'default', title: 'Goals updated' });
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {

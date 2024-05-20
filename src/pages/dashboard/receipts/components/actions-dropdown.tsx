@@ -4,15 +4,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useToast } from '@/components/ui/use-toast';
 import { deleteReceipt } from '@/lib/api/receipts';
 import { ReceiptData } from '@/lib/types';
 import { MoreVertical } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import { toast } from 'sonner';
 import { useSWRConfig } from 'swr';
 
 interface ActionsDropdownProps {
@@ -23,8 +22,8 @@ export function ActionsDropdown({ receipt, ...props }: ActionsDropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [hasOpenDialog, setHasOpenDialog] = useState(false);
 
-  const { mutate, cache } = useSWRConfig();
-  console.log(cache);
+  const { mutate } = useSWRConfig();
+  const { toast } = useToast();
 
   function handleDialogItemOpenChange(open: boolean) {
     if (open === false) {
@@ -42,18 +41,18 @@ export function ActionsDropdown({ receipt, ...props }: ActionsDropdownProps) {
         if (!receipt?.id) return;
         await deleteReceipt(receipt.id);
         mutate('/receipts?limit=5');
-        toast('Receipt deleted');
+        toast({ variant: 'default', title: 'Receipt deleted' });
       } catch (error) {
         let message = 'Something went wrong';
         if (error instanceof Error) {
           message = error.message;
         }
-        toast.error(message);
+        toast({ variant: 'destructive', title: 'Error', description: message });
       } finally {
         setDropdownOpen(false);
       }
     },
-    [mutate]
+    [mutate, toast]
   );
 
   return (
