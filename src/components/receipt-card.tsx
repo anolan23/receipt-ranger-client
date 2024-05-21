@@ -37,6 +37,7 @@ import {
 } from './ui/collapsible';
 import { useState } from 'react';
 import { ActionsDropdown } from '@/pages/dashboard/receipts/components/actions-dropdown';
+import CopyableText from './copyable-text';
 
 const NUM_VISIBLE_ITEMS: number = 4;
 
@@ -129,17 +130,11 @@ export function ReceiptCard({
           {!headerHidden && (
             <CardHeader className="flex flex-row items-start bg-muted/50 gap-2">
               <div className="grid gap-0.5">
-                <CardTitle className="group flex items-center gap-2 text-lg overflow-hidden">
-                  <div className="truncate flex-1">Receipt {receipt.id}</div>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
-                  >
-                    <Copy className="h-3 w-3" />
-                    <span className="sr-only">Copy Receipt ID</span>
-                  </Button>
-                </CardTitle>
+                <CopyableText text={`Receipt ${receipt.id}`}>
+                  <CardTitle className="truncate flex-1">
+                    Receipt {receipt.id}
+                  </CardTitle>
+                </CopyableText>
                 <CardDescription>{`Date: ${transactionDate}`}</CardDescription>
               </div>
               <div className="ml-auto flex items-center gap-1">
