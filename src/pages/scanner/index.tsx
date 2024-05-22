@@ -100,7 +100,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
       content={
         <div className="space-y-4 mx-auto max-w-[59rem]">
           <h1 className="text-xl font-semibold tracking-tight">
-            Receipt Upload
+            Receipt Scanner
           </h1>
           <div className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
@@ -114,7 +114,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                       </div>
                       <div className="space-y-1">
                         <h3 className="mt-2 font-semibold">
-                          Receipt upload via email
+                          Receipt processing via email
                         </h3>
                         <p className="mt-2 text-sm text-muted-foreground">
                           Quickly add receipts to your account
@@ -128,7 +128,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                   side={isMobile ? 'bottom' : 'right'}
                 >
                   <SheetHeader>
-                    <SheetTitle>Receipt upload via email</SheetTitle>
+                    <SheetTitle>Receipt processing via email</SheetTitle>
                     <SheetDescription>
                       An alternative way to enter receipts. Send an email with a
                       receipt image in the attachment to the below email
@@ -140,8 +140,8 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                       <CardHeader>
                         <CardTitle>Your forwarding email</CardTitle>
                         <CardDescription>
-                          To properly identify you, the sender must be your
-                          account's email address
+                          To properly identify your account, the sender must be
+                          your email address that is on file
                         </CardDescription>
                       </CardHeader>
                       <CardContent>

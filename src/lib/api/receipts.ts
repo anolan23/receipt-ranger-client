@@ -48,7 +48,7 @@ export async function createReceipt(file: File) {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 429) {
-        throw new Error('Maximum number of receipt uploads reached');
+        throw new Error('Maximum number of receipt scans reached');
       }
     }
     throw error;
