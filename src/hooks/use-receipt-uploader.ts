@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { uploadFile } from '../lib/api/files';
-import { createReceipt } from '../lib/api/receipts';
-import { UploadFile, UploadFileStatus } from '../lib/types';
+import { CreateReceiptResult, createReceipt } from '../lib/api/receipts';
+import { UploadFile } from '../lib/types';
 
 class FileUploadError extends Error {
   constructor(public file: File, message: string) {
@@ -12,6 +12,7 @@ class FileUploadError extends Error {
 
 export function useReceiptUploader() {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
+  const [uploading, setUploading] = useState(false);
   const [fileUploadErrors, setFileUploadErrors] = useState<FileUploadError[]>(
     []
   );
@@ -21,20 +22,22 @@ export function useReceiptUploader() {
     const uploadFile: UploadFile = {
       id,
       file,
-      status: 'uploading',
     };
     setUploadFiles((prevState) => [...prevState, uploadFile]);
     return id;
   };
 
-  const updateFileStatus = function (
-    fileId: string,
-    newStatus: UploadFileStatus
-  ) {
+  const removeFileFromUpload = function (id: string) {
+    setUploadFiles((prevState) =>
+      prevState.filter((uploadFile) => uploadFile.id !== id)
+    );
+  };
+
+  const updateFileTaskId = function (fileId: string, taskId: string) {
     setUploadFiles((prevState) =>
       prevState.map((uploadFile) =>
         uploadFile.id === fileId
-          ? { ...uploadFile, status: newStatus }
+          ? { ...uploadFile, taskId: taskId }
           : uploadFile
       )
     );
@@ -43,12 +46,11 @@ export function useReceiptUploader() {
   const upload = async function (file: File) {
     const fileId = addFileToUpload(file);
     try {
-      updateFileStatus(fileId, 'processing');
       const result = await createReceipt(file);
-      updateFileStatus(fileId, 'complete');
+      updateFileTaskId(fileId, result.task_id);
       return result;
     } catch (error) {
-      updateFileStatus(fileId, 'error');
+      removeFileFromUpload(fileId);
       throw new FileUploadError(
         file,
         error instanceof Error ? error.message : 'Unknown error'
@@ -58,8 +60,9 @@ export function useReceiptUploader() {
 
   const uploadAll = async function (fileList: FileList) {
     const promises = Array.from(fileList).map(upload);
+    setUploading(true);
     const results = await Promise.allSettled(promises);
-
+    setUploading(false);
     const failedUploads = results
       .filter(
         (result): result is PromiseRejectedResult =>
@@ -69,7 +72,7 @@ export function useReceiptUploader() {
 
     const fulfilled = results
       .filter(
-        (result): result is PromiseFulfilledResult<any> =>
+        (result): result is PromiseFulfilledResult<CreateReceiptResult> =>
           result.status === 'fulfilled'
       )
       .map((result) => result.value);
@@ -78,5 +81,11 @@ export function useReceiptUploader() {
     return { failedUploads, fulfilled };
   };
 
-  return { uploadFiles, uploadAll, errors: fileUploadErrors };
+  return {
+    uploadFiles,
+    uploadAll,
+    errors: fileUploadErrors,
+    uploading,
+    removeFileFromUpload,
+  };
 }

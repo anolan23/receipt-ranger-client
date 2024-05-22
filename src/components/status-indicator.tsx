@@ -6,7 +6,11 @@ import {
 } from 'lucide-react';
 import { ReactNode } from 'react';
 
-type StatusIndicatorStatus = 'destructive' | 'success' | 'warning' | 'loading';
+export type StatusIndicatorStatus =
+  | 'destructive'
+  | 'success'
+  | 'warning'
+  | 'loading';
 
 interface StatusIndicatorProps {
   status: StatusIndicatorStatus;

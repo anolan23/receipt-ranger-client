@@ -67,5 +67,3 @@ export function UploadArea({ onFileProcessed }: UploadAreaProps) {
     </label>
   );
 }
-
-export default UploadArea;

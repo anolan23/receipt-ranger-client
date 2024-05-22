@@ -4,6 +4,16 @@ import { Link } from '@/components/link';
 
 import { Loader } from '@/components/loader';
 import { ReceiptsTable } from '@/components/receipts-table';
+import {
+  StatusIndicator,
+  StatusIndicatorStatus,
+} from '@/components/status-indicator';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   Breadcrumb,
@@ -32,20 +42,30 @@ import {
 } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
-import UploadArea from '@/components/upload-area';
+import { UploadArea } from '@/components/upload-area';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { useReceiptUploader } from '@/hooks/use-receipt-uploader';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { formatBytes } from '@/lib/helpers';
+import { UploadFileStatus } from '@/lib/types';
 import { RocketIcon } from '@radix-ui/react-icons';
-import { Copy, Mail } from 'lucide-react';
+import {
+  Circle,
+  CircleAlert,
+  CircleCheck,
+  CircleCheckBig,
+  Copy,
+  Mail,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { UploadFileProgress } from './upload-file-progress';
 
 interface ScannerPageProps {}
 
 export function ScannerPage({ ...props }: ScannerPageProps) {
   const navigate = useNavigate();
-  const { uploadFiles, uploadAll, errors } = useReceiptUploader();
+  const { uploadFiles, uploadAll, errors, uploading, removeFileFromUpload } =
+    useReceiptUploader();
   const { toast } = useToast();
   const isMobile = useDeviceWidth();
 
@@ -59,6 +79,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
       });
     });
   };
+
   return (
     <DashboardLayout
       breadcrumbs={
@@ -77,11 +98,10 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
         </Breadcrumb>
       }
       content={
-        <div className="space-y-4">
-          <Header
-            title="Receipt Upload"
-            // description="Manage your account settings and set e-mail preferences."
-          />
+        <div className="space-y-4 mx-auto max-w-[59rem]">
+          <h1 className="text-xl font-semibold tracking-tight">
+            Receipt Upload
+          </h1>
           <div className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <UploadArea onFileProcessed={handleFileDrop} />
@@ -139,7 +159,33 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                 <TabsTrigger value="for-review">For review</TabsTrigger>
                 <TabsTrigger value="reviewed">Reviewed</TabsTrigger>
               </TabsList>
-              <TabsContent value="for-review">
+              <TabsContent value="for-review" className="space-y-4">
+                {uploadFiles.length ? (
+                  <Accordion
+                    type="single"
+                    collapsible
+                    defaultValue="processing"
+                  >
+                    <AccordionItem value="processing">
+                      <AccordionTrigger className="text-lg font-bold">
+                        Processing {`(${uploadFiles.length})`}
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-2">
+                        <div className="space-y-2">
+                          {uploadFiles.map((file) => (
+                            <UploadFileProgress
+                              key={file.id}
+                              uploadFile={file}
+                              onUploadSuccess={(result) =>
+                                removeFileFromUpload(file.id)
+                              }
+                            />
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                ) : null}
                 <Card>
                   <CardHeader></CardHeader>
                   <CardContent>
