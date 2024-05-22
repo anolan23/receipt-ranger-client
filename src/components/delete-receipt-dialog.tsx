@@ -9,7 +9,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { ReceiptData } from '@/lib/types';
 import { DialogProps } from '@radix-ui/react-alert-dialog';
 import { ReactElement } from 'react';

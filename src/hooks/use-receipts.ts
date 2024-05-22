@@ -1,14 +1,18 @@
-import { getReceipts } from '@/lib/api/receipts';
+import { GetReceiptsParams, getReceipts } from '@/lib/api/receipts';
 import useSWR from 'swr';
 
-interface UseReceiptsOptions {
-  limit?: number;
-}
+export function useReceipts(params?: GetReceiptsParams) {
+  const searchParams = new URLSearchParams();
 
-export function useReceipts(options?: UseReceiptsOptions) {
-  const { limit } = options || {};
+  if (params) {
+    for (const [key, value] of Object.entries(params)) {
+      if (value !== undefined) {
+        searchParams.append(key, value.toString());
+      }
+    }
+  }
 
-  const key = limit ? `/receipts?limit=${limit}` : '/receipts';
+  const key = `/receipts?${searchParams.toString()}`;
 
-  return useSWR(key, () => getReceipts({ limit }));
+  return useSWR(key, () => getReceipts(params));
 }

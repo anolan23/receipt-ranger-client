@@ -16,8 +16,10 @@ import { SubscriptionSettings } from './pages/dashboard/settings/subscription';
 import { AppearanceSettings } from './pages/dashboard/settings/appearance';
 import { ReceiptPage } from './pages/dashboard/receipts/[receiptId]';
 import { CategoryPage } from './pages/dashboard/categories/[categoryId]';
+import { useScrollToTop } from './hooks/use-scroll-to-top';
 
 function App() {
+  useScrollToTop();
   return (
     <>
       <Routes>

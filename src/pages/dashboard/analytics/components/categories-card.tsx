@@ -27,7 +27,7 @@ export function CategoriesCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Top 5 Receipt Categories</CardTitle>
+        <CardTitle>Top Categories</CardTitle>
       </CardHeader>
       <CardContent>
         <NivoBarChart

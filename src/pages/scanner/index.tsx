@@ -1,20 +1,13 @@
 import CopyableText from '@/components/copyable-text';
-import { Header } from '@/components/header';
 import { Link } from '@/components/link';
 
-import { Loader } from '@/components/loader';
 import { ReceiptsTable } from '@/components/receipts-table';
-import {
-  StatusIndicator,
-  StatusIndicatorStatus,
-} from '@/components/status-indicator';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,7 +16,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -31,7 +23,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import {
   Sheet,
   SheetContent,
@@ -46,19 +37,10 @@ import { UploadArea } from '@/components/upload-area';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { useReceiptUploader } from '@/hooks/use-receipt-uploader';
 import { DashboardLayout } from '@/layout/dashboard-layout';
-import { formatBytes } from '@/lib/helpers';
-import { UploadFileStatus } from '@/lib/types';
-import { RocketIcon } from '@radix-ui/react-icons';
-import {
-  Circle,
-  CircleAlert,
-  CircleCheck,
-  CircleCheckBig,
-  Copy,
-  Mail,
-} from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { UploadFileProgress } from './upload-file-progress';
+import { UploadFileProgress } from './components/upload-file-progress';
+import { useReceipts } from '@/hooks/use-receipts';
 
 interface ScannerPageProps {}
 
@@ -68,6 +50,12 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
     useReceiptUploader();
   const { toast } = useToast();
   const isMobile = useDeviceWidth();
+  const { data: receipts, mutate: mutateReviewReceipts } = useReceipts({
+    reviewed: false,
+  });
+  const { data: reviewedReceipts } = useReceipts({
+    reviewed: true,
+  });
 
   const handleFileDrop = async function (files: FileList) {
     const { failedUploads, fulfilled } = await uploadAll(files);
@@ -176,9 +164,10 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                             <UploadFileProgress
                               key={file.id}
                               uploadFile={file}
-                              onUploadSuccess={(result) =>
-                                removeFileFromUpload(file.id)
-                              }
+                              onUploadSuccess={(result) => {
+                                removeFileFromUpload(file.id);
+                                mutateReviewReceipts();
+                              }}
                             />
                           ))}
                         </div>
@@ -187,42 +176,20 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                   </Accordion>
                 ) : null}
                 <Card>
-                  <CardHeader></CardHeader>
-                  <CardContent>
-                    <ReceiptsTable data={[]} variant="embedded" />
+                  <CardContent className="pt-6">
+                    <ReceiptsTable data={receipts || []} variant="embedded" />
                   </CardContent>
                 </Card>
-                {/* {uploadFiles.map((uploadFile, index) => {
-                  const url = URL.createObjectURL(uploadFile.file);
-                  return (
-                    <div
-                      key={uploadFile.id}
-                      className="flex items-center gap-4 border rounded-lg px-4 py-3"
-                    >
-                      <div className="w-[50px] h-[50px]">
-                        <img
-                          className="w-full h-full grayscale rounded-sm"
-                          src={url}
-                        />
-                      </div>
-                      <div>
-                        <div className="font-normal text-sm">
-                          {uploadFile.file.name}
-                        </div>
-                        <div className="text-muted-foreground text-xs">
-                          {formatBytes(uploadFile.file.size)}
-                        </div>
-                      </div>
-                      <div className="ml-auto flex items-center space-x-2">
-                        {uploadFile.status === 'processing' ||
-                        uploadFile.status === 'uploading' ? (
-                          <Loader />
-                        ) : null}
-                        {uploadFile.status}
-                      </div>
-                    </div>
-                  );
-                })} */}
+              </TabsContent>
+              <TabsContent value="reviewed" className="space-y-4">
+                <Card>
+                  <CardContent className="pt-6">
+                    <ReceiptsTable
+                      data={reviewedReceipts || []}
+                      variant="embedded"
+                    />
+                  </CardContent>
+                </Card>
               </TabsContent>
             </Tabs>
           </div>

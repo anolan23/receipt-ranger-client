@@ -8,8 +8,9 @@ import {
   UseMonthlyTotalsParams,
 } from '../types';
 
-interface GetReceiptsParams {
+export interface GetReceiptsParams {
   limit?: number;
+  reviewed?: boolean;
 }
 export async function getReceipts(params?: GetReceiptsParams) {
   const response = await backend.get<ReceiptData[]>('/receipts', { params });

@@ -14,6 +14,7 @@ export type ReceiptData = {
   items: ItemData[] | null;
   category_id: number | null;
   category: CategoryData | null;
+  reviewed: boolean;
 };
 
 export type MerchantData = {

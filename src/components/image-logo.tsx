@@ -4,7 +4,7 @@ interface ImageLogoProps extends ImgHTMLAttributes<HTMLImageElement> {
   size?: number;
 }
 
-export function ImageLogo({ size = 64, ...props }: ImageLogoProps) {
+export function ImageLogo({ size = 48, ...props }: ImageLogoProps) {
   return (
     <div>
       <img
