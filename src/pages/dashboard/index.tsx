@@ -75,11 +75,11 @@ export function DashboardPage() {
 
   return (
     <DashboardLayout
-      breadcrumbs={
-        <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-2xl">
-          Dashboard
-        </h1>
-      }
+      // breadcrumbs={
+      //   <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-2xl">
+      //     Dashboard
+      //   </h1>
+      // }
       content={
         <div className="space-y-4">
           <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
@@ -99,6 +99,7 @@ export function DashboardPage() {
                     </Button>
                   </CardFooter>
                 </Card>
+
                 <MetricCard
                   title="Current Month Total"
                   value={

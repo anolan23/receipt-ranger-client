@@ -2,21 +2,20 @@ import { useForm } from 'react-hook-form';
 
 import { Link } from '@/components/link';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { AuthLayout } from '@/layout/auth-layout';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/components/ui/form';
-import { Credentials } from '@/lib/types';
+import { Input } from '@/components/ui/input';
+import { AuthLayout } from '@/layout/auth-layout';
 import { googleSignIn, loginUser } from '@/lib/api/auth';
-import { useNavigate } from 'react-router-dom';
+import { Credentials } from '@/lib/types';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginPageProps {}
 

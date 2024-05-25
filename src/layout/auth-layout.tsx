@@ -1,7 +1,8 @@
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
+import { useUser } from '@/hooks/use-user';
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 interface AuthLayoutProps {
   content: ReactNode;
@@ -9,6 +10,9 @@ interface AuthLayoutProps {
 }
 
 export function AuthLayout({ content, action, ...props }: AuthLayoutProps) {
+  const { isAuthenticated } = useUser();
+  if (isAuthenticated === true) return <Navigate to="/dashboard" />;
+
   return (
     <div className="min-h-screen container relative flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">

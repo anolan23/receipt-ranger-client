@@ -135,7 +135,7 @@ export function ReceiptCard({
                 >
                   <Edit2Icon className="h-3.5 w-3.5" />
                   <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                    Edit Receipt
+                    Edit
                   </span>
                 </Link>
               </Button>
@@ -148,7 +148,7 @@ export function ReceiptCard({
               >
                 <Edit2Icon className="h-3.5 w-3.5" />
                 <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                  Edit Receipt
+                  Edit
                 </span>
               </Button>
             )}
