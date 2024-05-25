@@ -41,7 +41,7 @@ export function UploadArea({ onFileProcessed }: UploadAreaProps) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className={`flex flex-col space-y-3 py-6 px-6 shrink-0 items-center justify-center rounded-md border-2 border-dashed bg-background cursor-pointer hover:shadow-lg ${
+      className={`flex w-full flex-col items-center rounded-md bg-card p-6 text-card-foreground shadow transition-colors hover:bg-muted/50 sm:p-8 border-2 border-dashed cursor-pointer ${
         isDragOver ? 'border-primary' : 'border-border'
       }`}
     >
