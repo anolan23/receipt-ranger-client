@@ -13,12 +13,15 @@ import { ChevronLeft } from 'lucide-react';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { LineItemsCard } from './components/line-items-card';
+import { LineItemsTable } from './components/line-items-table';
 import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
 import { useSubcategories } from '@/hooks/use-subcategories';
 import { ActionsDropdown } from '../components/actions-dropdown';
 import { useToast } from '@/components/ui/use-toast';
+import { Card, CardContent } from '@/components/ui/card';
+import { DocViewer } from '@/components/doc-viewer';
+import { Badge } from '@/components/ui/badge';
 
 interface ReceiptPageProps {}
 
@@ -115,7 +118,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
     <DashboardLayout
       breadcrumbs={<SmartBreadcrumb />}
       content={
-        <div className="space-y-4 mx-auto max-w-[59rem]">
+        <div className="space-y-4">
           <div className="flex items-center gap-4">
             <Button
               onClick={() => navigate(-1)}
@@ -126,9 +129,12 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
               <ChevronLeft className="h-4 w-4" />
               <span className="sr-only">Back</span>
             </Button>
-            <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight">
+            <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight lg:flex-none">
               {`Receipt ${receipt.id}`}
             </h1>
+            <Badge variant="outline" className="ml-auto sm:ml-0">
+              {receipt.reviewed ? 'Reviewed' : 'Pending review'}
+            </Badge>
             <div className="hidden items-center gap-2 md:ml-auto md:flex">
               <Button onClick={() => navigate(-1)} variant="outline" size="sm">
                 Cancel
@@ -144,23 +150,29 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
               <ActionsDropdown receipt={receipt} />
             </div>
           </div>
-          <Form {...form}>
-            <form id="edit-form" onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid gap-8">
-                <ReceiptInfoCard />
-                <div className="space-y-2 min-w-0">
-                  <LineItemsCard subcategories={subcategories} />
-                  <div>
-                    <StatusIndicator
-                      status={statusIndicatorStatus}
-                    >{`Calculated subtotal: ${toDollar(
-                      calculatedSubtotal
-                    )}`}</StatusIndicator>
+          <div className="grid gap-8 md:grid-cols-[400px_1fr]">
+            <div>
+              <Card className="sticky top-4">
+                <CardContent className="pt-6">
+                  <div className="overflow-hidden rounded-md">
+                    <DocViewer objectKey={receipt.object_key || undefined} />
                   </div>
-                </div>
-              </div>
-            </form>
-          </Form>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="overflow-y-auto">
+              <Form {...form}>
+                <form id="edit-form" onSubmit={form.handleSubmit(onSubmit)}>
+                  <div className="grid gap-8">
+                    <ReceiptInfoCard
+                      subcategories={subcategories}
+                      receipt={receipt}
+                    />
+                  </div>
+                </form>
+              </Form>
+            </div>
+          </div>
         </div>
       }
     />

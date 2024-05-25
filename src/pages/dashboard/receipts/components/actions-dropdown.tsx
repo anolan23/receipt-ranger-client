@@ -15,7 +15,7 @@ import { useCallback, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
 interface ActionsDropdownProps {
-  receipt: ReceiptData;
+  receipt?: ReceiptData;
 }
 
 export function ActionsDropdown({ receipt, ...props }: ActionsDropdownProps) {
@@ -62,13 +62,21 @@ export function ActionsDropdown({ receipt, ...props }: ActionsDropdownProps) {
       modal={false}
     >
       <DropdownMenuTrigger asChild>
-        <Button size="icon" variant="outline" className="h-8 w-8">
+        <Button
+          size="icon"
+          variant="outline"
+          className="h-8 w-8"
+          disabled={!receipt}
+        >
           <MoreVertical className="h-3.5 w-3.5" />
           <span className="sr-only">More</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" hidden={hasOpenDialog}>
-        <DropdownMenuItem disabled>Export</DropdownMenuItem>
+        <DropdownMenuItem disabled>Export to .csv</DropdownMenuItem>
+        <DropdownMenuItem disabled={receipt?.reviewed}>
+          Mark as reviewed
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DeleteReceiptDialog
           trigger={

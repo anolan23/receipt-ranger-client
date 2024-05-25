@@ -33,17 +33,32 @@ export function getDates(startDate: Date, endDate: Date): Date[] {
   return dates;
 }
 
+// export function toDollar(
+//   value: string | number,
+//   roundTo: 'dollar' | 'cent' = 'cent'
+// ): string {
+//   const amount = typeof value === 'string' ? parseFloat(value) : value;
+
+//   if (roundTo === 'dollar') {
+//     return `$${amount.toFixed(0)}`;
+//   } else {
+//     return `$${amount.toFixed(2)}`;
+//   }
+// }
 export function toDollar(
   value: string | number,
   roundTo: 'dollar' | 'cent' = 'cent'
 ): string {
   const amount = typeof value === 'string' ? parseFloat(value) : value;
 
-  if (roundTo === 'dollar') {
-    return `$${amount.toFixed(0)}`;
-  } else {
-    return `$${amount.toFixed(2)}`;
-  }
+  const options: Intl.NumberFormatOptions = {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: roundTo === 'dollar' ? 0 : 2,
+    maximumFractionDigits: roundTo === 'dollar' ? 0 : 2,
+  };
+
+  return new Intl.NumberFormat('en-US', options).format(amount);
 }
 
 export const categoryColors = new Map([

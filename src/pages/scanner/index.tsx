@@ -37,10 +37,16 @@ import { UploadArea } from '@/components/upload-area';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { useReceiptUploader } from '@/hooks/use-receipt-uploader';
 import { DashboardLayout } from '@/layout/dashboard-layout';
-import { Mail } from 'lucide-react';
+import { CheckCheck, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UploadFileProgress } from './components/upload-file-progress';
 import { useReceipts } from '@/hooks/use-receipts';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ActionsDropdown } from '../dashboard/receipts/components/actions-dropdown';
+import { ColumnFilterDropdown } from '@/components/column-filter-dropdown';
+import { TextFilter } from '@/components/text-filter';
+import { Pagination } from '@/components/pagination';
 
 interface ScannerPageProps {}
 
@@ -86,7 +92,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
         </Breadcrumb>
       }
       content={
-        <div className="space-y-4 mx-auto max-w-[59rem]">
+        <div className="space-y-4 mx-auto">
           <h1 className="text-xl font-semibold tracking-tight">
             Receipt Scanner
           </h1>
@@ -175,21 +181,42 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                     </AccordionItem>
                   </Accordion>
                 ) : null}
-                <Card>
-                  <CardContent className="pt-6">
-                    <ReceiptsTable data={receipts || []} variant="embedded" />
-                  </CardContent>
-                </Card>
+                <ReceiptsTable
+                  variant="border"
+                  data={receipts || []}
+                  tools={(table) => (
+                    <div className="flex items-center">
+                      <TextFilter
+                        table={table}
+                        placeholder="Filter Receipts..."
+                      />
+                      <div className="ml-auto flex items-center gap-2">
+                        <ColumnFilterDropdown table={table} />
+                      </div>
+                    </div>
+                  )}
+                  footerControls={(table) => <Pagination table={table} />}
+                  selectionType="multiple"
+                />
               </TabsContent>
               <TabsContent value="reviewed" className="space-y-4">
-                <Card>
-                  <CardContent className="pt-6">
-                    <ReceiptsTable
-                      data={reviewedReceipts || []}
-                      variant="embedded"
-                    />
-                  </CardContent>
-                </Card>
+                <ReceiptsTable
+                  variant="border"
+                  data={reviewedReceipts || []}
+                  tools={(table) => (
+                    <div className="flex items-center">
+                      <TextFilter
+                        table={table}
+                        placeholder="Filter Receipts..."
+                      />
+                      <div className="ml-auto flex items-center gap-2">
+                        <ColumnFilterDropdown table={table} />
+                      </div>
+                    </div>
+                  )}
+                  footerControls={(table) => <Pagination table={table} />}
+                  selectionType="multiple"
+                />
               </TabsContent>
             </Tabs>
           </div>

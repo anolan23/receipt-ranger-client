@@ -1,6 +1,12 @@
 import { DatePicker } from '@/components/date-picker';
 import { OptionItemDefinition } from '@/components/option';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Combobox } from '@/components/ui/combo-box';
 import {
   FormControl,
@@ -19,10 +25,22 @@ import { useCategories } from '@/hooks/use-categories';
 import { Select } from '@/components/select';
 import { DollarSign } from 'lucide-react';
 import { DollarInput } from '@/components/dollar-input';
+import { LineItemsTable } from './line-items-table';
+import { Separator } from '@/components/ui/separator';
+import { ReceiptData, SubcategoryData } from '@/lib/types';
+import { toDollar } from '@/lib/helpers';
+import dayjs from 'dayjs';
 
-interface ReceiptInfoCardProps {}
+interface ReceiptInfoCardProps {
+  receipt: ReceiptData;
+  subcategories?: SubcategoryData[];
+}
 
-export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
+export function ReceiptInfoCard({
+  receipt,
+  subcategories,
+  ...props
+}: ReceiptInfoCardProps) {
   const form = useFormContext<EditReceiptFormValues>();
   const [filterValue, setFilterValue] = useState<string>();
   const debouncedFilterValue = useDebouncedValue(filterValue, 300);
@@ -55,10 +73,15 @@ export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
     );
   }, [categories]);
 
+  const modifiedDateShort = dayjs(receipt.updated_at).format('YYYY-MM-DD');
+  const modifiedDate = dayjs(receipt.updated_at).format('MMMM D, YYYY');
+
   return (
     <Card className="min-w-0">
-      {/* <CardHeader>
-        <CardTitle>Receipt Information</CardTitle>
+      {/* <CardHeader className="bg-muted/50">
+        <h1 className="scroll-m-20 text-4xl font-thin tracking-tight lg:text-3xl ml-auto">
+          {toDollar(form.getValues().total)}
+        </h1>
       </CardHeader> */}
       <CardContent className="space-y-4 pt-6">
         <FormField
@@ -88,6 +111,23 @@ export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
         />
         <FormField
           control={form.control}
+          name="transaction_date"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="transaction_date">Transaction Date</FormLabel>
+              <FormControl>
+                <DatePicker
+                  date={field.value}
+                  onDateChange={field.onChange}
+                  id="transaction_date"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="category_id"
           render={({ field }) => {
             return (
@@ -111,23 +151,10 @@ export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
             );
           }}
         />
-        <FormField
-          control={form.control}
-          name="transaction_date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="transaction_date">Transaction Date</FormLabel>
-              <FormControl>
-                <DatePicker
-                  date={field.value}
-                  onDateChange={field.onChange}
-                  id="transaction_date"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
+        <Separator />
+        <LineItemsTable subcategories={subcategories} />
+        <Separator />
         <FormField
           control={form.control}
           name="subtotal"
@@ -187,6 +214,11 @@ export function ReceiptInfoCard({ ...props }: ReceiptInfoCardProps) {
           )}
         />
       </CardContent>
+      <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
+        <div className="text-xs text-muted-foreground">
+          Updated <time dateTime={modifiedDateShort}>{modifiedDate}</time>
+        </div>
+      </CardFooter>
     </Card>
   );
 }

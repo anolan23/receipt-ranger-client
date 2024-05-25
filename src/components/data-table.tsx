@@ -30,6 +30,13 @@ import React, { ReactNode, useMemo } from 'react';
 import { Button } from './ui/button';
 import { Loader } from './loader';
 import { Checkbox } from './ui/checkbox';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from './ui/card';
 
 type ColumnVisibilty<TData> = {
   [Key in keyof TData]?: boolean;
@@ -40,14 +47,13 @@ export interface DataTableProps<TData> {
   data: TData[];
   selectionType?: 'single' | 'multiple';
   rowSelection?: RowSelectionState;
-  variant?: 'default' | 'embedded';
+  variant?: 'default' | 'embedded' | 'border';
   initialColumnVisibility?: ColumnVisibilty<TData>;
-  globalFilter?: string;
   loading?: boolean;
   empty?: ReactNode;
+  header?: ReactNode;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
-  onGlobalFilterChange?: OnChangeFn<string>;
-  filter?: (table: ITable<TData>) => ReactNode;
+  tools?: (table: ITable<TData>) => ReactNode;
   footerControls?: (table: ITable<TData>) => ReactNode;
   getRowId?:
     | ((
@@ -63,16 +69,15 @@ export function DataTable<TData>({
   columns,
   data,
   rowSelection = {},
-  globalFilter,
   variant = 'default',
   initialColumnVisibility,
   loading,
   empty,
+  header,
   onRowSelectionChange,
-  filter,
+  tools,
   footerControls,
   getRowId,
-  onGlobalFilterChange,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -86,7 +91,38 @@ export function DataTable<TData>({
     if (selectionType === 'single') {
       return [
         columnHelper.display({
+          enableHiding: false,
           id: 'selection',
+          cell: ({ row }) => {
+            const toggleRow = row.getToggleSelectedHandler();
+
+            return (
+              <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(checked) => toggleRow(checked)}
+              />
+            );
+          },
+        }),
+        ...columns,
+      ];
+    } else if (selectionType === 'multiple') {
+      return [
+        columnHelper.display({
+          enableHiding: false,
+          id: 'selection',
+          header: ({ table }) => (
+            <Checkbox
+              checked={
+                table.getIsAllPageRowsSelected() ||
+                (table.getIsSomePageRowsSelected() && 'indeterminate')
+              }
+              onCheckedChange={(value) =>
+                table.toggleAllPageRowsSelected(!!value)
+              }
+              aria-label="Select all"
+            />
+          ),
           cell: ({ row }) => {
             const toggleRow = row.getToggleSelectedHandler();
 
@@ -115,7 +151,6 @@ export function DataTable<TData>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onGlobalFilterChange,
     getRowId,
 
     state: {
@@ -123,7 +158,6 @@ export function DataTable<TData>({
       sorting,
       columnFilters,
       columnVisibility,
-      globalFilter,
     },
     initialState: {
       pagination: {
@@ -135,87 +169,94 @@ export function DataTable<TData>({
 
   return (
     <div>
-      {filter && <div className="flex items-center py-4">{filter(table)}</div>}
-      <div className={cn(variant === 'default' && 'rounded-md border')}>
-        {loading ? (
-          <div className="h-[100px] flex justify-center items-center">
-            <Loader size={24} />
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        key={header.id}
-                        // style={{
-                        //   width: header.getSize(),
-                        // }}
-                      >
-                        {header.isPlaceholder ? null : (
-                          <HeaderCell
-                            sortable={header.column.getCanSort()}
-                            onClick={() =>
-                              header.column.toggleSorting(
-                                header.column.getIsSorted() === 'asc'
-                              )
-                            }
-                          >
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                          </HeaderCell>
-                        )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        // style={{
-                        //   width: cell.column.getSize(),
-                        // }}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
+      {tools && <div className="mb-4">{tools(table)}</div>}
+      <Card
+        className={cn({
+          'rounded-md border shadow-none': variant === 'border',
+        })}
+      >
+        {header}
+        <CardContent
+          className={cn({
+            'p-0': variant === 'border',
+          })}
+        >
+          {loading ? (
+            <div className="h-[100px] flex justify-center items-center">
+              <Loader size={24} />
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          // style={{
+                          //   width: header.getSize(),
+                          // }}
+                        >
+                          {header.isPlaceholder ? null : (
+                            <HeaderCell
+                              sortable={header.column.getCanSort()}
+                              onClick={() =>
+                                header.column.toggleSorting(
+                                  header.column.getIsSorted() === 'asc'
+                                )
+                              }
+                            >
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                            </HeaderCell>
+                          )}
+                        </TableHead>
+                      );
+                    })}
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length + 1}
-                    className="h-24 text-center"
-                  >
-                    {empty ? empty : 'No results.'}
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        )}
-      </div>
-      {footerControls && (
-        <div className="flex items-center justify-between px-2 mt-4">
-          {footerControls(table)}
-        </div>
-      )}
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          // style={{
+                          //   width: cell.column.getSize(),
+                          // }}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length + 1}
+                      className="h-24 text-center"
+                    >
+                      {empty ? empty : 'No results.'}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+      {footerControls && <div className="mt-4">{footerControls(table)}</div>}
     </div>
   );
 }

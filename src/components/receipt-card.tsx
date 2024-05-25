@@ -38,6 +38,7 @@ import {
 import { useState } from 'react';
 import { ActionsDropdown } from '@/pages/dashboard/receipts/components/actions-dropdown';
 import CopyableText from './copyable-text';
+import { Badge } from './ui/badge';
 
 const NUM_VISIBLE_ITEMS: number = 4;
 
@@ -62,17 +63,18 @@ export function ReceiptCard({
   ...props
 }: ReceiptCardProps) {
   const [expanded, setExpanded] = useState(false);
-  if (!receipt) return null;
   const transactionDate = receipt?.transaction_date
     ? dayjs(receipt.transaction_date).format('MMMM D, YYYY')
     : undefined;
-  const modifiedDateShort = dayjs(receipt?.updated_at).format('YYYY-MM-DD');
-  const modifiedDate = dayjs(receipt?.updated_at).format('MMMM D, YYYY');
+  const modifiedDateShort =
+    receipt?.updated_at && dayjs(receipt.updated_at).format('YYYY-MM-DD');
+  const modifiedDate =
+    receipt?.updated_at && dayjs(receipt.updated_at).format('MMMM D, YYYY');
 
   const renderItemList = function () {
     if (!receipt?.items?.length)
       return (
-        <div className="p-4 flex items-center justify-center">
+        <div className="p-4 flex items-center justify-center text-sm">
           No Receipt Items
         </div>
       );
@@ -112,109 +114,95 @@ export function ReceiptCard({
 
   return (
     <Card className={cn('overflow-hidden', className)}>
-      {loading ? (
-        <CardContent className="pt-6">
-          <StatusIndicator status="loading">Loading</StatusIndicator>
-        </CardContent>
-      ) : !receipt ? (
-        <CardContent className="pt-6 min-h-[600px] flex justify-center items-center">
-          <div className="text-center space-y-2">
-            <div className="text-sm">No Receipt selected</div>
-            <div className="text-xs text-muted-foreground">
-              Receipt preview will show up here
-            </div>
+      {!headerHidden && (
+        <CardHeader className="flex flex-row items-start bg-muted/50 gap-2">
+          <div className="grid gap-0.5">
+            <CopyableText text={receipt?.id || '-'}>
+              <CardTitle className="truncate flex-1">
+                Receipt {receipt?.id || 'Preview'}
+              </CardTitle>
+            </CopyableText>
+            <CardDescription>{`Date: ${
+              transactionDate || '-'
+            }`}</CardDescription>
           </div>
-        </CardContent>
-      ) : (
-        <>
-          {!headerHidden && (
-            <CardHeader className="flex flex-row items-start bg-muted/50 gap-2">
-              <div className="grid gap-0.5">
-                <CopyableText text={`Receipt ${receipt.id}`}>
-                  <CardTitle className="truncate flex-1">
-                    Receipt {receipt.id}
-                  </CardTitle>
-                </CopyableText>
-                <CardDescription>{`Date: ${transactionDate}`}</CardDescription>
-              </div>
-              <div className="ml-auto flex items-center gap-1">
-                <Button size="sm" variant="outline" asChild>
-                  <Link
-                    to={`/dashboard/receipts/${receipt.id}`}
-                    className="h-8 gap-1"
-                  >
-                    <Edit2Icon className="h-3.5 w-3.5" />
-                    <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-                      Edit Receipt
-                    </span>
-                  </Link>
-                </Button>
-                <ActionsDropdown receipt={receipt} />
-                {/* <DropdownMenu modal={false}>
-                  <DropdownMenuTrigger asChild>
-                    <Button size="icon" variant="outline" className="h-8 w-8">
-                      <MoreVertical className="h-3.5 w-3.5" />
-                      <span className="sr-only">More</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Export</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Trash</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu> */}
-              </div>
-            </CardHeader>
-          )}
-          <CardContent className="p-6 text-sm">
-            <div className="grid gap-3">
-              <div className="font-semibold">Line Items</div>
-              {renderItemList()}
-              <Separator className="my-4" />
-              <ul className="grid gap-3">
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
-                  <span>
-                    {receipt.subtotal ? toDollar(receipt.subtotal) : '-'}
+          <div className="ml-auto flex items-center gap-1">
+            {receipt ? (
+              <Button size="sm" variant="outline" asChild>
+                <Link
+                  to={receipt?.id ? `/dashboard/receipts/${receipt.id}` : ''}
+                  className="h-8 gap-1"
+                >
+                  <Edit2Icon className="h-3.5 w-3.5" />
+                  <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                    Edit Receipt
                   </span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Tax</span>
-                  <span>
-                    {receipt.sales_tax ? toDollar(receipt.sales_tax) : '-'}
-                  </span>
-                </li>
-                <li className="flex items-center justify-between font-semibold">
-                  <span className="text-muted-foreground">Total</span>
-                  <span>
-                    {receipt.total_amount
-                      ? toDollar(receipt.total_amount)
-                      : '-'}
-                  </span>
-                </li>
-              </ul>
+                </Link>
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                variant="outline"
+                disabled
+                className="h-8 gap-1"
+              >
+                <Edit2Icon className="h-3.5 w-3.5" />
+                <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                  Edit Receipt
+                </span>
+              </Button>
+            )}
+            <ActionsDropdown receipt={receipt} />
+          </div>
+        </CardHeader>
+      )}
+      <CardContent className="p-6 text-sm">
+        <div className="grid gap-3">
+          <div className="font-semibold">Line Items</div>
+          {renderItemList()}
+          <Separator className="my-4" />
+          <ul className="grid gap-3">
+            <li className="flex items-center justify-between">
+              <span className="text-muted-foreground">Subtotal</span>
+              <span>
+                {receipt?.subtotal ? toDollar(receipt.subtotal) : '-'}
+              </span>
+            </li>
+            <li className="flex items-center justify-between">
+              <span className="text-muted-foreground">Tax</span>
+              <span>
+                {receipt?.sales_tax ? toDollar(receipt.sales_tax) : '-'}
+              </span>
+            </li>
+            <li className="flex items-center justify-between font-semibold">
+              <span className="text-muted-foreground">Total</span>
+              <span>
+                {receipt?.total_amount ? toDollar(receipt.total_amount) : '-'}
+              </span>
+            </li>
+          </ul>
+        </div>
+        <Separator className="my-4" />
+        <div className="grid gap-3">
+          <div className="font-semibold">Merchant Information</div>
+          <dl className="grid gap-3">
+            <div className="flex items-center justify-between">
+              <dt className="text-muted-foreground">Merchant</dt>
+              <dd>{receipt?.merchant.name || '-'}</dd>
             </div>
-            <Separator className="my-4" />
-            <div className="grid gap-3">
-              <div className="font-semibold">Merchant Information</div>
-              <dl className="grid gap-3">
-                <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Merchant</dt>
-                  <dd>{receipt.merchant.name}</dd>
-                </div>
-                <div className="flex items-center justify-between">
-                  <dt className="text-muted-foreground">Logo</dt>
-                  <dd>
-                    {receipt?.merchant.logo_url ? (
-                      <ImageLogo src={receipt.merchant.logo_url} size={48} />
-                    ) : (
-                      '-'
-                    )}
-                  </dd>
-                </div>
-              </dl>
+            <div className="flex items-center justify-between">
+              <dt className="text-muted-foreground">Logo</dt>
+              <dd>
+                {receipt?.merchant.logo_url ? (
+                  <ImageLogo src={receipt.merchant.logo_url} size={48} />
+                ) : (
+                  '-'
+                )}
+              </dd>
             </div>
-            {/* <Separator className="my-4" />
+          </dl>
+        </div>
+        {/* <Separator className="my-4" />
             <div className="grid gap-3">
               <div className="font-semibold">Payment Information</div>
               <dl className="grid gap-3">
@@ -227,40 +215,43 @@ export function ReceiptCard({
                 </div>
               </dl>
             </div> */}
-          </CardContent>
-          <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-            <div className="text-xs text-muted-foreground">
-              Updated <time dateTime={modifiedDateShort}>{modifiedDate}</time>
-            </div>
-            <Pagination className="ml-auto mr-0 w-auto">
-              <PaginationContent>
-                <PaginationItem>
-                  <Button
-                    onClick={onPreviousClick}
-                    size="icon"
-                    variant="outline"
-                    className="h-6 w-6"
-                  >
-                    <ChevronLeft className="h-3.5 w-3.5" />
-                    <span className="sr-only">Previous Receipt</span>
-                  </Button>
-                </PaginationItem>
-                <PaginationItem>
-                  <Button
-                    onClick={onNextClick}
-                    size="icon"
-                    variant="outline"
-                    className="h-6 w-6"
-                  >
-                    <ChevronRight className="h-3.5 w-3.5" />
-                    <span className="sr-only">Next Receipt</span>
-                  </Button>
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </CardFooter>
-        </>
-      )}
+      </CardContent>
+      <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
+        <div className="text-xs text-muted-foreground">
+          Updated{' '}
+          {modifiedDate && modifiedDateShort ? (
+            <time dateTime={modifiedDateShort}>{modifiedDate}</time>
+          ) : (
+            '-'
+          )}
+        </div>
+        <Pagination className="ml-auto mr-0 w-auto">
+          <PaginationContent>
+            <PaginationItem>
+              <Button
+                onClick={onPreviousClick}
+                size="icon"
+                variant="outline"
+                className="h-6 w-6"
+              >
+                <ChevronLeft className="h-3.5 w-3.5" />
+                <span className="sr-only">Previous Receipt</span>
+              </Button>
+            </PaginationItem>
+            <PaginationItem>
+              <Button
+                onClick={onNextClick}
+                size="icon"
+                variant="outline"
+                className="h-6 w-6"
+              >
+                <ChevronRight className="h-3.5 w-3.5" />
+                <span className="sr-only">Next Receipt</span>
+              </Button>
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </CardFooter>
     </Card>
   );
 }

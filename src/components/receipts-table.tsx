@@ -59,13 +59,13 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
         return <ImageLogo src={logoUrl || undefined} />;
       },
       enableSorting: false,
-      enableHiding: false,
     }),
 
     columnHelper.accessor('merchant.name', {
       id: 'merchant',
       header: 'Merchant',
       enableSorting: false,
+      enableHiding: false,
     }),
     columnHelper.accessor('category.label', {
       id: 'category',
@@ -104,6 +104,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       header: 'Total',
       cell: (info) => `$${info.getValue()}`,
       enableSorting: true,
+      enableHiding: false,
     }),
     // columnHelper.accessor('created_at', {
     //   id: 'created_at',

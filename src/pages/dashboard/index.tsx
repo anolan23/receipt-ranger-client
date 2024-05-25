@@ -28,6 +28,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ReceiptsTable } from '../../components/receipts-table';
 import { toDollar } from '@/lib/helpers';
+import { Pagination } from '@/components/pagination';
 export function DashboardPage() {
   const { data: receipts } = useReceipts({ limit: 5 });
   const { rowSelection, setRowSelection, selectedRow, nextRow, prevRow } =
@@ -45,7 +46,7 @@ export function DashboardPage() {
   const getMonlthySpendPercentDiff = (num1: number, num2: number) => {
     const frac = (num1 - num2) / num2;
     const percent = Math.round(frac * 100);
-    if (Number.isNaN(percent)) return 'Not enough data';
+    if (Number.isNaN(percent)) return `+0% from last month`;
     const sign = percent >= 0 ? '+' : '';
     return `${sign}${percent}% from last month`;
   };
@@ -87,7 +88,7 @@ export function DashboardPage() {
                 <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
                   <CardHeader className="pb-3">
                     <CardTitle>Receipts Overview</CardTitle>
-                    <CardDescription className="max-w-lg text-balance leading-relaxed">
+                    <CardDescription className="text-sm max-w-lg text-balance leading-relaxed text-card-foreground">
                       Introducing Your Receipts Dashboard for Seamless
                       Management and Insightful Analysis.
                     </CardDescription>
@@ -124,48 +125,21 @@ export function DashboardPage() {
                   percent={percentForcasted}
                 />
               </div>
-              <Card x-chunk="dashboard-05-chunk-3">
-                <CardHeader className="px-7">
-                  <CardTitle>Receipts</CardTitle>
-                  <CardDescription>Recently scanned receipts.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ReceiptsTable
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                    variant="embedded"
-                    selectionType="single"
-                    data={receipts || []}
-                    footerControls={(table) => (
-                      <>
-                        <div className="flex-1 text-sm text-muted-foreground">
-                          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-                          {table.getFilteredRowModel().rows.length} row(s)
-                          selected.
-                        </div>
-                        <div className="flex items-center justify-end space-x-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                          >
-                            Previous
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                          >
-                            Next
-                          </Button>
-                        </div>
-                      </>
-                    )}
-                  />
-                </CardContent>
-              </Card>
+              <ReceiptsTable
+                header={
+                  <CardHeader>
+                    <CardTitle>Receipts</CardTitle>
+                    <CardDescription>
+                      Recently scanned receipts.
+                    </CardDescription>
+                  </CardHeader>
+                }
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                variant="embedded"
+                selectionType="single"
+                data={receipts || []}
+              />
             </div>
             <div>
               <ReceiptCard

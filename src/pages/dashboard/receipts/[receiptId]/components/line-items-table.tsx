@@ -27,12 +27,16 @@ import { PlusCircle, Trash2Icon } from 'lucide-react';
 import { Select } from '@/components/select';
 import { FormControl, FormField, FormItem } from '@/components/ui/form';
 import { EditReceiptFormValues, ItemUpdatePayload } from '../interfaces';
+import { DollarInput } from '@/components/dollar-input';
 
-interface LineItemsCardProps {
+interface LineItemsTableProps {
   subcategories?: SubcategoryData[];
 }
 
-export function LineItemsCard({ subcategories, ...props }: LineItemsCardProps) {
+export function LineItemsTable({
+  subcategories,
+  ...props
+}: LineItemsTableProps) {
   const { control } = useFormContext<EditReceiptFormValues>();
   const { fields, append, remove } = useFieldArray<EditReceiptFormValues>({
     control,
@@ -120,7 +124,6 @@ export function LineItemsCard({ subcategories, ...props }: LineItemsCardProps) {
                       value={field.value}
                       onChange={field.onChange}
                       min={1}
-                      className="max-w-[75px]"
                     />
                   </FormControl>
                 </FormItem>
@@ -140,13 +143,9 @@ export function LineItemsCard({ subcategories, ...props }: LineItemsCardProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      min={0}
+                    <DollarInput
                       value={field.value || ''}
                       onChange={field.onChange}
-                      className="max-w-[75px]"
                     />
                   </FormControl>
                 </FormItem>
@@ -181,38 +180,27 @@ export function LineItemsCard({ subcategories, ...props }: LineItemsCardProps) {
   }, [control, remove, columnHelper, selectItems]);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Line Items</CardTitle>
-        {/* <CardDescription>
-          Lipsum dolor sit amet, consectetur adipiscing elit
-        </CardDescription> */}
-      </CardHeader>
-      <CardContent>
-        <DataTable
-          columns={columns}
-          data={fields}
-          variant="embedded"
-          getRowId={(originalRow) => originalRow.id}
-        />
-      </CardContent>
-      <CardFooter className="justify-center border-t p-4">
-        <Button
-          type="button"
-          onClick={() =>
-            append({
-              name: '',
-              quantity: 1,
-            })
-          }
-          size="sm"
-          variant="ghost"
-          className="gap-1"
-        >
-          <PlusCircle className="h-3.5 w-3.5" />
-          Add Item
-        </Button>
-      </CardFooter>
-    </Card>
+    <div className="flex flex-col gap-2">
+      <DataTable
+        columns={columns}
+        data={fields}
+        variant="border"
+        getRowId={(originalRow) => originalRow.id}
+      />
+      <Button
+        type="button"
+        onClick={() =>
+          append({
+            name: '',
+            quantity: 1,
+          })
+        }
+        variant="outline"
+        className="gap-1"
+      >
+        <PlusCircle className="h-3.5 w-3.5" />
+        Add Item
+      </Button>
+    </div>
   );
 }

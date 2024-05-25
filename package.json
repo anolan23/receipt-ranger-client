@@ -52,6 +52,7 @@
     "react-ga4": "^2.1.0",
     "react-hook-form": "^7.51.0",
     "react-router-dom": "^6.22.2",
+    "react-viewer": "^3.2.2",
     "sonner": "^1.4.41",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.2.1",
