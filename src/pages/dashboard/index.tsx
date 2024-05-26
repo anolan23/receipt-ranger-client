@@ -3,6 +3,7 @@ import { ReceiptCard } from '@/components/receipt-card';
 import { Button } from '@/components/ui/button';
 import {
   Card,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -135,8 +136,24 @@ export function DashboardPage() {
                 data={receipts || []}
                 loading={isReceiptsLoading}
               />
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+                <Card className="sm:col-span-4">
+                  <CardHeader>
+                    <CardTitle>Upgrade to Pro</CardTitle>
+                    <CardDescription>
+                      Enjoy unlimited receipt scans and access to the latest
+                      features.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button asChild>
+                      <Link to="/membership">Start Free Trial</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
-            <div>
+            <div className="sticky top-4">
               <ReceiptCard
                 receipt={receipt}
                 loading={isReceiptLoading}

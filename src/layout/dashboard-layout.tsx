@@ -1,5 +1,6 @@
 import placeHolderUser from '@/assets/user.webp';
 import { DashboardLink } from '@/components/dashboard-link';
+import { SheetNavLink } from '@/components/sheet-nav-link';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -155,52 +156,33 @@ export function DashboardLayout({
                   to="/dashboard"
                   className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
                 >
-                  {/* <Package2 className="h-5 w-5 transition-all group-hover:scale-110" /> */}
                   <ScanText className="h-5 w-5 transition-all group-hover:scale-110" />
                   <span className="sr-only">Snapceipt</span>
                 </Link>
-                <Link
-                  to="/dashboard"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
+                <SheetNavLink to="/dashboard" end>
                   <Home className="h-5 w-5" />
                   Dashboard
-                </Link>
-                <Link
-                  to="/dashboard/receipts"
-                  className="flex items-center gap-4 px-2.5 text-foreground"
-                >
+                </SheetNavLink>
+                <SheetNavLink to="/dashboard/receipts">
                   <ReceiptText className="h-5 w-5" />
                   Receipts
-                </Link>
-                <Link
-                  to="/dashboard/scanner"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
+                </SheetNavLink>
+                <SheetNavLink to="/dashboard/scanner">
                   <Scan className="h-5 w-5" />
                   Scanner
-                </Link>
-                <Link
-                  to="/dashboard/analytics"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
+                </SheetNavLink>
+                <SheetNavLink to="/dashboard/analytics">
                   <LineChart className="h-5 w-5" />
                   Analytics
-                </Link>
-                <Link
-                  to="#"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
+                </SheetNavLink>
+                <SheetNavLink to="/dashboard/reports">
                   <FileBarChart2 className="h-5 w-5" />
                   Reports
-                </Link>
-                <Link
-                  to="/dashboard/settings"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
+                </SheetNavLink>
+                <SheetNavLink to="/dashboard/settings">
                   <Settings className="h-5 w-5" />
                   Settings
-                </Link>
+                </SheetNavLink>
               </nav>
             </SheetContent>
           </Sheet>
