@@ -1,4 +1,4 @@
-import { Loader } from '@/components/loader';
+import { StatusIndicator } from '@/components/status-indicator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,7 +20,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { useUserAttributes } from '@/hooks/use-user-attributes';
-import { SettingsLayout } from '@/layout/settings-layout';
 import { ExclamationTriangleIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { updateUserAttributes } from 'aws-amplify/auth';
 import { useEffect, useMemo } from 'react';
@@ -73,7 +72,8 @@ export function ProfileSettings({ ...props }: ProfileSettingsProps) {
   }
 
   const { errors, isSubmitting, isValid } = form.formState;
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return <StatusIndicator status="loading">Loading</StatusIndicator>;
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

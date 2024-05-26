@@ -1,9 +1,8 @@
-import { Loader } from '@/components/loader';
+import { StatusIndicator } from '@/components/status-indicator';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { SubscriptionRecordData } from '@/lib/types';
 import { ReloadIcon } from '@radix-ui/react-icons';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 interface SubscriptionCardProps {
@@ -23,7 +22,7 @@ export function SubscriptionCard({
     <Card className="w-full">
       <CardContent className="flex justify-between items-center p-6 gap-2">
         {loading ? (
-          <Loader />
+          <StatusIndicator status="loading">Loading</StatusIndicator>
         ) : (
           <>
             <div className="flex flex-col">

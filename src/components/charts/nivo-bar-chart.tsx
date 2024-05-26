@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { ResponsiveBar } from '@nivo/bar';
 
+import { cn } from '@/lib/utils';
+import { StatusIndicator } from '../status-indicator';
 import { Label } from '../ui/label';
 import { Filter } from './filter';
-import { NivoBarChartProps, NivoData, RechartsData } from './interfaces';
-import { Loader } from '../loader';
-import { cn } from '@/lib/utils';
+import { NivoBarChartProps, NivoData } from './interfaces';
 
 export function NivoBarChart<T extends number | string>({
   series,
@@ -91,7 +91,7 @@ export function NivoBarChart<T extends number | string>({
       )}
       {loading ? (
         <div className="h-full flex justify-center items-center">
-          <Loader size={24} />
+          <StatusIndicator status="loading">Loading</StatusIndicator>
         </div>
       ) : isEmpty ? (
         <div className="h-full flex justify-center items-center text-sm">

@@ -1,5 +1,5 @@
 import { DollarInput } from '@/components/dollar-input';
-import { Loader } from '@/components/loader';
+import { StatusIndicator } from '@/components/status-indicator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,10 +18,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { useGoal } from '@/hooks/use-goal';
-import { SettingsLayout } from '@/layout/settings-layout';
 import { createOrUpdateGoal } from '@/lib/api/goals';
 import { ExclamationTriangleIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { useEffect, useMemo } from 'react';
@@ -65,7 +63,8 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
   }
 
   const { errors, isSubmitting, isValid } = form.formState;
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return <StatusIndicator status="loading">Loading</StatusIndicator>;
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

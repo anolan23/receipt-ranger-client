@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { ResponsivePie } from '@nivo/pie';
-import { Loader } from '../loader';
-import { NivoData, NivoPieChartProps } from './interfaces';
+import { StatusIndicator } from '../status-indicator';
+import { NivoPieChartProps } from './interfaces';
 
 export function NivoPieChart<T extends number | string>({
   series,
@@ -35,7 +35,7 @@ export function NivoPieChart<T extends number | string>({
     <div className={cn('h-[300px]', className)}>
       {loading ? (
         <div className="h-full flex justify-center items-center">
-          <Loader size={24} />
+          <StatusIndicator status="loading">Loading</StatusIndicator>
         </div>
       ) : isEmpty ? (
         <div className="h-full flex justify-center items-center text-sm">

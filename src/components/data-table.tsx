@@ -27,17 +27,10 @@ import {
 import { cn } from '@/lib/utils';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import React, { ReactNode, useMemo } from 'react';
-import { Button } from './ui/button';
-import { Loader } from './loader';
-import { Checkbox } from './ui/checkbox';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from './ui/card';
 import { StatusIndicator } from './status-indicator';
+import { Button } from './ui/button';
+import { Card, CardContent } from './ui/card';
+import { Checkbox } from './ui/checkbox';
 
 type ColumnVisibilty<TData> = {
   [Key in keyof TData]?: boolean;

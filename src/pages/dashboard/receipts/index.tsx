@@ -87,7 +87,7 @@ export function ReceiptsPage() {
       }
       content={
         <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 min-w-0">
             <ReceiptsTable
               tools={(table) => (
                 <div className="flex items-center">

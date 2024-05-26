@@ -152,32 +152,32 @@ export function DashboardLayout({
             <SheetContent side="left" className="sm:max-w-xs">
               <nav className="grid gap-6 text-lg font-medium">
                 <Link
-                  to="/dashboard/scanner"
+                  to="/dashboard"
                   className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
                 >
                   {/* <Package2 className="h-5 w-5 transition-all group-hover:scale-110" /> */}
                   <ScanText className="h-5 w-5 transition-all group-hover:scale-110" />
-                  <span className="sr-only">Acme Inc</span>
+                  <span className="sr-only">Snapceipt</span>
                 </Link>
                 <Link
-                  to="#"
+                  to="/dashboard"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
                   <Home className="h-5 w-5" />
                   Dashboard
                 </Link>
                 <Link
-                  to="#"
+                  to="/dashboard/receipts"
                   className="flex items-center gap-4 px-2.5 text-foreground"
                 >
                   <ReceiptText className="h-5 w-5" />
                   Receipts
                 </Link>
                 <Link
-                  to="#"
+                  to="/dashboard/scanner"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
-                  <ScanText className="h-5 w-5" />
+                  <Scan className="h-5 w-5" />
                   Scanner
                 </Link>
                 <Link
@@ -195,7 +195,7 @@ export function DashboardLayout({
                   Reports
                 </Link>
                 <Link
-                  to="#"
+                  to="/dashboard/settings"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
                   <Settings className="h-5 w-5" />

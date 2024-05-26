@@ -79,7 +79,7 @@ export function AnalyticsPage({ ...props }: AnalyticsProps) {
             )}
           </div>
           <div className="grid gap-8">
-            <div className="grid grid-cols-4 gap-8">
+            <div className="grid gap-8 md:grid-cols-3 min-w-0">
               <MetricCard
                 title="Total amount"
                 value={
@@ -106,7 +106,7 @@ export function AnalyticsPage({ ...props }: AnalyticsProps) {
                 loading={isOverviewLoading}
               />
             </div>
-            <div>
+            <div className="min-w-0">
               <MonthlyTotalsCard
                 data={monthlyTotalsData}
                 loading={monthlyTotalsDataLoading}
@@ -120,7 +120,7 @@ export function AnalyticsPage({ ...props }: AnalyticsProps) {
                 loading={isCategoryTotalsLoading}
               />
             </div> */}
-            <div className="grid gap-8 sm:grid-cols-2">
+            <div className="grid gap-8 sm:grid-cols-2 min-w-0">
               <CategoriesCard
                 data={categoryTotalsResult || []}
                 loading={isCategoryTotalsLoading}

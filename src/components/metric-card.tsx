@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Loader } from './loader';
+import { StatusIndicator } from './status-indicator';
 
 interface MetricCardProps {
   title: string;
@@ -31,7 +31,7 @@ export function MetricCard({
       <CardHeader className="pb-2">
         <CardDescription>{title}</CardDescription>
         {loading ? (
-          <Loader />
+          <StatusIndicator status="loading">Loading</StatusIndicator>
         ) : (
           <CardTitle className="text-4xl">{value}</CardTitle>
         )}
