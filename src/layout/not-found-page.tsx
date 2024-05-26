@@ -1,8 +1,10 @@
+import { usePageTitle } from '@/hooks/use-page-title';
 import { ErrorLayout } from './error-layout';
 
 interface NotFoundPageProps {}
 
 export function NotFoundPage({ ...props }: NotFoundPageProps) {
+  usePageTitle('404: Not Found');
   return (
     <ErrorLayout
       hideLogo={false}

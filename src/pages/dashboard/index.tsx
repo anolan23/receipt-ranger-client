@@ -16,8 +16,14 @@ import { DashboardLayout } from '@/layout/dashboard-layout';
 import { toDollar } from '@/lib/helpers';
 import { Link } from 'react-router-dom';
 import { ReceiptsTable } from '../../components/receipts-table';
+import { usePageTitle } from '@/hooks/use-page-title';
 export function DashboardPage() {
-  const { data: receipts, mutate: mutateReceipts } = useReceipts({ limit: 5 });
+  usePageTitle('Dashboard Home');
+  const {
+    data: receipts,
+    mutate: mutateReceipts,
+    isLoading: isReceiptsLoading,
+  } = useReceipts({ limit: 5 });
   const { rowSelection, setRowSelection, selectedRow, nextRow, prevRow } =
     useRowSelection({
       selectFirstOnMOunt: true,
@@ -127,6 +133,7 @@ export function DashboardPage() {
                 variant="embedded"
                 selectionType="single"
                 data={receipts || []}
+                loading={isReceiptsLoading}
               />
             </div>
             <div>

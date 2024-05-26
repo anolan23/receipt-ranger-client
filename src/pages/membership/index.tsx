@@ -9,10 +9,12 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useUser } from '@/hooks/use-user';
 import { ScanLogo } from '@/components/scan-logo';
 import { Logo } from '@/components/logo';
+import { usePageTitle } from '@/hooks/use-page-title';
 
 interface MembershipPageProps {}
 
 export function MembershipPage({ ...props }: MembershipPageProps) {
+  usePageTitle('Membership');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);

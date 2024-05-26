@@ -12,10 +12,12 @@ import { MerchantsCard } from './components/merchants-card';
 import { MonthlyTotalsCard } from './components/monthly-totals-card';
 import { useOverview } from '@/hooks/use-overview';
 import { toDollar } from '@/lib/helpers';
+import { usePageTitle } from '@/hooks/use-page-title';
 
 interface AnalyticsProps {}
 
 export function AnalyticsPage({ ...props }: AnalyticsProps) {
+  usePageTitle('Analytics');
   const { datePreset, dateRange, dateRangeStr, setDatePreset, setDateRange } =
     useDateRangePreset('6-months');
 

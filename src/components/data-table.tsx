@@ -37,6 +37,7 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
+import { StatusIndicator } from './status-indicator';
 
 type ColumnVisibilty<TData> = {
   [Key in keyof TData]?: boolean;
@@ -183,7 +184,7 @@ export function DataTable<TData>({
         >
           {loading ? (
             <div className="h-[100px] flex justify-center items-center">
-              <Loader size={24} />
+              <StatusIndicator status="loading">Loading</StatusIndicator>
             </div>
           ) : (
             <Table>

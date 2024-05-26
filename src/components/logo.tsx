@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { ScanLogo } from './scan-logo';
+import { ScanText } from 'lucide-react';
 
 interface LogoProps {
   fill?: string;
@@ -8,7 +7,7 @@ interface LogoProps {
 export function Logo({ fill, ...props }: LogoProps) {
   return (
     <div className="flex space-x-2 items-center">
-      <ScanLogo fill={fill} />
+      <ScanText fill={fill} />
       <span className="font-bold tracking-tighter">snapceipt.</span>
     </div>
   );

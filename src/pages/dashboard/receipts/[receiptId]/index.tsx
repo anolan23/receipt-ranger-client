@@ -20,10 +20,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ActionsDropdown } from '../components/actions-dropdown';
 import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
+import { usePageTitle } from '@/hooks/use-page-title';
 
 interface ReceiptPageProps {}
 
 export function ReceiptPage({ ...props }: ReceiptPageProps) {
+  usePageTitle('Receipt Details');
   const { receiptId } = useParams();
 
   const navigate = useNavigate();

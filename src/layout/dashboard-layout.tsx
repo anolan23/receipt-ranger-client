@@ -1,3 +1,4 @@
+import placeHolderUser from '@/assets/user.webp';
 import { DashboardLink } from '@/components/dashboard-link';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,26 +16,21 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { signOutUser } from '@/lib/api/auth';
+import { clearSWRCache } from '@/lib/utils';
 import {
   FileBarChart2,
-  FilePieChart,
   Home,
   LineChart,
-  Package,
-  Package2,
   PanelLeft,
   ReceiptText,
+  Scan,
   ScanText,
   Search,
   Settings,
-  ShoppingCart,
-  Users2,
 } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import placeHolderUser from '@/assets/user.webp';
-import { signOutUser } from '@/lib/api/auth';
-import { clearSWRCache } from '@/lib/utils';
 
 interface DashboardLayoutProps {
   breadcrumbs?: ReactNode;
@@ -101,7 +97,7 @@ export function DashboardLayout({
           <Tooltip>
             <TooltipTrigger asChild>
               <DashboardLink to="/dashboard/scanner">
-                <ScanText className="h-5 w-5" />
+                <Scan className="h-5 w-5" />
                 <span className="sr-only">Scanner</span>
               </DashboardLink>
             </TooltipTrigger>

@@ -46,22 +46,31 @@ import { useNavigate } from 'react-router-dom';
 import { UploadFileProgress } from './components/upload-file-progress';
 import { ActionsDropdown } from '../dashboard/receipts/components/actions-dropdown';
 import { useRowSelection } from '@/hooks/use-row-selection';
+import { usePageTitle } from '@/hooks/use-page-title';
 
 interface ScannerPageProps {}
 
 export function ScannerPage({ ...props }: ScannerPageProps) {
+  usePageTitle('Scanner');
   const navigate = useNavigate();
   const { uploadFiles, uploadAll, errors, uploading, removeFileFromUpload } =
     useReceiptUploader();
   const { toast } = useToast();
   const isMobile = useDeviceWidth();
-  const { data: receipts, mutate: mutateReceipts } = useReceipts({
+  const {
+    data: receipts,
+    mutate: mutateReceipts,
+    isLoading: isReceiptsLoading,
+  } = useReceipts({
     reviewed: false,
   });
-  const { data: reviewedReceipts, mutate: mutateReviewedReceipts } =
-    useReceipts({
-      reviewed: true,
-    });
+  const {
+    data: reviewedReceipts,
+    mutate: mutateReviewedReceipts,
+    isLoading: isReviewedReceiptsLoading,
+  } = useReceipts({
+    reviewed: true,
+  });
 
   const { rowSelection, setRowSelection, selectedRow } = useRowSelection({
     selectFirstOnMOunt: true,
@@ -221,6 +230,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                   selectionType="single"
                   rowSelection={rowSelection}
                   onRowSelectionChange={setRowSelection}
+                  loading={isReceiptsLoading}
                 />
               </TabsContent>
               <TabsContent value="reviewed" className="space-y-4">
@@ -246,6 +256,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                   selectionType="single"
                   rowSelection={revRowSelection}
                   onRowSelectionChange={setRevRowSelection}
+                  loading={isReviewedReceiptsLoading}
                 />
               </TabsContent>
             </Tabs>

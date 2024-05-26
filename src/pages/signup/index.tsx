@@ -6,9 +6,11 @@ import { Credentials } from '@/lib/types';
 import { useNavigate } from 'react-router-dom';
 import { CredentialsForm } from './components/credentials-form';
 import { GoogleIcon } from '@/components/google-icon';
+import { usePageTitle } from '@/hooks/use-page-title';
 
 interface SignupPageProps {}
 export function SignupPage({ ...props }: SignupPageProps) {
+  usePageTitle('Sign Up');
   const navigate = useNavigate();
 
   async function handleCredentialsSubmit(values: Credentials) {

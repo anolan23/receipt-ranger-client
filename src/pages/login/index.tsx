@@ -17,10 +17,12 @@ import { Credentials } from '@/lib/types';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useNavigate } from 'react-router-dom';
 import { GoogleIcon } from '@/components/google-icon';
+import { usePageTitle } from '@/hooks/use-page-title';
 
 interface LoginPageProps {}
 
 export function LoginPage({ ...props }: LoginPageProps) {
+  usePageTitle('Login');
   const navigate = useNavigate();
   const form = useForm<Credentials>({
     defaultValues: {

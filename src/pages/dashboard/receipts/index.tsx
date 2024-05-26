@@ -23,9 +23,15 @@ import { ReceiptsTable } from '../../../components/receipts-table';
 import { ColumnFilterDropdown } from '@/components/column-filter-dropdown';
 import { TextFilter } from '@/components/text-filter';
 import { Pagination } from '@/components/pagination';
+import { usePageTitle } from '@/hooks/use-page-title';
 
 export function ReceiptsPage() {
-  const { data: receipts, mutate: mutateReceipts } = useReceipts();
+  usePageTitle('Receipts');
+  const {
+    data: receipts,
+    mutate: mutateReceipts,
+    isLoading: isReceiptsLoading,
+  } = useReceipts();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
 
@@ -117,6 +123,7 @@ export function ReceiptsPage() {
               selectionType="single"
               data={receipts || []}
               footerControls={(table) => <Pagination table={table} />}
+              loading={isReceiptsLoading}
             />
           </div>
           <ReceiptCard

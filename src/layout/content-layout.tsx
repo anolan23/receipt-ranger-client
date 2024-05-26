@@ -1,5 +1,6 @@
 import { HTMLAttributes, ReactNode } from 'react';
 import { ErrorLayout } from './error-layout';
+import { StatusIndicator } from '@/components/status-indicator';
 
 interface ContentLayoutProps<T> {
   children: (data: T) => ReactNode;
@@ -16,7 +17,12 @@ export function ContentLayout<T>({
   data,
   ...props
 }: ContentLayoutProps<T>) {
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div>
+        <StatusIndicator status="loading">Loading</StatusIndicator>
+      </div>
+    );
   if (error)
     return (
       <ErrorLayout
