@@ -25,7 +25,7 @@ import { TextFilter } from '@/components/text-filter';
 import { Pagination } from '@/components/pagination';
 
 export function ReceiptsPage() {
-  const { data: receipts } = useReceipts();
+  const { data: receipts, mutate: mutateReceipts } = useReceipts();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
 
@@ -91,7 +91,7 @@ export function ReceiptsPage() {
                       onClick={handleExportClick}
                       size="sm"
                       variant="outline"
-                      className="h-7 gap-1"
+                      className="gap-1"
                       disabled={downloading}
                     >
                       <File className="h-3.5 w-3.5" />
@@ -124,6 +124,7 @@ export function ReceiptsPage() {
             loading={isReceiptLoading}
             onPreviousClick={prevRow}
             onNextClick={nextRow}
+            onDeleteSuccess={() => mutateReceipts()}
           />
         </div>
       }

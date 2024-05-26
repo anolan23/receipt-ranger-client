@@ -22,8 +22,6 @@ export function AnalyticsPage({ ...props }: AnalyticsProps) {
   const { data: overviewData, isLoading: isOverviewLoading } =
     useOverview(dateRangeStr);
 
-  console.log(overviewData);
-
   const { data: monthlyTotalsData, isLoading: monthlyTotalsDataLoading } =
     useMonthlyTotals(dateRangeStr);
 

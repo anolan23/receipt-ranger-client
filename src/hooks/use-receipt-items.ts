@@ -11,7 +11,7 @@ export function useReceiptItems(receiptId?: string) {
   const swrResponse = useSWR(
     receiptId ? `/receipts/${receiptId}/items` : undefined,
     fetcher,
-    { revalidateOnMount: true }
+    { revalidateOnMount: true, shouldRetryOnError: false }
   );
 
   return swrResponse;

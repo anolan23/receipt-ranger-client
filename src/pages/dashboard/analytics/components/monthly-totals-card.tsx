@@ -1,16 +1,10 @@
+import { BarSeries, Datum } from '@/components/charts/interfaces';
+import { NivoBarChart } from '@/components/charts/nivo-bar-chart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatDate, getDates } from '@/lib/helpers';
 import { DatePreset, MonthySpendingData } from '@/lib/types';
 import { useMemo } from 'react';
-import {
-  BarDataSeries,
-  BarSeries,
-  Datum,
-} from '@/components/charts/interfaces';
-import dayjs from 'dayjs';
-import { NivoBarChart } from '@/components/charts/nivo-bar-chart';
-import { formatDate, getDates } from '@/lib/helpers';
 import { DateRange } from 'react-day-picker';
-import { scaleTime } from 'd3-scale';
 
 interface MonthlyTotalsCardProps {
   data?: MonthySpendingData[];
@@ -39,9 +33,7 @@ export function MonthlyTotalsCard({
 
     data.forEach((item) => {
       const str = new Date(item.month_date).toUTCString();
-      console.log(str);
       const formattedDate = formatDate(new Date(item.month_date));
-      console.log(item.month_date, formattedDate);
       totalSpentData[formattedDate] = parseFloat(item.total);
     });
 

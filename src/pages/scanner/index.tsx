@@ -1,7 +1,10 @@
 import CopyableText from '@/components/copyable-text';
 import { Link } from '@/components/link';
 
+import { ColumnFilterDropdown } from '@/components/column-filter-dropdown';
+import { Pagination } from '@/components/pagination';
 import { ReceiptsTable } from '@/components/receipts-table';
+import { TextFilter } from '@/components/text-filter';
 import {
   Accordion,
   AccordionContent,
@@ -36,17 +39,13 @@ import { useToast } from '@/components/ui/use-toast';
 import { UploadArea } from '@/components/upload-area';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { useReceiptUploader } from '@/hooks/use-receipt-uploader';
+import { useReceipts } from '@/hooks/use-receipts';
 import { DashboardLayout } from '@/layout/dashboard-layout';
-import { CheckCheck, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { UploadFileProgress } from './components/upload-file-progress';
-import { useReceipts } from '@/hooks/use-receipts';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ActionsDropdown } from '../dashboard/receipts/components/actions-dropdown';
-import { ColumnFilterDropdown } from '@/components/column-filter-dropdown';
-import { TextFilter } from '@/components/text-filter';
-import { Pagination } from '@/components/pagination';
+import { useRowSelection } from '@/hooks/use-row-selection';
 
 interface ScannerPageProps {}
 
@@ -56,11 +55,26 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
     useReceiptUploader();
   const { toast } = useToast();
   const isMobile = useDeviceWidth();
-  const { data: receipts, mutate: mutateReviewReceipts } = useReceipts({
+  const { data: receipts, mutate: mutateReceipts } = useReceipts({
     reviewed: false,
   });
-  const { data: reviewedReceipts } = useReceipts({
-    reviewed: true,
+  const { data: reviewedReceipts, mutate: mutateReviewedReceipts } =
+    useReceipts({
+      reviewed: true,
+    });
+
+  const { rowSelection, setRowSelection, selectedRow } = useRowSelection({
+    selectFirstOnMOunt: true,
+    data: receipts,
+  });
+
+  const {
+    rowSelection: revRowSelection,
+    setRowSelection: setRevRowSelection,
+    selectedRow: selectedRevRow,
+  } = useRowSelection({
+    selectFirstOnMOunt: true,
+    data: reviewedReceipts,
   });
 
   const handleFileDrop = async function (files: FileList) {
@@ -172,7 +186,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                               uploadFile={file}
                               onUploadSuccess={(result) => {
                                 removeFileFromUpload(file.id);
-                                mutateReviewReceipts();
+                                mutateReceipts();
                               }}
                             />
                           ))}
@@ -192,11 +206,21 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                       />
                       <div className="ml-auto flex items-center gap-2">
                         <ColumnFilterDropdown table={table} />
+                        <ActionsDropdown
+                          receipt={selectedRow}
+                          onDelete={() => mutateReceipts()}
+                          onReviewed={() => {
+                            mutateReceipts();
+                            mutateReviewedReceipts();
+                          }}
+                        />
                       </div>
                     </div>
                   )}
                   footerControls={(table) => <Pagination table={table} />}
-                  selectionType="multiple"
+                  selectionType="single"
+                  rowSelection={rowSelection}
+                  onRowSelectionChange={setRowSelection}
                 />
               </TabsContent>
               <TabsContent value="reviewed" className="space-y-4">
@@ -211,11 +235,17 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                       />
                       <div className="ml-auto flex items-center gap-2">
                         <ColumnFilterDropdown table={table} />
+                        <ActionsDropdown
+                          receipt={selectedRevRow}
+                          onDelete={() => mutateReviewedReceipts()}
+                        />
                       </div>
                     </div>
                   )}
                   footerControls={(table) => <Pagination table={table} />}
-                  selectionType="multiple"
+                  selectionType="single"
+                  rowSelection={revRowSelection}
+                  onRowSelectionChange={setRevRowSelection}
                 />
               </TabsContent>
             </Tabs>

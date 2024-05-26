@@ -7,5 +7,7 @@ export function useReceipt(receiptId?: string) {
     const receipt = await getReceipt(receiptId);
     return receipt;
   };
-  return useSWR(receiptId ? `/receipts/${receiptId}` : undefined, fetcher);
+  return useSWR(receiptId ? `/receipts/${receiptId}` : undefined, fetcher, {
+    shouldRetryOnError: false,
+  });
 }

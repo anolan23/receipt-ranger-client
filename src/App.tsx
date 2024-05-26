@@ -17,6 +17,7 @@ import { AppearanceSettings } from './pages/dashboard/settings/appearance';
 import { ReceiptPage } from './pages/dashboard/receipts/[receiptId]';
 import { CategoryPage } from './pages/dashboard/categories/[categoryId]';
 import { useScrollToTop } from './hooks/use-scroll-to-top';
+import { NotFoundPage } from './layout/not-found-page';
 
 function App() {
   useScrollToTop();
@@ -44,6 +45,7 @@ function App() {
             </Route>
           </Route>
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );

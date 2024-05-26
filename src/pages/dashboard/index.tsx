@@ -3,34 +3,21 @@ import { ReceiptCard } from '@/components/receipt-card';
 import { Button } from '@/components/ui/button';
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { useSpendingOverview } from '@/hooks/use-spending-overview';
 import { DashboardLayout } from '@/layout/dashboard-layout';
-import { File, ListFilter } from 'lucide-react';
-import { useEffect } from 'react';
+import { toDollar } from '@/lib/helpers';
 import { Link } from 'react-router-dom';
 import { ReceiptsTable } from '../../components/receipts-table';
-import { toDollar } from '@/lib/helpers';
-import { Pagination } from '@/components/pagination';
 export function DashboardPage() {
-  const { data: receipts } = useReceipts({ limit: 5 });
+  const { data: receipts, mutate: mutateReceipts } = useReceipts({ limit: 5 });
   const { rowSelection, setRowSelection, selectedRow, nextRow, prevRow } =
     useRowSelection({
       selectFirstOnMOunt: true,
@@ -148,6 +135,7 @@ export function DashboardPage() {
                 loading={isReceiptLoading}
                 onPreviousClick={prevRow}
                 onNextClick={nextRow}
+                onDeleteSuccess={() => mutateReceipts()}
               />
             </div>
           </div>

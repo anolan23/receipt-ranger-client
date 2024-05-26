@@ -1,27 +1,25 @@
+import { DocViewer } from '@/components/doc-viewer';
 import SmartBreadcrumb from '@/components/smart-breadcrumb';
-import { StatusIndicator } from '@/components/status-indicator';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
-import { useCategories } from '@/hooks/use-categories';
+import { useToast } from '@/components/ui/use-toast';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceiptItems } from '@/hooks/use-receipt-items';
+import { useSubcategories } from '@/hooks/use-subcategories';
+import { ContentLayout } from '@/layout/content-layout';
 import { DashboardLayout } from '@/layout/dashboard-layout';
+import { ErrorLayout } from '@/layout/error-layout';
 import { updateReceipt } from '@/lib/api/receipts';
-import { toDollar } from '@/lib/helpers';
 import { ItemData } from '@/lib/types';
 import { ChevronLeft } from 'lucide-react';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { LineItemsTable } from './components/line-items-table';
+import { ActionsDropdown } from '../components/actions-dropdown';
 import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
-import { useSubcategories } from '@/hooks/use-subcategories';
-import { ActionsDropdown } from '../components/actions-dropdown';
-import { useToast } from '@/components/ui/use-toast';
-import { Card, CardContent } from '@/components/ui/card';
-import { DocViewer } from '@/components/doc-viewer';
-import { Badge } from '@/components/ui/badge';
 
 interface ReceiptPageProps {}
 
@@ -31,7 +29,12 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const { data: receipt } = useReceipt(receiptId);
+  const {
+    data: receipt,
+    mutate: mutateReceipt,
+    error,
+    isLoading,
+  } = useReceipt(receiptId);
   const { data: items } = useReceiptItems(receiptId);
 
   const transformItemToUpdatePayload = useCallback(
@@ -90,8 +93,6 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
     return sum.toFixed(2);
   }, [formValues]);
 
-  if (!receipt) return <div>Loading...</div>;
-
   async function onSubmit(values: EditReceiptFormValues) {
     try {
       if (!receipt?.id) return;
@@ -102,7 +103,6 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
       });
       toast({ title: 'Receipt successfully updated' });
     } catch (error) {
-      console.error(error);
       toast({
         variant: 'destructive',
         title: 'Error',
@@ -111,69 +111,101 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
     }
   }
 
-  const statusIndicatorStatus =
-    calculatedSubtotal === formValues.subtotal ? 'success' : 'warning';
-
   return (
     <DashboardLayout
       breadcrumbs={<SmartBreadcrumb />}
       content={
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <Button
-              onClick={() => navigate(-1)}
-              variant="outline"
-              size="icon"
-              className="h-7 w-7"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <span className="sr-only">Back</span>
-            </Button>
-            <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight lg:flex-none">
-              {`Receipt ${receipt.id}`}
-            </h1>
-            <Badge variant="outline" className="ml-auto sm:ml-0">
-              {receipt.reviewed ? 'Reviewed' : 'Pending review'}
-            </Badge>
-            <div className="hidden items-center gap-2 md:ml-auto md:flex">
-              <Button onClick={() => navigate(-1)} variant="outline" size="sm">
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                form="edit-form"
-                type="submit"
-                disabled={form.formState.isSubmitting}
-              >
-                Save Receipt
-              </Button>
-              <ActionsDropdown receipt={receipt} />
-            </div>
-          </div>
-          <div className="grid gap-8 md:grid-cols-[400px_1fr]">
-            <div>
-              <Card className="sticky top-4">
-                <CardContent className="pt-6">
-                  <div className="overflow-hidden rounded-md">
-                    <DocViewer objectKey={receipt.object_key || undefined} />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            <div className="overflow-y-auto">
-              <Form {...form}>
-                <form id="edit-form" onSubmit={form.handleSubmit(onSubmit)}>
-                  <div className="grid gap-8">
-                    <ReceiptInfoCard
-                      subcategories={subcategories}
+        <ContentLayout
+          className="space-y-4"
+          loading={isLoading}
+          error={error}
+          data={receipt}
+        >
+          {(receipt) => {
+            return (
+              <>
+                <div className="flex items-center gap-4">
+                  <Button
+                    onClick={() => navigate(-1)}
+                    variant="outline"
+                    size="icon"
+                    className="h-7 w-7"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    <span className="sr-only">Back</span>
+                  </Button>
+                  <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight lg:flex-none">
+                    {`Receipt ${receipt.id}`}
+                  </h1>
+                  <Badge variant="outline" className="ml-auto sm:ml-0">
+                    {receipt.reviewed ? 'Reviewed' : 'Pending review'}
+                  </Badge>
+                  <div className="hidden items-center gap-2 md:ml-auto md:flex">
+                    <Button
+                      onClick={() => navigate(-1)}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      size="sm"
+                      form="edit-form"
+                      type="submit"
+                      disabled={form.formState.isSubmitting}
+                    >
+                      Save Receipt
+                    </Button>
+                    <ActionsDropdown
                       receipt={receipt}
+                      onDelete={(receipt) => navigate('/dashboard/receipts')}
+                      onReviewed={async () => {
+                        try {
+                          mutateReceipt();
+                          toast({ title: 'Receipt reviewed' });
+                        } catch (error) {
+                          toast({
+                            variant: 'destructive',
+                            title: 'Error',
+                            description: 'Failed to review receipt',
+                          });
+                        }
+                      }}
                     />
                   </div>
-                </form>
-              </Form>
-            </div>
-          </div>
-        </div>
+                </div>
+                <div className="grid gap-8 md:grid-cols-[400px_1fr]">
+                  <div>
+                    <Card className="sticky top-4">
+                      <CardContent className="pt-6">
+                        <div className="overflow-hidden rounded-md">
+                          <DocViewer
+                            objectKey={receipt.object_key || undefined}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                  <div className="overflow-y-auto">
+                    <Form {...form}>
+                      <form
+                        id="edit-form"
+                        onSubmit={form.handleSubmit(onSubmit)}
+                      >
+                        <div className="grid gap-8">
+                          <ReceiptInfoCard
+                            subcategories={subcategories}
+                            receipt={receipt}
+                          />
+                        </div>
+                      </form>
+                    </Form>
+                  </div>
+                </div>
+              </>
+            );
+          }}
+        </ContentLayout>
       }
     />
   );

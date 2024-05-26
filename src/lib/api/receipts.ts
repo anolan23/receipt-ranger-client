@@ -49,7 +49,7 @@ export async function createReceipt(file: File) {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 429) {
-        throw new Error('Maximum number of receipt scans reached');
+        throw new Error('Upgrade to Pro for unlimited Receipt scans');
       }
     }
     throw error;
@@ -84,6 +84,16 @@ export async function updateReceipt(
   updates: ReceiptUpdatePayload
 ) {
   const response = await backend.put(`/receipts/${receiptId}`, updates);
+  return response.data;
+}
+
+export async function updateReceiptReviewStatus(
+  receiptId: string,
+  reviewed: boolean
+) {
+  const response = await backend.patch(`/receipts/${receiptId}/review`, {
+    reviewed,
+  });
   return response.data;
 }
 

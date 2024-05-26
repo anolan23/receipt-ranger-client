@@ -5,6 +5,7 @@ import { googleSignIn, signUpUser } from '@/lib/api/auth';
 import { Credentials } from '@/lib/types';
 import { useNavigate } from 'react-router-dom';
 import { CredentialsForm } from './components/credentials-form';
+import { GoogleIcon } from '@/components/google-icon';
 
 interface SignupPageProps {}
 export function SignupPage({ ...props }: SignupPageProps) {
@@ -47,6 +48,7 @@ export function SignupPage({ ...props }: SignupPageProps) {
               </div>
             </div>
             <Button variant="outline" type="button" onClick={googleSignIn}>
+              <GoogleIcon />
               Google
             </Button>
           </div>

@@ -9,7 +9,7 @@ import {
   Edit2Icon,
   MoreVertical,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ImageLogo } from './image-logo';
 import { StatusIndicator } from './status-indicator';
 import { Button } from './ui/button';
@@ -50,6 +50,7 @@ interface ReceiptCardProps {
   loading?: boolean;
   onPreviousClick?: () => void;
   onNextClick?: () => void;
+  onDeleteSuccess?: (receipt: ReceiptData) => void;
 }
 
 export function ReceiptCard({
@@ -60,8 +61,10 @@ export function ReceiptCard({
   loading,
   onPreviousClick,
   onNextClick,
+  onDeleteSuccess,
   ...props
 }: ReceiptCardProps) {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const transactionDate = receipt?.transaction_date
     ? dayjs(receipt.transaction_date).format('MMMM D, YYYY')
@@ -152,7 +155,7 @@ export function ReceiptCard({
                 </span>
               </Button>
             )}
-            <ActionsDropdown receipt={receipt} />
+            <ActionsDropdown receipt={receipt} onDelete={onDeleteSuccess} />
           </div>
         </CardHeader>
       )}

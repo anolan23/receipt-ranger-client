@@ -168,7 +168,7 @@ export function DataTable<TData>({
   });
 
   return (
-    <div>
+    <div className="min-w-0">
       {tools && <div className="mb-4">{tools(table)}</div>}
       <Card
         className={cn({

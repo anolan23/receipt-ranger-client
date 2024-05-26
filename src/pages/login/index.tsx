@@ -8,7 +8,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { AuthLayout } from '@/layout/auth-layout';
@@ -16,6 +16,7 @@ import { googleSignIn, loginUser } from '@/lib/api/auth';
 import { Credentials } from '@/lib/types';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useNavigate } from 'react-router-dom';
+import { GoogleIcon } from '@/components/google-icon';
 
 interface LoginPageProps {}
 
@@ -147,6 +148,7 @@ export function LoginPage({ ...props }: LoginPageProps) {
               </div>
             </div>
             <Button variant="outline" type="button" onClick={googleSignIn}>
+              <GoogleIcon />
               Google
             </Button>
           </div>

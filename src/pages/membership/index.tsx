@@ -59,7 +59,7 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
               <Link
                 to={
                   searchParams.get('c') === 'settings'
-                    ? '/settings/subscription'
+                    ? '/dashboard/settings/subscription'
                     : '/dashboard'
                 }
               >

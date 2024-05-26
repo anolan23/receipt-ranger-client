@@ -48,7 +48,7 @@ export async function loginUser({ username, password }: SignInInput) {
 }
 
 export async function signOutUser() {
-  await signOut();
+  await signOut({ global: true });
 }
 
 export async function resendSignUpCodeToEmail({

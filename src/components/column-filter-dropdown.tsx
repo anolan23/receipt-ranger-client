@@ -22,7 +22,7 @@ export function ColumnFilterDropdown({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="h-7" size="sm">
+        <Button variant="outline" size="sm">
           <MixerHorizontalIcon className="h-3.5 w-3.5 mr-2" /> View
         </Button>
       </DropdownMenuTrigger>
