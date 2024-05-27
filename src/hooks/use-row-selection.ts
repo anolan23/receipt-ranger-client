@@ -1,5 +1,5 @@
 import { RowSelectionState } from '@tanstack/react-table';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 interface UseRowSelectionArgs<TData> {
   data?: TData[];
@@ -18,7 +18,7 @@ export function useRowSelection<T>({
     return data?.[+index];
   }, [rowSelection, data]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!selectFirstOnMOunt) return;
     if (!data?.length) return;
     setRowSelection({ '0': true });

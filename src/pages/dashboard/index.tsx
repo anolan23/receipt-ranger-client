@@ -9,15 +9,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { useSpendingOverview } from '@/hooks/use-spending-overview';
+import { useSubscription } from '@/hooks/use-subscription';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { toDollar } from '@/lib/helpers';
 import { Link } from 'react-router-dom';
 import { ReceiptsTable } from '../../components/receipts-table';
-import { usePageTitle } from '@/hooks/use-page-title';
 export function DashboardPage() {
   usePageTitle('Dashboard Home');
   const {
@@ -36,6 +37,8 @@ export function DashboardPage() {
 
   const { data: spendingOverview, isLoading: isSpendingOverviewLoading } =
     useSpendingOverview();
+
+  const { data: subscriptionRecord } = useSubscription();
 
   const getMonlthySpendPercentDiff = (num1: number, num2: number) => {
     const frac = (num1 - num2) / num2;
@@ -136,22 +139,24 @@ export function DashboardPage() {
                 data={receipts || []}
                 loading={isReceiptsLoading}
               />
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-                <Card className="sm:col-span-4">
-                  <CardHeader>
-                    <CardTitle>Upgrade to Pro</CardTitle>
-                    <CardDescription>
-                      Enjoy unlimited receipt scans and access to the latest
-                      features.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Button asChild>
-                      <Link to="/membership">Start Free Trial</Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
+              {!subscriptionRecord?.subscription && (
+                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+                  <Card className="sm:col-span-4">
+                    <CardHeader>
+                      <CardTitle>Upgrade to Pro</CardTitle>
+                      <CardDescription>
+                        Enjoy unlimited receipt scans and access to the latest
+                        features.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Button asChild>
+                        <Link to="/membership">Choose a plan</Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
             </div>
             <div className="sticky top-4">
               <ReceiptCard

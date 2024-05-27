@@ -62,13 +62,23 @@ export type GoalData = {
   amount: string;
 };
 
+export type SubscriptionStatus =
+  | 'incomplete'
+  | 'incomplete_expired'
+  | 'trialing'
+  | 'active'
+  | 'past_due'
+  | 'canceled'
+  | 'unpaid'
+  | 'paused';
+
 export type SubscriptionRecordData = {
   created_at: string;
   end_date: string;
   id: number;
   stripe_customer_id: string;
   stripe_subscription_id: string;
-  subscription_status: string;
+  subscription_status: SubscriptionStatus;
   updated_at: string;
   user_id: string;
 };
