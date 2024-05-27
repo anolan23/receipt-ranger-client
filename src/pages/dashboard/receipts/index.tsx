@@ -24,9 +24,13 @@ import { ColumnFilterDropdown } from '@/components/column-filter-dropdown';
 import { TextFilter } from '@/components/text-filter';
 import { Pagination } from '@/components/pagination';
 import { usePageTitle } from '@/hooks/use-page-title';
+import { Cards } from '@/components/cards';
+import { useDeviceWidth } from '@/hooks/use-device-width';
+import { ReceiptCardLink } from '@/components/receipt-card-link';
 
 export function ReceiptsPage() {
   usePageTitle('Receipts');
+  const isMobile = useDeviceWidth();
   const {
     data: receipts,
     mutate: mutateReceipts,
@@ -87,46 +91,55 @@ export function ReceiptsPage() {
       }
       content={
         <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-          <div className="lg:col-span-2 min-w-0">
-            <ReceiptsTable
-              tools={(table) => (
-                <div className="flex items-center">
-                  <TextFilter table={table} placeholder="Filter Receipts..." />
-                  <div className="ml-auto flex items-center gap-2">
-                    <Button
-                      onClick={handleExportClick}
-                      size="sm"
-                      variant="outline"
-                      className="gap-1"
-                      disabled={downloading}
-                    >
-                      <File className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                        Export
-                      </span>
-                    </Button>
-                    <ColumnFilterDropdown table={table} />
-                  </div>
+          <ReceiptsTable
+            tools={(table) => (
+              <div className="flex items-center">
+                <TextFilter table={table} placeholder="Filter Receipts..." />
+                <div className="ml-auto flex items-center gap-2">
+                  <Button
+                    onClick={handleExportClick}
+                    size="sm"
+                    variant="outline"
+                    className="gap-1"
+                    disabled={downloading}
+                  >
+                    <File className="h-3.5 w-3.5" />
+                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                      Export
+                    </span>
+                  </Button>
+                  <ColumnFilterDropdown table={table} />
                 </div>
-              )}
-              header={
-                <CardHeader>
-                  <CardTitle>Receipts</CardTitle>
-                  <CardDescription>
-                    All of your scanned receipts.
-                  </CardDescription>
-                </CardHeader>
-              }
-              rowSelection={rowSelection}
-              onRowSelectionChange={setRowSelection}
-              variant="embedded"
-              selectionType="single"
-              data={receipts || []}
-              footerControls={(table) => <Pagination table={table} />}
-              loading={isReceiptsLoading}
-            />
-          </div>
+              </div>
+            )}
+            header={
+              <CardHeader>
+                <CardTitle>Receipts</CardTitle>
+                <CardDescription>All of your scanned receipts.</CardDescription>
+              </CardHeader>
+            }
+            rowSelection={rowSelection}
+            onRowSelectionChange={setRowSelection}
+            variant="embedded"
+            selectionType="single"
+            data={receipts || []}
+            footerControls={(table) => <Pagination table={table} />}
+            loading={isReceiptsLoading}
+            className="lg:col-span-2"
+          />
+          <Cards
+            hidden={!isMobile}
+            title="Reviewed Receipts"
+            loading={isReceiptsLoading}
+            loadingText="Loading Receipts"
+            emptyText="No Receipts."
+            data={receipts || []}
+            renderCard={(receipt) => (
+              <ReceiptCardLink key={receipt.id} receipt={receipt} />
+            )}
+          />
           <ReceiptCard
+            hidden={isMobile}
             receipt={receipt}
             loading={isReceiptLoading}
             onPreviousClick={prevRow}

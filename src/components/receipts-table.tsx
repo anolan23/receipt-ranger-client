@@ -7,11 +7,13 @@ import dayjs from 'dayjs';
 import { ReceiptTextIcon } from 'lucide-react';
 import { ImageLogo } from './image-logo';
 import { Badge } from './ui/badge';
+import { useDeviceWidth } from '@/hooks/use-device-width';
 
 interface ReceiptsTableProps
   extends Omit<DataTableProps<ReceiptData>, 'columns'> {}
 
 export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
+  const isMobile = useDeviceWidth();
   const columnHelper = createColumnHelper<ReceiptData>();
   const columns = [
     // columnHelper.accessor('id', {
@@ -128,6 +130,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       columns={columns}
       selectionType="single"
       empty={'No Receipts found'}
+      hidden={isMobile}
       {...props}
     />
   );

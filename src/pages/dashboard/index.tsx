@@ -1,3 +1,5 @@
+import { Cards } from '@/components/cards';
+import { ImageLogo } from '@/components/image-logo';
 import { MetricCard } from '@/components/metric-card';
 import { ReceiptCard } from '@/components/receipt-card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useDeviceWidth } from '@/hooks/use-device-width';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceipts } from '@/hooks/use-receipts';
@@ -17,10 +20,14 @@ import { useSpendingOverview } from '@/hooks/use-spending-overview';
 import { useSubscription } from '@/hooks/use-subscription';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { toDollar } from '@/lib/helpers';
+import dayjs from 'dayjs';
+import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ReceiptsTable } from '../../components/receipts-table';
+import { ReceiptCardLink } from '@/components/receipt-card-link';
 export function DashboardPage() {
   usePageTitle('Dashboard Home');
+  const isMobile = useDeviceWidth();
   const {
     data: receipts,
     mutate: mutateReceipts,
@@ -139,6 +146,17 @@ export function DashboardPage() {
                 data={receipts || []}
                 loading={isReceiptsLoading}
               />
+              <Cards
+                hidden={!isMobile}
+                title="Recent Receipts"
+                loading={isReceiptsLoading}
+                loadingText="Loading Receipts"
+                emptyText="No Receipts."
+                data={receipts || []}
+                renderCard={(receipt) => (
+                  <ReceiptCardLink key={receipt.id} receipt={receipt} />
+                )}
+              />
               {!subscriptionRecord?.subscription && (
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
                   <Card className="sm:col-span-4">
@@ -160,6 +178,7 @@ export function DashboardPage() {
             </div>
             <div className="sticky top-4">
               <ReceiptCard
+                hidden={isMobile}
                 receipt={receipt}
                 loading={isReceiptLoading}
                 onPreviousClick={prevRow}

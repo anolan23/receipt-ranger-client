@@ -47,6 +47,8 @@ import { UploadFileProgress } from './components/upload-file-progress';
 import { ActionsDropdown } from '../dashboard/receipts/components/actions-dropdown';
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { usePageTitle } from '@/hooks/use-page-title';
+import { Cards } from '@/components/cards';
+import { ReceiptCardLink } from '@/components/receipt-card-link';
 
 interface ScannerPageProps {}
 
@@ -232,6 +234,16 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                   onRowSelectionChange={setRowSelection}
                   loading={isReceiptsLoading}
                 />
+                <Cards
+                  hidden={!isMobile}
+                  loading={isReceiptsLoading}
+                  loadingText="Loading Receipts"
+                  emptyText="No Receipts to review"
+                  data={receipts || []}
+                  renderCard={(receipt) => (
+                    <ReceiptCardLink key={receipt.id} receipt={receipt} />
+                  )}
+                />
               </TabsContent>
               <TabsContent value="reviewed" className="space-y-4">
                 <ReceiptsTable
@@ -257,6 +269,16 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                   rowSelection={revRowSelection}
                   onRowSelectionChange={setRevRowSelection}
                   loading={isReviewedReceiptsLoading}
+                />
+                <Cards
+                  hidden={!isMobile}
+                  loading={isReviewedReceiptsLoading}
+                  loadingText="Loading Receipts"
+                  emptyText="No Receipts."
+                  data={reviewedReceipts || []}
+                  renderCard={(receipt) => (
+                    <ReceiptCardLink key={receipt.id} receipt={receipt} />
+                  )}
                 />
               </TabsContent>
             </Tabs>

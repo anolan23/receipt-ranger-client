@@ -48,6 +48,7 @@ interface ReceiptCardProps {
   className?: string;
   headerHidden?: boolean;
   loading?: boolean;
+  hidden?: boolean;
   onPreviousClick?: () => void;
   onNextClick?: () => void;
   onDeleteSuccess?: (receipt: ReceiptData) => void;
@@ -59,6 +60,7 @@ export function ReceiptCard({
   headerHidden,
   title,
   loading,
+  hidden,
   onPreviousClick,
   onNextClick,
   onDeleteSuccess,
@@ -114,6 +116,8 @@ export function ReceiptCard({
       </Collapsible>
     );
   };
+
+  if (hidden) return null;
 
   return (
     <Card className={cn('overflow-hidden', className)}>

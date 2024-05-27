@@ -46,6 +46,8 @@ export interface DataTableProps<TData> {
   loading?: boolean;
   empty?: ReactNode;
   header?: ReactNode;
+  hidden?: boolean;
+  className?: string;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   tools?: (table: ITable<TData>) => ReactNode;
   footerControls?: (table: ITable<TData>) => ReactNode;
@@ -68,6 +70,8 @@ export function DataTable<TData>({
   loading,
   empty,
   header,
+  hidden,
+  className,
   onRowSelectionChange,
   tools,
   footerControls,
@@ -161,8 +165,10 @@ export function DataTable<TData>({
     },
   });
 
+  if (hidden) return null;
+
   return (
-    <div className="min-w-0">
+    <div className={cn('min-w-0', className)}>
       {tools && <div className="mb-4">{tools(table)}</div>}
       <Card
         className={cn({

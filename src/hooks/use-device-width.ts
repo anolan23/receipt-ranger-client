@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
 
 export function useDeviceWidth() {
   const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 640);
     };
