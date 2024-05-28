@@ -77,13 +77,8 @@ export function ReceiptInfoCard({
   const modifiedDate = dayjs(receipt.updated_at).format('MMMM D, YYYY');
 
   return (
-    <Card className="min-w-0">
-      {/* <CardHeader className="bg-muted/50">
-        <h1 className="scroll-m-20 text-4xl font-thin tracking-tight lg:text-3xl ml-auto">
-          {toDollar(form.getValues().total)}
-        </h1>
-      </CardHeader> */}
-      <CardContent className="space-y-4 pt-6">
+    <Card className="min-w-0 shadow-none border-0 bg-transparent sm:shadow sm:border sm:bg-card">
+      <CardContent className="p-0 space-y-4 sm:p-6 sm:pt-6">
         <FormField
           control={form.control}
           name="merchantOption"

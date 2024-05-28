@@ -1,4 +1,4 @@
-import { DocViewer } from '@/components/doc-viewer';
+import { DocViewerCard } from '@/components/doc-viewer-card';
 import SmartBreadcrumb from '@/components/smart-breadcrumb';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,7 @@ import { ActionsDropdown } from '../components/actions-dropdown';
 import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
 import { usePageTitle } from '@/hooks/use-page-title';
+import { useDeviceWidth } from '@/hooks/use-device-width';
 
 interface ReceiptPageProps {}
 
@@ -126,23 +127,25 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
           {(receipt) => {
             return (
               <>
-                <div className="flex items-center gap-4">
-                  <Button
-                    onClick={() => navigate(-1)}
-                    variant="outline"
-                    size="icon"
-                    className="h-7 w-7"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                    <span className="sr-only">Back</span>
-                  </Button>
-                  <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight lg:flex-none">
-                    {`Receipt ${receipt.id}`}
-                  </h1>
-                  <Badge variant="outline" className="ml-auto sm:ml-0">
-                    {receipt.reviewed ? 'Reviewed' : 'Pending review'}
-                  </Badge>
-                  <div className="hidden items-center gap-2 md:ml-auto md:flex">
+                <div className="flex flex-col gap-4 lg:flex-row">
+                  <div className="flex items-center gap-4">
+                    <Button
+                      onClick={() => navigate(-1)}
+                      variant="outline"
+                      size="icon"
+                      className="h-7 w-7"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      <span className="sr-only">Back</span>
+                    </Button>
+                    <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight lg:flex-none">
+                      {`Receipt ${receipt.id}`}
+                    </h1>
+                    <Badge variant="outline" className="ml-auto sm:ml-0">
+                      {receipt.reviewed ? 'Reviewed' : 'Pending review'}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-end gap-2 md:ml-auto md:flex">
                     <Button
                       onClick={() => navigate(-1)}
                       variant="outline"
@@ -177,18 +180,8 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                   </div>
                 </div>
                 <div className="grid gap-8 md:grid-cols-[400px_1fr]">
-                  <div>
-                    <Card className="sticky top-4">
-                      <CardContent className="pt-6">
-                        <div className="overflow-hidden rounded-md">
-                          <DocViewer
-                            objectKey={receipt.object_key || undefined}
-                          />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  <div className="overflow-y-auto">
+                  <DocViewerCard objectKey={receipt.object_key || undefined} />
+                  <div className="sm:overflow-y-auto">
                     <Form {...form}>
                       <form
                         id="edit-form"

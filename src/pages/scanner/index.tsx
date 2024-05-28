@@ -149,9 +149,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                   <SheetHeader>
                     <SheetTitle>Receipt processing via email</SheetTitle>
                     <SheetDescription>
-                      An alternative way to enter receipts. Send an email with a
-                      receipt image in the attachment to the below email
-                      address.
+                      An alternative way to enter receipts.
                     </SheetDescription>
                   </SheetHeader>
                   <div className="mt-4">
@@ -159,8 +157,8 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                       <CardHeader>
                         <CardTitle>Your forwarding email</CardTitle>
                         <CardDescription>
-                          To properly identify your account, the sender must be
-                          your email address that is on file
+                          Send an email with a receipt image in the attachment
+                          to the below email address.
                         </CardDescription>
                       </CardHeader>
                       <CardContent>

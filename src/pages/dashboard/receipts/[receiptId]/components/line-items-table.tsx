@@ -84,6 +84,7 @@ export function LineItemsTable({
           );
         },
         enableSorting: false,
+        minSize: 250,
       }),
       columnHelper.accessor('subcategory_id', {
         header: 'Category',
@@ -108,6 +109,7 @@ export function LineItemsTable({
           );
         },
         enableSorting: false,
+        size: 200,
       }),
       columnHelper.accessor('quantity', {
         header: 'Quantity',
@@ -132,6 +134,7 @@ export function LineItemsTable({
           );
         },
         enableSorting: false,
+        size: 100,
       }),
       columnHelper.accessor('price', {
         header: 'Total Price',
@@ -154,6 +157,7 @@ export function LineItemsTable({
           );
         },
         enableSorting: false,
+        size: 150,
       }),
       columnHelper.display({
         id: 'action',

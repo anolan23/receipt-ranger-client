@@ -16,25 +16,6 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
   const isMobile = useDeviceWidth();
   const columnHelper = createColumnHelper<ReceiptData>();
   const columns = [
-    // columnHelper.accessor('id', {
-    //   id: 'id',
-    //   header: 'Receipt Id',
-    //   cell: (info) => {
-    //     const receipt = info.row.original;
-    //     return (
-    //       <Button
-    //         asChild
-    //         variant="link"
-    //         className="whitespace-normal text-inherit"
-    //       >
-    //         <Link to={`/dashboard/receipts/${receipt.id}`}>
-    //           {info.getValue()}
-    //         </Link>
-    //       </Button>
-    //     );
-    //   },
-    //   enableSorting: false,
-    // }),
     columnHelper.display({
       id: 'action',
       cell: ({ row }) => {
@@ -52,6 +33,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       },
       enableSorting: false,
       enableHiding: false,
+      size: 150,
     }),
     columnHelper.display({
       id: 'logo',
@@ -61,6 +43,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
         return <ImageLogo src={logoUrl || undefined} />;
       },
       enableSorting: false,
+      size: 100,
     }),
 
     columnHelper.accessor('merchant.name', {
@@ -68,6 +51,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       header: 'Merchant',
       enableSorting: false,
       enableHiding: false,
+      minSize: 215,
     }),
     columnHelper.accessor('category.label', {
       id: 'category',
@@ -78,6 +62,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
         if (!value) return '-';
         return <Badge variant="outline">{value}</Badge>;
       },
+      size: 150,
     }),
     columnHelper.accessor('transaction_date', {
       id: 'transaction_date',
@@ -92,6 +77,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
 
         return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
       },
+      size: 100,
     }),
     // columnHelper.display({
     //   id: 'status',
@@ -107,7 +93,9 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       cell: (info) => `$${info.getValue()}`,
       enableSorting: true,
       enableHiding: false,
+      size: 100,
     }),
+
     // columnHelper.accessor('created_at', {
     //   id: 'created_at',
     //   header: 'Upload date',

@@ -36,6 +36,14 @@ type ColumnVisibilty<TData> = {
   [Key in keyof TData]?: boolean;
 };
 
+type ColumnMeta = {
+  meta?: {
+    size?: number | string;
+  };
+};
+
+type AugmentedColumnDef<TData> = ColumnDef<TData> & ColumnMeta;
+
 export interface DataTableProps<TData> {
   columns: ColumnDef<TData, any>[];
   data: TData[];
@@ -101,7 +109,9 @@ export function DataTable<TData>({
               />
             );
           },
+          size: 50,
         }),
+
         ...columns,
       ];
     } else if (selectionType === 'multiple') {
@@ -131,6 +141,7 @@ export function DataTable<TData>({
               />
             );
           },
+          size: 50,
         }),
         ...columns,
       ];
@@ -186,7 +197,11 @@ export function DataTable<TData>({
               <StatusIndicator status="loading">Loading</StatusIndicator>
             </div>
           ) : (
-            <Table>
+            <Table
+              style={{
+                width: table.getCenterTotalSize(),
+              }}
+            >
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
@@ -194,9 +209,9 @@ export function DataTable<TData>({
                       return (
                         <TableHead
                           key={header.id}
-                          // style={{
-                          //   width: header.getSize(),
-                          // }}
+                          style={{
+                            width: header.getSize(),
+                          }}
                         >
                           {header.isPlaceholder ? null : (
                             <HeaderCell
@@ -229,9 +244,9 @@ export function DataTable<TData>({
                       {row.getVisibleCells().map((cell) => (
                         <TableCell
                           key={cell.id}
-                          // style={{
-                          //   width: cell.column.getSize(),
-                          // }}
+                          style={{
+                            width: cell.column.getSize(),
+                          }}
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
