@@ -1,6 +1,5 @@
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -14,10 +13,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Option, OptionItemDefinition } from '../option';
+import { cn } from '@/lib/utils';
 import { ReactNode, useState } from 'react';
-import { StatusIndicator } from '../status-indicator';
-import { useCommandState } from 'cmdk';
+import { Option, OptionItemDefinition } from '../option';
 
 interface ComboboxProps {
   id?: any;
@@ -71,7 +69,7 @@ export function Combobox({
       </PopoverTrigger>
       <PopoverContent
         className="w-[var(--radix-popover-trigger-width)] p-0 max-h-[var(--radix-popover-content-available-height)]"
-        collisionPadding={32}
+        collisionPadding={16}
       >
         <Command shouldFilter={false}>
           <CommandInput

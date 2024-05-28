@@ -21,7 +21,7 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
   const { user, isAuthenticated } = useUser();
 
   const ensureAuth = function () {
-    if (!isAuthenticated) navigate('/signup');
+    if (isAuthenticated === false) navigate('/signup');
   };
 
   const handleMonthlyClick: React.MouseEventHandler<HTMLButtonElement> =

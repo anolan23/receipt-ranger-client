@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { ReceiptData } from './types';
 
 export function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return '0 Bytes';
@@ -33,18 +34,6 @@ export function getDates(startDate: Date, endDate: Date): Date[] {
   return dates;
 }
 
-// export function toDollar(
-//   value: string | number,
-//   roundTo: 'dollar' | 'cent' = 'cent'
-// ): string {
-//   const amount = typeof value === 'string' ? parseFloat(value) : value;
-
-//   if (roundTo === 'dollar') {
-//     return `$${amount.toFixed(0)}`;
-//   } else {
-//     return `$${amount.toFixed(2)}`;
-//   }
-// }
 export function toDollar(
   value: string | number,
   roundTo: 'dollar' | 'cent' = 'cent'
@@ -59,6 +48,15 @@ export function toDollar(
   };
 
   return new Intl.NumberFormat('en-US', options).format(amount);
+}
+
+export function getReceiptTitle(receipt: ReceiptData) {
+  const transactionDate = receipt.transaction_date
+    ? dayjs(receipt.transaction_date).format('MMM D, YYYY')
+    : undefined;
+  return `${receipt.merchant.name} Receipt - ${transactionDate} - ${toDollar(
+    receipt.total_amount || 0
+  )}`;
 }
 
 export const categoryColors = new Map([

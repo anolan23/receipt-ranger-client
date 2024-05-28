@@ -13,6 +13,7 @@ export const DollarInput = forwardRef<HTMLInputElement, DollarInputProps>(
           ref={ref}
           className="w-full rounded-lg bg-background pl-8"
           type="number"
+          inputMode="numeric"
           step={0.01}
           min={0}
           {...props}

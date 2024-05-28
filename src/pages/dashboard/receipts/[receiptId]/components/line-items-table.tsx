@@ -1,33 +1,19 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { DataTable } from '@/components/data-table';
+import { DollarInput } from '@/components/dollar-input';
+import { Select } from '@/components/select';
+import { Button } from '@/components/ui/button';
+import { FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { SubcategoryData } from '@/lib/types';
+import { createColumnHelper } from '@tanstack/react-table';
+import { PlusCircle, Trash2Icon } from 'lucide-react';
+import { useMemo } from 'react';
 import {
   FieldArrayWithId,
   useFieldArray,
   useFormContext,
 } from 'react-hook-form';
-import {
-  CategoryData,
-  ItemData,
-  ReceiptData,
-  SubcategoryData,
-} from '@/lib/types';
-import { LineItemsEditor } from './line-items-editor';
-import { Input } from '@/components/ui/input';
-import { DataTable } from '@/components/data-table';
-import { useMemo, useRef } from 'react';
-import { createColumnHelper } from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
-import { PlusCircle, Trash2Icon } from 'lucide-react';
-import { Select } from '@/components/select';
-import { FormControl, FormField, FormItem } from '@/components/ui/form';
-import { EditReceiptFormValues, ItemUpdatePayload } from '../interfaces';
-import { DollarInput } from '@/components/dollar-input';
+import { EditReceiptFormValues } from '../interfaces';
 
 interface LineItemsTableProps {
   subcategories?: SubcategoryData[];

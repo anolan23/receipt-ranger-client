@@ -1,4 +1,4 @@
-import { toDollar } from '@/lib/helpers';
+import { getReceiptTitle, toDollar } from '@/lib/helpers';
 import { ItemData, ReceiptData } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
@@ -39,6 +39,7 @@ import { useState } from 'react';
 import { ActionsDropdown } from '@/pages/dashboard/receipts/components/actions-dropdown';
 import CopyableText from './copyable-text';
 import { Badge } from './ui/badge';
+import { LineItem } from './line-item';
 
 const NUM_VISIBLE_ITEMS: number = 4;
 
@@ -87,7 +88,13 @@ export function ReceiptCard({
       return (
         <ul className="grid gap-3">
           {receipt?.items?.slice(0, NUM_VISIBLE_ITEMS).map((item) => (
-            <LineItem key={item.id} item={item} />
+            <LineItem
+              key={item.id}
+              name={item.generated_item_name || undefined}
+              quantity={item.quantity || undefined}
+              price={item.total_price || undefined}
+              subcategory={item.subcategory || undefined}
+            />
           ))}
         </ul>
       );
@@ -96,13 +103,25 @@ export function ReceiptCard({
       <Collapsible open={expanded} onOpenChange={setExpanded}>
         <ul className="grid gap-3">
           {receipt?.items?.slice(0, NUM_VISIBLE_ITEMS).map((item) => (
-            <LineItem key={item.id} item={item} />
+            <LineItem
+              key={item.id}
+              name={item.generated_item_name || undefined}
+              quantity={item.quantity || undefined}
+              price={item.total_price || undefined}
+              subcategory={item.subcategory || undefined}
+            />
           ))}
         </ul>
         <CollapsibleContent className="grid gap-3" asChild>
           <ul className="mt-3">
             {receipt?.items?.slice(NUM_VISIBLE_ITEMS).map((item) => (
-              <LineItem key={item.id} item={item} />
+              <LineItem
+                key={item.id}
+                name={item.generated_item_name || undefined}
+                quantity={item.quantity || undefined}
+                price={item.total_price || undefined}
+                subcategory={item.subcategory || undefined}
+              />
             ))}
           </ul>
         </CollapsibleContent>
@@ -124,9 +143,9 @@ export function ReceiptCard({
       {!headerHidden && (
         <CardHeader className="flex flex-row items-start bg-muted/50 gap-2">
           <div className="grid gap-0.5">
-            <CopyableText text={receipt?.id || '-'}>
+            <CopyableText text={receipt ? getReceiptTitle(receipt) : '-'}>
               <CardTitle className="truncate flex-1">
-                Receipt {receipt?.id || 'Preview'}
+                {receipt ? getReceiptTitle(receipt) : 'Receipt Preview'}
               </CardTitle>
             </CopyableText>
             <CardDescription>{`Date: ${
@@ -260,20 +279,5 @@ export function ReceiptCard({
         </Pagination>
       </CardFooter>
     </Card>
-  );
-}
-
-interface LineItemProps {
-  item: ItemData;
-}
-function LineItem({ item }: LineItemProps) {
-  const { generated_item_name, quantity, total_price } = item;
-  return (
-    <li className="flex items-center justify-between">
-      <span className="text-muted-foreground">
-        {generated_item_name} x <span>{quantity}</span>
-      </span>
-      <span>{total_price ? toDollar(total_price) : '-'}</span>
-    </li>
   );
 }

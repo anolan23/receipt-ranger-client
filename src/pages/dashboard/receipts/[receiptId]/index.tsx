@@ -22,6 +22,8 @@ import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { useDeviceWidth } from '@/hooks/use-device-width';
+import { getReceiptTitle, toDollar } from '@/lib/helpers';
+import dayjs from 'dayjs';
 
 interface ReceiptPageProps {}
 
@@ -119,7 +121,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
       breadcrumbs={<SmartBreadcrumb />}
       content={
         <ContentLayout
-          className="space-y-4"
+          className="space-y-4 max-w-[65rem] mx-auto"
           loading={isLoading}
           error={error}
           data={receipt}
@@ -127,7 +129,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
           {(receipt) => {
             return (
               <>
-                <div className="flex flex-col gap-4 lg:flex-row">
+                <div className="flex flex-col gap-2 lg:flex-row">
                   <div className="flex items-center gap-4">
                     <Button
                       onClick={() => navigate(-1)}
@@ -139,7 +141,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                       <span className="sr-only">Back</span>
                     </Button>
                     <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight lg:flex-none">
-                      {`Receipt ${receipt.id}`}
+                      {getReceiptTitle(receipt)}
                     </h1>
                     <Badge variant="outline" className="ml-auto sm:ml-0">
                       {receipt.reviewed ? 'Reviewed' : 'Pending review'}
@@ -181,7 +183,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                 </div>
                 <div className="grid gap-8 md:grid-cols-[400px_1fr]">
                   <DocViewerCard objectKey={receipt.object_key || undefined} />
-                  <div className="sm:overflow-y-auto">
+                  <div>
                     <Form {...form}>
                       <form
                         id="edit-form"

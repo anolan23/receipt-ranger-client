@@ -30,6 +30,8 @@ import { Separator } from '@/components/ui/separator';
 import { ReceiptData, SubcategoryData } from '@/lib/types';
 import { toDollar } from '@/lib/helpers';
 import dayjs from 'dayjs';
+import { LineItem } from '@/components/line-item';
+import { LineItems } from './line-items';
 
 interface ReceiptInfoCardProps {
   receipt: ReceiptData;
@@ -148,7 +150,7 @@ export function ReceiptInfoCard({
         />
 
         <Separator />
-        <LineItemsTable subcategories={subcategories} />
+        <LineItems receipt={receipt} subcategories={subcategories} />
         <Separator />
         <FormField
           control={form.control}
@@ -158,7 +160,6 @@ export function ReceiptInfoCard({
               <FormLabel htmlFor="subtotal">Subtotal</FormLabel>
               <FormControl>
                 <DollarInput
-                  className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
                   id="subtotal"
                   type="number"
                   step={0.01}
