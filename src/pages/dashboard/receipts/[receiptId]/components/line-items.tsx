@@ -15,15 +15,18 @@ import { PlusCircle } from 'lucide-react';
 import { useMemo } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { EditReceiptFormValues } from '../interfaces';
+import { useDeviceWidth } from '@/hooks/use-device-width';
 
 interface LineItemsProps {
   receipt: ReceiptData;
   subcategories?: SubcategoryData[];
+  isMobile?: boolean;
 }
 
 export function LineItems({
   receipt,
   subcategories,
+  isMobile,
   ...props
 }: LineItemsProps) {
   const { control, watch } = useFormContext<EditReceiptFormValues>();
@@ -46,11 +49,12 @@ export function LineItems({
   return (
     <div className="flex flex-col space-y-4">
       <div className="font-semibold">Line Items</div>
-      <ul className="grid gap-3">
+      <ul className="grid gap-4 min-w-0">
         {fields?.map((item, index) => (
           <LineItem
-            variant="edit"
             key={item.id}
+            isMobile={isMobile}
+            variant="edit"
             name={watch(`items.${index}.name`)}
             quantity={watch(`items.${index}.quantity`)}
             price={watch(`items.${index}.price`)}
@@ -77,6 +81,7 @@ export function LineItems({
                           value={field.value || ''}
                           onChange={field.onChange}
                           onBlur={field.onBlur}
+                          sizeVariant={isMobile ? 'lg' : 'default'}
                         />
                       </FormControl>
                       <FormMessage />
@@ -102,6 +107,7 @@ export function LineItems({
                               field.onChange(value);
                             }}
                             disabled={!subcategories?.length}
+                            sizeVariant={isMobile ? 'lg' : 'default'}
                           />
                         </FormControl>
                         <FormMessage />
@@ -119,9 +125,11 @@ export function LineItems({
                         <Input
                           id="quantity"
                           type="number"
+                          inputMode="numeric"
                           value={field.value}
                           onChange={field.onChange}
                           min={1}
+                          sizeVariant={isMobile ? 'lg' : 'default'}
                         />
                       </FormControl>
                     </FormItem>
@@ -138,6 +146,7 @@ export function LineItems({
                           id="price"
                           value={field.value || ''}
                           onChange={field.onChange}
+                          sizeVariant={isMobile ? 'lg' : 'default'}
                         />
                       </FormControl>
                     </FormItem>
@@ -158,6 +167,7 @@ export function LineItems({
         }
         variant="outline"
         className="gap-1"
+        size={isMobile ? 'lg' : 'default'}
       >
         <PlusCircle className="h-3.5 w-3.5" />
         Add Item

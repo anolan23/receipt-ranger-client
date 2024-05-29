@@ -7,6 +7,7 @@ import {
   Select as SelectPrimitive,
 } from './ui/select';
 import { SelectProps as RadixSelectProps } from '@radix-ui/react-select';
+import { cn } from '@/lib/utils';
 
 type SelectItemDefinition = {
   label: string;
@@ -18,10 +19,11 @@ interface SelectProps extends RadixSelectProps {
   items: SelectItemDefinition[];
   placeholder?: string;
   id?: any;
+  sizeVariant?: 'default' | 'lg';
 }
 
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(
-  ({ items, placeholder, id, value, ...props }, ref) => {
+  ({ items, placeholder, id, value, sizeVariant, ...props }, ref) => {
     const selectedItem = useMemo(
       () =>
         items.find((item) => {
@@ -31,12 +33,19 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     );
     return (
       <SelectPrimitive value={value} {...props}>
-        <SelectTrigger ref={ref} id={id}>
+        <SelectTrigger
+          ref={ref}
+          id={id}
+          className={cn({ 'h-10 text-base': sizeVariant === 'lg' })}
+        >
           <SelectValue placeholder={placeholder}>
             {selectedItem?.label || ''}
           </SelectValue>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent
+          collisionPadding={16}
+          className="max-h-[var(--radix-popper-available-height)]"
+        >
           {items.map((item) => (
             <SelectItem key={item.value} value={item.value}>
               {item.label}

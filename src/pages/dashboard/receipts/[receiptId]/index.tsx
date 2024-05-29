@@ -106,6 +106,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
         ...rest,
         merchant_id: merchantOption?.value || '',
       });
+      mutateReceipt();
       toast({ title: 'Receipt successfully updated' });
     } catch (error) {
       toast({
@@ -159,7 +160,9 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                       size="sm"
                       form="edit-form"
                       type="submit"
-                      disabled={form.formState.isSubmitting}
+                      disabled={
+                        form.formState.isSubmitting || !form.formState.isDirty
+                      }
                     >
                       Save Receipt
                     </Button>

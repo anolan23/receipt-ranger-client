@@ -27,6 +27,8 @@ interface ComboboxProps {
   empty?: ReactNode;
   filterValue?: string;
   loading?: boolean;
+  sizeVariant?: 'default' | 'lg';
+
   onFilterChange?: (newValue: string) => void;
   onOptionChange?: (newOption: OptionItemDefinition) => void;
 }
@@ -39,6 +41,7 @@ export function Combobox({
   searchPlaceHolder = 'Search resources...',
   empty = 'No resource found.',
   filterValue,
+  sizeVariant,
   loading,
   onFilterChange,
   onOptionChange,
@@ -60,7 +63,7 @@ export function Combobox({
           {!selectedOption?.value ? (
             placeholder
           ) : triggerVariant === 'option' ? (
-            <Option option={selectedOption} />
+            <Option option={selectedOption} sizeVariant={sizeVariant} />
           ) : (
             selectedOption.value
           )}

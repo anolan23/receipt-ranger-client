@@ -1,5 +1,6 @@
 import { SettingsIcon } from 'lucide-react';
 import { ImageLogo } from './image-logo';
+import { cn } from '@/lib/utils';
 
 export interface OptionItemDefinition {
   label: string;
@@ -10,12 +11,17 @@ export interface OptionItemDefinition {
 
 interface OptionProps {
   option: OptionItemDefinition;
+  sizeVariant?: 'default' | 'lg';
 }
 
-export function Option({ option, ...props }: OptionProps) {
+export function Option({ option, sizeVariant, ...props }: OptionProps) {
   const { label, value, description, imgSrc } = option;
   return (
-    <div className="flex gap-2 items-center overflow-hidden">
+    <div
+      className={cn('flex gap-2 items-center overflow-hidden', {
+        'text-base': sizeVariant === 'lg',
+      })}
+    >
       <ImageLogo src={imgSrc} />
       <div className="flex-1 overflow-hidden">
         <div>{label}</div>

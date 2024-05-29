@@ -32,6 +32,7 @@ import { toDollar } from '@/lib/helpers';
 import dayjs from 'dayjs';
 import { LineItem } from '@/components/line-item';
 import { LineItems } from './line-items';
+import { useDeviceWidth } from '@/hooks/use-device-width';
 
 interface ReceiptInfoCardProps {
   receipt: ReceiptData;
@@ -44,6 +45,8 @@ export function ReceiptInfoCard({
   ...props
 }: ReceiptInfoCardProps) {
   const form = useFormContext<EditReceiptFormValues>();
+  const isMobile = useDeviceWidth();
+
   const [filterValue, setFilterValue] = useState<string>();
   const debouncedFilterValue = useDebouncedValue(filterValue, 300);
 
@@ -79,8 +82,8 @@ export function ReceiptInfoCard({
   const modifiedDate = dayjs(receipt.updated_at).format('MMMM D, YYYY');
 
   return (
-    <Card className="min-w-0 shadow-none border-0 bg-transparent sm:shadow sm:border sm:bg-card">
-      <CardContent className="p-0 space-y-4 sm:p-6 sm:pt-6">
+    <Card className="min-w-0 shadow-none bg-card border-0 sm:shadow sm:border">
+      <CardContent className="px-0 space-y-4 sm:p-6 sm:pt-6">
         <FormField
           control={form.control}
           name="merchantOption"
@@ -99,6 +102,7 @@ export function ReceiptInfoCard({
                     loading={isMerchantSearchLoading}
                     filterValue={filterValue}
                     onFilterChange={setFilterValue}
+                    sizeVariant={isMobile ? 'lg' : 'default'}
                   />
                 </FormControl>
                 <FormMessage />
@@ -117,6 +121,7 @@ export function ReceiptInfoCard({
                   date={field.value}
                   onDateChange={field.onChange}
                   id="transaction_date"
+                  sizeVariant={isMobile ? 'lg' : 'default'}
                 />
               </FormControl>
               <FormMessage />
@@ -141,6 +146,7 @@ export function ReceiptInfoCard({
                         field.onChange(value);
                       }
                     }}
+                    sizeVariant={isMobile ? 'lg' : 'default'}
                   />
                 </FormControl>
                 <FormMessage />
@@ -150,7 +156,11 @@ export function ReceiptInfoCard({
         />
 
         <Separator />
-        <LineItems receipt={receipt} subcategories={subcategories} />
+        <LineItems
+          receipt={receipt}
+          subcategories={subcategories}
+          isMobile={isMobile}
+        />
         <Separator />
         <FormField
           control={form.control}
@@ -164,6 +174,7 @@ export function ReceiptInfoCard({
                   type="number"
                   step={0.01}
                   min={0}
+                  sizeVariant={isMobile ? 'lg' : 'default'}
                   {...field}
                 />
               </FormControl>
@@ -183,6 +194,7 @@ export function ReceiptInfoCard({
                   type="number"
                   step={0.01}
                   min={0}
+                  sizeVariant={isMobile ? 'lg' : 'default'}
                   {...field}
                 />
               </FormControl>
@@ -202,6 +214,7 @@ export function ReceiptInfoCard({
                   type="number"
                   step={0.01}
                   min={0}
+                  sizeVariant={isMobile ? 'lg' : 'default'}
                   {...field}
                 />
               </FormControl>
