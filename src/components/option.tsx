@@ -11,17 +11,12 @@ export interface OptionItemDefinition {
 
 interface OptionProps {
   option: OptionItemDefinition;
-  sizeVariant?: 'default' | 'lg';
 }
 
-export function Option({ option, sizeVariant, ...props }: OptionProps) {
+export function Option({ option, ...props }: OptionProps) {
   const { label, value, description, imgSrc } = option;
   return (
-    <div
-      className={cn('flex gap-2 items-center overflow-hidden', {
-        'text-base': sizeVariant === 'lg',
-      })}
-    >
+    <div className={cn('flex gap-2 items-center overflow-hidden text-base')}>
       <ImageLogo src={imgSrc} />
       <div className="flex-1 overflow-hidden">
         <div>{label}</div>

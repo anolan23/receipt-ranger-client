@@ -15,7 +15,6 @@ interface LineItemProps {
   price?: string;
   subcategory?: string;
   onRemoveClick?: () => void;
-  isMobile?: boolean;
 }
 export function LineItem({
   name,
@@ -24,49 +23,56 @@ export function LineItem({
   subcategory,
   variant = 'default',
   content,
-  isMobile,
   onRemoveClick,
 }: LineItemProps) {
-  const renderItemName = function () {
-    switch (variant) {
-      case 'edit':
-        return (
-          <DrawerDialog
-            title="Edit Item"
-            trigger={
-              <button className="text-muted-foreground underline underline-offset-4 decoration-dashed text-left whitespace-nowrap">
-                <div className="">
-                  {name} x {quantity}
+  if (variant === 'edit') {
+    return (
+      <li className="min-w-0">
+        <DrawerDialog
+          title="Edit Item"
+          trigger={
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full h-auto block text-base text-left font-normal"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <div className="w-full min-w-0">
+                  <div className="truncate">
+                    {name} x {quantity}
+                  </div>
+                  {subcategory && (
+                    <Badge variant="secondary" className="">
+                      {subcategory}
+                    </Badge>
+                  )}
                 </div>
-              </button>
-            }
-            content={content}
-            action={
-              <Button
-                type="button"
-                onClick={onRemoveClick}
-                variant="destructive"
-                className="gap-1"
-                size={isMobile ? 'lg' : 'default'}
-              >
-                <Trash2Icon className="h-3.5 w-3.5" />
-                Remove Item
-              </Button>
-            }
-          />
-        );
-      default:
-        return (
-          <span className="text-muted-foreground">
-            {name} x {quantity}
-          </span>
-        );
-    }
-  };
+                <span className="">{price ? toDollar(price) : '-'}</span>
+              </div>
+            </Button>
+          }
+          content={content}
+          action={
+            <Button
+              type="button"
+              onClick={onRemoveClick}
+              variant="destructive"
+              className="gap-1"
+            >
+              <Trash2Icon className="h-3.5 w-3.5" />
+              Remove Item
+            </Button>
+          }
+        />
+      </li>
+    );
+  }
   return (
     <li className="flex items-center justify-between gap-2">
       <div className="flex items-center gap-2 flex-1">
-        {renderItemName()}
+        <span className="text-muted-foreground">
+          {name} x {quantity}
+        </span>
         {subcategory && (
           <Badge variant="secondary" className="">
             {subcategory}

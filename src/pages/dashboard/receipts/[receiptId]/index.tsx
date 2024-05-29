@@ -66,7 +66,6 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
             label: receipt.merchant.name,
             value: receipt.merchant.id,
             imgSrc: receipt.merchant.logo_url || undefined,
-            description: receipt.merchant.id,
           }
         : undefined,
       subtotal: receipt?.subtotal || '',

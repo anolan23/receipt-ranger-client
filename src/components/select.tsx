@@ -19,11 +19,10 @@ interface SelectProps extends RadixSelectProps {
   items: SelectItemDefinition[];
   placeholder?: string;
   id?: any;
-  sizeVariant?: 'default' | 'lg';
 }
 
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(
-  ({ items, placeholder, id, value, sizeVariant, ...props }, ref) => {
+  ({ items, placeholder, id, value, ...props }, ref) => {
     const selectedItem = useMemo(
       () =>
         items.find((item) => {
@@ -33,11 +32,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     );
     return (
       <SelectPrimitive value={value} {...props}>
-        <SelectTrigger
-          ref={ref}
-          id={id}
-          className={cn({ 'h-10 text-base': sizeVariant === 'lg' })}
-        >
+        <SelectTrigger ref={ref} id={id} className="text-base">
           <SelectValue placeholder={placeholder}>
             {selectedItem?.label || ''}
           </SelectValue>

@@ -13,13 +13,13 @@ interface DatePickerProps {
   date?: Date;
   onDateChange?: (newDate?: Date) => void;
   id?: any;
-  sizeVariant?: 'default' | 'lg';
+  className?: string;
 }
 export function DatePicker({
   date,
   onDateChange,
   id,
-  sizeVariant,
+  className,
   ...props
 }: DatePickerProps) {
   return (
@@ -28,9 +28,9 @@ export function DatePicker({
         <Button
           variant={'outline'}
           className={cn(
-            'flex w-full max-w-[280px] justify-start text-left font-normal',
+            'flex w-full max-w-[280px] justify-start text-left font-normal text-base',
             !date && 'text-muted-foreground',
-            { 'h-10 text-base': sizeVariant === 'lg' }
+            className
           )}
           id={id}
         >

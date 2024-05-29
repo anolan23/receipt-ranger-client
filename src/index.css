@@ -53,6 +53,9 @@
   :root {
     --font-sans: 'GeistSans';
   }
+  /* input {
+    @apply text-base;
+  } */
 }
 
 @layer base {

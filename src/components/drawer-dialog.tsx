@@ -43,13 +43,13 @@ export function DrawerDialog({
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>{trigger}</DrawerTrigger>
         <DrawerContent>
-          <DrawerHeader className="text-left">
+          {/* <DrawerHeader className="text-left">
             <DrawerTitle>{title}</DrawerTitle>
             {description && (
               <DrawerDescription>{description}</DrawerDescription>
             )}
-          </DrawerHeader>
-          <div className="space-y-4 px-4">{content}</div>
+          </DrawerHeader> */}
+          <div className="space-y-2 px-4">{content}</div>
           <DrawerFooter className="pt-4">
             {action}
             <DrawerClose asChild>
