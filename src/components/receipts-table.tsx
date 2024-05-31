@@ -34,6 +34,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       enableSorting: false,
       enableHiding: false,
       size: 150,
+      maxSize: 150,
     }),
     columnHelper.display({
       id: 'logo',

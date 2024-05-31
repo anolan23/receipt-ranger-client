@@ -34,11 +34,11 @@ export function LineItem({
             <Button
               type="button"
               variant="outline"
-              className="w-full h-auto block text-base text-left font-normal"
+              className="w-full h-auto block text-base sm:text-sm text-left font-normal"
             >
               <div className="flex items-center justify-between gap-2">
                 <div className="w-full min-w-0">
-                  <div className="truncate">
+                  <div className="truncate sm:mb-1">
                     {name} x {quantity}
                   </div>
                   {subcategory && (

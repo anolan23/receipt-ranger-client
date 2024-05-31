@@ -83,16 +83,12 @@ export type SubscriptionRecordData = {
   user_id: string;
 };
 
-export type UploadFileStatus =
-  | 'uploading'
-  | 'processing'
-  | 'complete'
-  | 'error';
+export type UploadStatus = 'pending' | 'completed' | 'failed';
 
 export type UploadFile = {
   id: string;
   file: File;
-  taskId?: string;
+  status: UploadStatus;
 };
 
 export type MonthySpendingData = {

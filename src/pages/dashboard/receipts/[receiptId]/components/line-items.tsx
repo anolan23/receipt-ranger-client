@@ -46,7 +46,6 @@ export function LineItems({
 
   return (
     <div className="flex flex-col space-y-4">
-      <div className="font-semibold">Line Items</div>
       <ul className="grid gap-4 min-w-0">
         {fields?.map((item, index) => (
           <LineItem

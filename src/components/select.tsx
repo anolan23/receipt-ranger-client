@@ -32,7 +32,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     );
     return (
       <SelectPrimitive value={value} {...props}>
-        <SelectTrigger ref={ref} id={id} className="text-base">
+        <SelectTrigger ref={ref} id={id} className="text-base sm:text-sm">
           <SelectValue placeholder={placeholder}>
             {selectedItem?.label || ''}
           </SelectValue>

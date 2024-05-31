@@ -16,7 +16,11 @@ interface OptionProps {
 export function Option({ option, ...props }: OptionProps) {
   const { label, value, description, imgSrc } = option;
   return (
-    <div className={cn('flex gap-2 items-center overflow-hidden text-base')}>
+    <div
+      className={cn(
+        'flex gap-2 items-center overflow-hidden text-base sm:text-sm'
+      )}
+    >
       <ImageLogo src={imgSrc} />
       <div className="flex-1 overflow-hidden">
         <div>{label}</div>

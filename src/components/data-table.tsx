@@ -197,11 +197,7 @@ export function DataTable<TData>({
               <StatusIndicator status="loading">Loading</StatusIndicator>
             </div>
           ) : (
-            <Table
-              style={{
-                width: table.getCenterTotalSize(),
-              }}
-            >
+            <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>

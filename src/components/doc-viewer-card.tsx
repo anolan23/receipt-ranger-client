@@ -17,20 +17,18 @@ export function DocViewerCard({
   const isMobile = useDeviceWidth();
 
   const ref = useRef<HTMLDivElement>(null);
-  const BUCKET_DOMAIN = 'https://receipt-ranger.s3.amazonaws.com';
+  const BUCKET_DOMAIN = import.meta.env.VITE_S3_BUCKET_DOMAIN;
   const src = `${BUCKET_DOMAIN}/${objectKey}`;
   return (
     <div className="hidden sm:block">
       <Card className={cn('sticky top-4', className)}>
         <CardContent className="pt-6">
           <div className="overflow-hidden rounded-md">
-            <div ref={ref}>
+            <div ref={ref} className="h-[590px]">
               <Viewer
-                className="h-[590px]"
                 zoomSpeed={0.2}
                 defaultScale={1.5}
                 minScale={1.5}
-                // defaultSize={{ width: 100, height: 400 }}
                 visible={!isMobile}
                 images={[{ src, alt: '', downloadUrl: src }]}
                 noClose

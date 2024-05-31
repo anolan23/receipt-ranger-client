@@ -75,7 +75,7 @@ export function Combobox({
         <Command shouldFilter={false}>
           <CommandInput
             placeholder={searchPlaceHolder}
-            className="h-9 text-base"
+            className="h-9 text-base sm:text-sm"
             value={filterValue}
             onValueChange={onFilterChange}
           />

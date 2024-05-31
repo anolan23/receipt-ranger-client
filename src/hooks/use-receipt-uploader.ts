@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { uploadFile } from '../lib/api/files';
 import { CreateReceiptResult, createReceipt } from '../lib/api/receipts';
-import { UploadFile } from '../lib/types';
+import { UploadFile, UploadStatus } from '../lib/types';
 
 class FileUploadError extends Error {
   constructor(public file: File, message: string) {
@@ -10,7 +9,13 @@ class FileUploadError extends Error {
   }
 }
 
-export function useReceiptUploader() {
+interface UseReceiptUploaderOptions {
+  onUploadSuccess?: (fileId: string) => void;
+}
+
+export function useReceiptUploader({
+  onUploadSuccess,
+}: UseReceiptUploaderOptions) {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const [fileUploadErrors, setFileUploadErrors] = useState<FileUploadError[]>(
@@ -22,6 +27,7 @@ export function useReceiptUploader() {
     const uploadFile: UploadFile = {
       id,
       file,
+      status: 'pending',
     };
     setUploadFiles((prevState) => [...prevState, uploadFile]);
     return id;
@@ -33,12 +39,10 @@ export function useReceiptUploader() {
     );
   };
 
-  const updateFileTaskId = function (fileId: string, taskId: string) {
+  const updateFileStatus = function (fileId: string, status: UploadStatus) {
     setUploadFiles((prevState) =>
       prevState.map((uploadFile) =>
-        uploadFile.id === fileId
-          ? { ...uploadFile, taskId: taskId }
-          : uploadFile
+        uploadFile.id === fileId ? { ...uploadFile, status } : uploadFile
       )
     );
   };
@@ -47,10 +51,12 @@ export function useReceiptUploader() {
     const fileId = addFileToUpload(file);
     try {
       const result = await createReceipt(file);
-      updateFileTaskId(fileId, result.task_id);
+      updateFileStatus(fileId, 'completed');
+      onUploadSuccess && onUploadSuccess(fileId);
+
       return result;
     } catch (error) {
-      removeFileFromUpload(fileId);
+      updateFileStatus(fileId, 'failed');
       throw new FileUploadError(
         file,
         error instanceof Error ? error.message : 'Unknown error'
