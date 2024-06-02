@@ -1,28 +1,37 @@
+import { ImageLogo } from '@/components/image-logo';
 import {
   StatusIndicator,
   StatusIndicatorStatus,
 } from '@/components/status-indicator';
-
-import { UploadFile, UploadStatus } from '@/lib/types';
+import { useReceiptTask } from '@/hooks/use-receipt-task';
+import { ReceiptTaskResult } from '@/lib/api/receipts';
+import { UploadFile } from '@/lib/types';
 
 interface FileProgressProps {
   uploadFile: UploadFile;
+  onUploadSuccess?: (result: ReceiptTaskResult | undefined) => void;
 }
 
 export function UploadFileProgress({
   uploadFile,
+  onUploadSuccess,
   ...props
 }: FileProgressProps) {
+  const { data, error, isLoading } = useReceiptTask(
+    uploadFile.taskId,
+    onUploadSuccess
+  );
+
   const getStatusIndicatorStatus = function (
-    status?: UploadStatus
+    result?: ReceiptTaskResult
   ): StatusIndicatorStatus {
-    if (status === 'failed') return 'destructive';
-    if (status === 'pending') return 'loading';
-    if (status === 'completed') return 'success';
+    if (error) return 'destructive';
+    if (isLoading) return 'loading';
+    if (result?.successful) return 'success';
     return 'loading';
   };
   return (
-    <StatusIndicator status={getStatusIndicatorStatus(uploadFile.status)}>
+    <StatusIndicator status={getStatusIndicatorStatus(data)}>
       {uploadFile.file.name}
     </StatusIndicator>
   );

@@ -55,7 +55,8 @@ interface ScannerPageProps {}
 export function ScannerPage({ ...props }: ScannerPageProps) {
   usePageTitle('Scanner');
   const navigate = useNavigate();
-
+  const { uploadFiles, uploadAll, errors, uploading, removeFileFromUpload } =
+    useReceiptUploader();
   const { toast } = useToast();
   const isMobile = useDeviceWidth();
   const {
@@ -65,14 +66,6 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
   } = useReceipts({
     reviewed: false,
   });
-  const { uploadFiles, uploadAll, errors, uploading, removeFileFromUpload } =
-    useReceiptUploader({
-      onUploadSuccess: (fileId) => {
-        toast({ title: 'Receipt created' });
-        removeFileFromUpload(fileId);
-        mutateReceipts();
-      },
-    });
   const {
     data: reviewedReceipts,
     mutate: mutateReviewedReceipts,
@@ -200,6 +193,10 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                             <UploadFileProgress
                               key={file.id}
                               uploadFile={file}
+                              onUploadSuccess={(result) => {
+                                removeFileFromUpload(file.id);
+                                mutateReceipts();
+                              }}
                             />
                           ))}
                         </div>

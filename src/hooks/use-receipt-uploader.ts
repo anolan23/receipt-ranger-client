@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { uploadFile } from '../lib/api/files';
 import { CreateReceiptResult, createReceipt } from '../lib/api/receipts';
-import { UploadFile, UploadStatus } from '../lib/types';
+import { UploadFile } from '../lib/types';
 
 class FileUploadError extends Error {
   constructor(public file: File, message: string) {
@@ -9,13 +10,7 @@ class FileUploadError extends Error {
   }
 }
 
-interface UseReceiptUploaderOptions {
-  onUploadSuccess?: (fileId: string) => void;
-}
-
-export function useReceiptUploader({
-  onUploadSuccess,
-}: UseReceiptUploaderOptions) {
+export function useReceiptUploader() {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const [fileUploadErrors, setFileUploadErrors] = useState<FileUploadError[]>(
@@ -27,7 +22,6 @@ export function useReceiptUploader({
     const uploadFile: UploadFile = {
       id,
       file,
-      status: 'pending',
     };
     setUploadFiles((prevState) => [...prevState, uploadFile]);
     return id;
@@ -39,10 +33,12 @@ export function useReceiptUploader({
     );
   };
 
-  const updateFileStatus = function (fileId: string, status: UploadStatus) {
+  const updateFileTaskId = function (fileId: string, taskId: string) {
     setUploadFiles((prevState) =>
       prevState.map((uploadFile) =>
-        uploadFile.id === fileId ? { ...uploadFile, status } : uploadFile
+        uploadFile.id === fileId
+          ? { ...uploadFile, taskId: taskId }
+          : uploadFile
       )
     );
   };
@@ -51,12 +47,10 @@ export function useReceiptUploader({
     const fileId = addFileToUpload(file);
     try {
       const result = await createReceipt(file);
-      updateFileStatus(fileId, 'completed');
-      onUploadSuccess && onUploadSuccess(fileId);
-
+      updateFileTaskId(fileId, result.task_id);
       return result;
     } catch (error) {
-      updateFileStatus(fileId, 'failed');
+      removeFileFromUpload(fileId);
       throw new FileUploadError(
         file,
         error instanceof Error ? error.message : 'Unknown error'

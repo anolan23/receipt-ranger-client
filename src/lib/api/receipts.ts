@@ -30,7 +30,7 @@ export async function getReceiptItems(receiptId: string) {
 }
 
 export type CreateReceiptResult = {
-  receipt_id: string;
+  task_id: string;
 };
 export async function createReceipt(file: File) {
   try {
@@ -54,6 +54,20 @@ export async function createReceipt(file: File) {
     }
     throw error;
   }
+}
+
+export type ReceiptTaskResult = {
+  ready: boolean;
+  receipt_id: string;
+  state: string;
+  successful: boolean;
+};
+
+export async function pollReceiptTask(taskId: string) {
+  const response = await backend.get<ReceiptTaskResult>(
+    `/receipts/tasks/${taskId}/status`
+  );
+  return response.data;
 }
 
 export interface ReceiptUpdatePayload {
