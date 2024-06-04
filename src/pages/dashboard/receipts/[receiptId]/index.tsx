@@ -22,7 +22,7 @@ import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { useDeviceWidth } from '@/hooks/use-device-width';
-import { getReceiptTitle, toDollar } from '@/lib/helpers';
+import { getReceiptTitle, getS3FileUrl, toDollar } from '@/lib/helpers';
 import dayjs from 'dayjs';
 
 interface ReceiptPageProps {}
@@ -65,7 +65,9 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
         ? {
             label: receipt.merchant.name,
             value: receipt.merchant.id,
-            imgSrc: receipt.merchant.logo_url || undefined,
+            imgSrc: receipt.merchant.logo_url
+              ? getS3FileUrl(receipt.merchant.logo_url)
+              : undefined,
           }
         : undefined,
       subtotal: receipt?.subtotal || '',

@@ -59,28 +59,8 @@ export function getReceiptTitle(receipt: ReceiptData) {
   )}`;
 }
 
-export const categoryColors = new Map([
-  ['Fruits', 'var(--color-charts-palette-categorical-1)'],
-  ['Vegetables', 'var(--color-charts-palette-categorical-2)'],
-  ['Canned Goods', 'var(--color-charts-palette-categorical-3)'],
-  ['Dairy', 'var(--color-charts-palette-categorical-4)'],
-  ['Meat', 'var(--color-charts-palette-categorical-5)'],
-  ['Fish & Seafood', 'var(--color-charts-palette-categorical-6)'],
-  ['Deli', 'var(--color-charts-palette-categorical-7)'],
-  ['Condiments & Spices', 'var(--color-charts-palette-categorical-8)'],
-  ['Snacks', 'var(--color-charts-palette-categorical-9)'],
-  ['Bread & Bakery', 'var(--color-charts-palette-categorical-10)'],
-  ['Beverages', 'var(--color-charts-palette-categorical-11)'],
-  ['Pasta, Rice & Cereal', 'var(--color-charts-palette-categorical-12)'],
-  ['Baking', 'var(--color-charts-palette-categorical-13)'],
-  ['Frozen Foods', 'var(--color-charts-palette-categorical-14)'],
-  ['Personal Care', 'var(--color-charts-palette-categorical-15)'],
-  ['Health Care', 'var(--color-charts-palette-categorical-16)'],
-  [
-    'Household & Cleaning Supplies',
-    'var(--color-charts-palette-categorical-17)',
-  ],
-  ['Baby Items', 'var(--color-charts-palette-categorical-18)'],
-  ['Pet Care', 'var(--color-charts-palette-categorical-19)'],
-  ['Other', 'var(--color-charts-palette-categorical-20)'],
-]);
+export function getS3FileUrl(objectKey: string) {
+  const bucketDomain = import.meta.env.VITE_S3_BUCKET_DOMAIN;
+  if (!bucketDomain) return '';
+  return `${bucketDomain}/${objectKey}`;
+}

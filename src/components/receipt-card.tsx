@@ -1,4 +1,4 @@
-import { getReceiptTitle, toDollar } from '@/lib/helpers';
+import { getReceiptTitle, getS3FileUrl, toDollar } from '@/lib/helpers';
 import { ItemData, ReceiptData } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import dayjs from 'dayjs';
@@ -223,7 +223,10 @@ export function ReceiptCard({
               <dt className="text-muted-foreground">Logo</dt>
               <dd>
                 {receipt?.merchant.logo_url ? (
-                  <ImageLogo src={receipt.merchant.logo_url} size={48} />
+                  <ImageLogo
+                    src={getS3FileUrl(receipt.merchant.logo_url)}
+                    size={48}
+                  />
                 ) : (
                   '-'
                 )}

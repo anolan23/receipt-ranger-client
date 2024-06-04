@@ -28,7 +28,7 @@ import { DollarInput } from '@/components/dollar-input';
 import { LineItemsTable } from './line-items-table';
 import { Separator } from '@/components/ui/separator';
 import { ReceiptData, SubcategoryData } from '@/lib/types';
-import { toDollar } from '@/lib/helpers';
+import { getS3FileUrl, toDollar } from '@/lib/helpers';
 import dayjs from 'dayjs';
 import { LineItem } from '@/components/line-item';
 import { LineItems } from './line-items';
@@ -60,7 +60,7 @@ export function ReceiptInfoCard({
       return {
         label: merch.name,
         value: merch.id,
-        imgSrc: merch.logo_url || undefined,
+        imgSrc: merch.logo_url ? getS3FileUrl(merch.logo_url) : undefined,
       };
     });
   }, [merchants]);

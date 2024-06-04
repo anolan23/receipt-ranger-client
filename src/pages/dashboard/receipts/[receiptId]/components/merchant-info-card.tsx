@@ -19,6 +19,7 @@ import { Combobox } from '@/components/ui/combo-box';
 import { MerchantData } from '@/lib/types';
 import { useMemo } from 'react';
 import { OptionItemDefinition } from '@/components/option';
+import { getS3FileUrl } from '@/lib/helpers';
 
 interface MerchantInfoCardProps {
   merchants?: MerchantData[];
@@ -36,7 +37,7 @@ export function MerchantInfoCard({
       return {
         label: merch.name,
         value: merch.name,
-        imgSrc: merch.logo_url || undefined,
+        imgSrc: merch.logo_url ? getS3FileUrl(merch.logo_url) : undefined,
         description: merch.id,
       };
     });

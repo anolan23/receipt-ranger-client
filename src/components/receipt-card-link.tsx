@@ -2,7 +2,7 @@ import { ReceiptData } from '@/lib/types';
 import { Link } from 'react-router-dom';
 import { ImageLogo } from './image-logo';
 import dayjs from 'dayjs';
-import { toDollar } from '@/lib/helpers';
+import { getS3FileUrl, toDollar } from '@/lib/helpers';
 import { ChevronRight } from 'lucide-react';
 
 interface ReceiptCardLinkProps {
@@ -17,7 +17,14 @@ export function ReceiptCardLink({ receipt, ...props }: ReceiptCardLinkProps) {
     >
       <div className="flex items-center">
         <div className="flex items-center">
-          <ImageLogo src={receipt.merchant.logo_url || ''} size={64} />
+          <ImageLogo
+            src={
+              receipt.merchant.logo_url
+                ? getS3FileUrl(receipt.merchant.logo_url)
+                : ''
+            }
+            size={64}
+          />
           <div className="flex-1 overflow-hidden mx-2">
             <div className="truncate">{receipt.merchant.name}</div>
             <div className="text-sm text-muted-foreground">

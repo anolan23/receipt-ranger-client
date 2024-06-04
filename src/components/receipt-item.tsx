@@ -4,6 +4,7 @@ import wfm from '../assets/wfm.png';
 import { ReceiptData } from '@/lib/types';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
+import { getS3FileUrl } from '@/lib/helpers';
 
 interface ReceiptItemProps {
   receipt: ReceiptData;
@@ -18,7 +19,13 @@ export function ReceiptItem({ receipt, ...props }: ReceiptItemProps) {
     >
       <Link to={`/receipts/${receipt.id}`}>
         <Avatar className="h-9 w-9">
-          <AvatarImage src={receipt.merchant.logo_url || undefined} />
+          <AvatarImage
+            src={
+              receipt.merchant.logo_url
+                ? getS3FileUrl(receipt.merchant.logo_url)
+                : ''
+            }
+          />
           <AvatarFallback></AvatarFallback>
         </Avatar>
         <div className="ml-4 space-y-1">
