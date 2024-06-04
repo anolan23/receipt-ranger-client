@@ -4,12 +4,17 @@ import { SubscriptionRecordData } from '../types';
 interface CreateCheckoutSessionResult {
   redirect_url: string;
 }
+interface CreateCheckoutSessionParams {
+  subscription_type: 'monthly' | 'yearly';
+  success_url: string;
+  cancel_url: string;
+}
 export async function createCheckoutSession(
-  subscriptionType: 'monthly' | 'yearly'
+  params: CreateCheckoutSessionParams
 ) {
   const response = await backend.post<CreateCheckoutSessionResult>(
     '/stripe/create-checkout-session',
-    { subscription_type: subscriptionType }
+    params
   );
 
   window.location.assign(response.data.redirect_url);
@@ -17,9 +22,13 @@ export async function createCheckoutSession(
 interface CreatePortalSessionResult {
   redirect_url: string;
 }
-export async function createPortalSession() {
+interface CreatePortalSessionParams {
+  return_url: string;
+}
+export async function createPortalSession(params: CreatePortalSessionParams) {
   const response = await backend.post<CreatePortalSessionResult>(
-    '/stripe/create-portal-session'
+    '/stripe/create-portal-session',
+    params
   );
 
   window.location.assign(response.data.redirect_url);

@@ -13,7 +13,7 @@ export function ReceiptCardLink({ receipt, ...props }: ReceiptCardLinkProps) {
   return (
     <Link
       to={`/dashboard/receipts/${receipt.id}`}
-      className="w-full rounded-lg border bg-card p-6 text-card-foreground shadow transition-colors hover:bg-muted/50 sm:p-8 text-left"
+      className="w-full min-w-0 rounded-lg border bg-card p-6 text-card-foreground shadow transition-colors hover:bg-muted/50 sm:p-8 text-left"
     >
       <div className="flex items-center">
         <div className="flex items-center">

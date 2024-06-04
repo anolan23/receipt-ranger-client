@@ -16,8 +16,8 @@ import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { downloadReceipts } from '@/lib/api/receipts';
-import { File, ScanText } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { File, ScanText, Utensils } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ReceiptsTable } from '../../../components/receipts-table';
 import { ColumnFilterDropdown } from '@/components/column-filter-dropdown';
@@ -27,6 +27,9 @@ import { usePageTitle } from '@/hooks/use-page-title';
 import { Cards } from '@/components/cards';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { ReceiptCardLink } from '@/components/receipt-card-link';
+import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter';
+import { Table } from '@tanstack/react-table';
+import { Cross2Icon } from '@radix-ui/react-icons';
 
 export function ReceiptsPage() {
   usePageTitle('Receipts');
@@ -51,6 +54,36 @@ export function ReceiptsPage() {
   );
   const [globalFilter, setGlobalFilter] = useState('');
   const [downloading, setDownloading] = useState(false);
+
+  const getOptions = useCallback((table: Table<any>, columnId: string) => {
+    const options = new Set<string>();
+
+    table.getCoreRowModel().flatRows.forEach((row) => {
+      const value = row.getValue(columnId) as string;
+      options.add(value);
+    });
+    return options;
+  }, []);
+
+  const getCategoryOptions = useCallback(
+    (table: Table<any>) => {
+      const options = getOptions(table, 'category');
+      return Array.from(options).map((val) => {
+        return { label: val, value: val };
+      });
+    },
+    [getOptions]
+  );
+
+  const getMerchantOptions = useCallback(
+    (table: Table<any>) => {
+      const options = getOptions(table, 'merchant');
+      return Array.from(options).map((val) => {
+        return { label: val, value: val };
+      });
+    },
+    [getOptions]
+  );
 
   useEffect(() => {
     if (!query) return;
@@ -92,26 +125,69 @@ export function ReceiptsPage() {
       content={
         <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <ReceiptsTable
-            tools={(table) => (
-              <div className="flex items-center">
-                <TextFilter table={table} placeholder="Filter Receipts..." />
-                <div className="ml-auto flex items-center gap-2">
-                  <Button
-                    onClick={handleExportClick}
-                    size="sm"
-                    variant="outline"
-                    className="gap-1"
-                    disabled={downloading}
-                  >
-                    <File className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                      Export
-                    </span>
-                  </Button>
-                  <ColumnFilterDropdown table={table} />
+            tools={(table) => {
+              const isFiltered = table.getState().columnFilters.length > 0;
+
+              return (
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <TextFilter
+                      table={table}
+                      placeholder="Filter Receipts..."
+                    />
+                    {table.getColumn('merchant') && (
+                      <DataTableFacetedFilter
+                        column={table.getColumn('merchant')}
+                        title="Merchant"
+                        options={getMerchantOptions(table)}
+                      />
+                    )}
+                    {table.getColumn('category') && (
+                      <DataTableFacetedFilter
+                        column={table.getColumn('category')}
+                        title="Category"
+                        options={getCategoryOptions(table)}
+                      />
+                    )}
+                    {table.getColumn('status') && (
+                      <DataTableFacetedFilter
+                        column={table.getColumn('status')}
+                        title="Status"
+                        options={[
+                          { label: 'Pending', value: false },
+                          { label: 'Reviewed', value: true },
+                        ]}
+                      />
+                    )}
+                    {isFiltered && (
+                      <Button
+                        variant="ghost"
+                        onClick={() => table.resetColumnFilters()}
+                        className="h-8 px-2 lg:px-3"
+                      >
+                        Reset
+                        <Cross2Icon className="ml-2 h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      onClick={handleExportClick}
+                      size="sm"
+                      variant="outline"
+                      className="gap-1"
+                      disabled={downloading}
+                    >
+                      <File className="h-3.5 w-3.5" />
+                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                        Export
+                      </span>
+                    </Button>
+                    <ColumnFilterDropdown table={table} />
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            }}
             header={
               <CardHeader>
                 <CardTitle>Receipts</CardTitle>

@@ -14,7 +14,11 @@ export function SubscriptionSettings({ ...props }: SubscriptionSettingsProps) {
   const handleManageClick = async function () {
     try {
       setLoading(true);
-      await createPortalSession();
+      await createPortalSession({
+        return_url: `${
+          import.meta.env.VITE_APP_DOMAIN
+        }/dashboard/settings/subscription`,
+      });
     } catch (error) {
       console.error(error);
     } finally {

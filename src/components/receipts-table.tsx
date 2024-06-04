@@ -8,6 +8,7 @@ import { ReceiptTextIcon } from 'lucide-react';
 import { ImageLogo } from './image-logo';
 import { Badge } from './ui/badge';
 import { useDeviceWidth } from '@/hooks/use-device-width';
+import { StatusIndicator } from './status-indicator';
 
 interface ReceiptsTableProps
   extends Omit<DataTableProps<ReceiptData>, 'columns'> {}
@@ -36,16 +37,16 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       size: 150,
       maxSize: 150,
     }),
-    columnHelper.display({
-      id: 'logo',
-      header: 'Logo',
-      cell: ({ row }) => {
-        const logoUrl = row.original.merchant.logo_url;
-        return <ImageLogo src={logoUrl || undefined} />;
-      },
-      enableSorting: false,
-      size: 100,
-    }),
+    // columnHelper.display({
+    //   id: 'logo',
+    //   header: 'Logo',
+    //   cell: ({ row }) => {
+    //     const logoUrl = row.original.merchant.logo_url;
+    //     return <ImageLogo src={logoUrl || undefined} />;
+    //   },
+    //   enableSorting: false,
+    //   size: 100,
+    // }),
 
     columnHelper.accessor('merchant.name', {
       id: 'merchant',
@@ -53,6 +54,9 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       enableSorting: false,
       enableHiding: false,
       minSize: 215,
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
     }),
     columnHelper.accessor('category.label', {
       id: 'category',
@@ -62,6 +66,24 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
         const value = info.getValue();
         if (!value) return '-';
         return <Badge variant="outline">{value}</Badge>;
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+      size: 150,
+    }),
+    columnHelper.accessor('reviewed', {
+      id: 'status',
+      header: 'Status',
+      enableSorting: false,
+      cell: (info) => {
+        const value = info.getValue();
+        if (value)
+          return <StatusIndicator status="success">Reviewed</StatusIndicator>;
+        return <StatusIndicator status="pending">Pending</StatusIndicator>;
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
       },
       size: 150,
     }),

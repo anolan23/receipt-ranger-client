@@ -26,7 +26,7 @@ export function PriceCard({
   price,
   interval,
   badge,
-  buttonText = 'Try Pro',
+  buttonText = 'Upgrade to Pro',
   loading,
   footer,
   onClick,
@@ -47,14 +47,12 @@ export function PriceCard({
       <CardContent className="flex flex-col ">
         <p className="text-sm text-muted-foreground mb-8">{description}</p>
         <div className="flex flex-col items-center mb-4">
-          <div className="font-bold">Free Trial $0.00</div>
-          <span className="text-sm text-muted-foreground">
+          <span className="font-bold text-2xl">
             <span>
               ${dollar}
-              <sup>.{cents}</sup>
-              <sup>/mo*</sup>
-            </span>{' '}
-            <span>after 7 days</span>
+              <span>.{cents}</span> <span>/ month</span>
+              {footer && <sup>*</sup>}
+            </span>
           </span>
           {/* <span className="text-3xl font-bold tracking-tighter mr-1">
           {price}
@@ -65,7 +63,7 @@ export function PriceCard({
           {intervalText}
         </span> */}
         </div>
-        <Button onClick={onClick}>
+        <Button onClick={onClick} size="lg">
           {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
           {buttonText}
         </Button>

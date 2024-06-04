@@ -42,40 +42,55 @@ export function DashboardPage() {
     selectedRow?.id.toString()
   );
 
-  const { data: spendingOverview, isLoading: isSpendingOverviewLoading } =
-    useSpendingOverview();
+  const {
+    data: spendingOverview,
+    isLoading: isSpendingOverviewLoading,
+    mutate: mutateSpendingOverview,
+  } = useSpendingOverview();
 
   const { data: subscriptionRecord } = useSubscription();
 
-  const getMonlthySpendPercentDiff = (num1: number, num2: number) => {
+  const calcPercentChange = (num1: number, num2: number) => {
+    if (num2 === 0) return `+0% from last month`;
     const frac = (num1 - num2) / num2;
     const percent = Math.round(frac * 100);
-    if (Number.isNaN(percent)) return `+0% from last month`;
     const sign = percent >= 0 ? '+' : '';
     return `${sign}${percent}% from last month`;
+  };
+
+  const calcDifference = (num1: number, num2: number) => {
+    const difference = num1 - num2;
+    const sign = difference >= 0 ? 'more' : 'less';
+    return `${toDollar(
+      Math.abs(difference),
+      'dollar'
+    )} ${sign} than last month`;
   };
 
   const getPercentDiff = function (num1: number, num2: number) {
     return Math.min(Math.round((num1 / num2) * 100), 100);
   };
 
-  const { current_month_spend, forecasted_spend, previous_month_spend } =
-    spendingOverview || {};
+  const {
+    current_month_spend,
+    forecasted_spend,
+    previous_month_spend,
+    goal_budget,
+  } = spendingOverview || {};
 
   const currentMonthDescription =
     current_month_spend && previous_month_spend
-      ? getMonlthySpendPercentDiff(+current_month_spend, +previous_month_spend)
+      ? calcDifference(+current_month_spend, +previous_month_spend)
       : undefined;
 
-  const percentMonth =
-    current_month_spend && previous_month_spend
-      ? getPercentDiff(+current_month_spend, +previous_month_spend)
-      : 0;
-
-  const percentForcasted =
-    forecasted_spend && current_month_spend
-      ? getPercentDiff(+forecasted_spend, +current_month_spend)
-      : 0;
+  const percentMonth = getPercentDiff(
+    current_month_spend ? +current_month_spend : 0,
+    goal_budget ? +goal_budget : 1000
+  );
+  const percentForcasted = getPercentDiff(
+    forecasted_spend ? +forecasted_spend : 0,
+    goal_budget ? +goal_budget : 1000
+  );
 
   return (
     <DashboardLayout
@@ -93,8 +108,8 @@ export function DashboardPage() {
                   <CardHeader className="pb-3">
                     <CardTitle>Receipts Overview</CardTitle>
                     <CardDescription className="text-sm max-w-lg text-balance leading-relaxed text-card-foreground">
-                      Introducing Your Receipts Dashboard for Seamless
-                      Management and Insightful Analysis.
+                      Your Receipts Dashboard simplifies expense tracking and
+                      organizes your receipts.
                     </CardDescription>
                   </CardHeader>
                   <CardFooter>
@@ -120,11 +135,8 @@ export function DashboardPage() {
                     forecasted_spend ? toDollar(forecasted_spend, 'dollar') : ''
                   }
                   description={
-                    forecasted_spend && current_month_spend
-                      ? getMonlthySpendPercentDiff(
-                          +forecasted_spend,
-                          +current_month_spend
-                        )
+                    forecasted_spend && previous_month_spend
+                      ? calcDifference(+forecasted_spend, +previous_month_spend)
                       : undefined
                   }
                   percent={percentForcasted}
@@ -145,6 +157,13 @@ export function DashboardPage() {
                 selectionType="single"
                 data={receipts || []}
                 loading={isReceiptsLoading}
+                footer={
+                  <CardFooter className="flex justify-center">
+                    <Button variant="link" asChild>
+                      <Link to="/dashboard/receipts">View All Receipts</Link>
+                    </Button>
+                  </CardFooter>
+                }
               />
               <Cards
                 hidden={!isMobile}
@@ -163,7 +182,7 @@ export function DashboardPage() {
                     <CardHeader>
                       <CardTitle>Upgrade to Pro</CardTitle>
                       <CardDescription>
-                        Enjoy unlimited receipt scans and access to the latest
+                        Access to unlimited receipt scans and the latest
                         features.
                       </CardDescription>
                     </CardHeader>
@@ -183,7 +202,10 @@ export function DashboardPage() {
                 loading={isReceiptLoading}
                 onPreviousClick={prevRow}
                 onNextClick={nextRow}
-                onDeleteSuccess={() => mutateReceipts()}
+                onDeleteSuccess={() => {
+                  mutateReceipts();
+                  mutateSpendingOverview();
+                }}
               />
             </div>
           </div>

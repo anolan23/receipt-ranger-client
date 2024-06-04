@@ -73,9 +73,9 @@ export function ReceiptCard({
     ? dayjs(receipt.transaction_date).format('MMMM D, YYYY')
     : undefined;
   const modifiedDateShort =
-    receipt?.updated_at && dayjs(receipt.updated_at).format('YYYY-MM-DD');
+    receipt?.created_at && dayjs(receipt.created_at).format('YYYY-MM-DD');
   const modifiedDate =
-    receipt?.updated_at && dayjs(receipt.updated_at).format('MMMM D, YYYY');
+    receipt?.created_at && dayjs(receipt.created_at).fromNow();
 
   const renderItemList = function () {
     if (!receipt?.items?.length)
@@ -148,9 +148,12 @@ export function ReceiptCard({
                 {receipt ? getReceiptTitle(receipt) : 'Receipt Preview'}
               </CardTitle>
             </CopyableText>
-            <CardDescription>{`Date: ${
-              transactionDate || '-'
-            }`}</CardDescription>
+            <div className="text-sm text-muted-foreground flex items-center gap-2 min-h-[22px]">
+              <span>{`Date: ${transactionDate || '-'}`}</span>
+              {receipt?.category?.label && (
+                <Badge variant="secondary">{receipt.category.label}</Badge>
+              )}
+            </div>
           </div>
           <div className="ml-auto flex items-center gap-1">
             {receipt ? (
@@ -244,7 +247,7 @@ export function ReceiptCard({
       </CardContent>
       <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
         <div className="text-xs text-muted-foreground">
-          Updated{' '}
+          Scanned{' '}
           {modifiedDate && modifiedDateShort ? (
             <time dateTime={modifiedDateShort}>{modifiedDate}</time>
           ) : (

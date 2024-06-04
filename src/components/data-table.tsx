@@ -13,6 +13,8 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   useReactTable,
 } from '@tanstack/react-table';
 
@@ -54,6 +56,7 @@ export interface DataTableProps<TData> {
   loading?: boolean;
   empty?: ReactNode;
   header?: ReactNode;
+  footer?: ReactNode;
   hidden?: boolean;
   className?: string;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
@@ -78,6 +81,7 @@ export function DataTable<TData>({
   loading,
   empty,
   header,
+  footer,
   hidden,
   className,
   onRowSelectionChange,
@@ -160,6 +164,8 @@ export function DataTable<TData>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     getRowId,
 
     state: {
@@ -266,6 +272,7 @@ export function DataTable<TData>({
             </Table>
           )}
         </CardContent>
+        {footer}
       </Card>
       {footerControls && <div className="mt-4">{footerControls(table)}</div>}
     </div>

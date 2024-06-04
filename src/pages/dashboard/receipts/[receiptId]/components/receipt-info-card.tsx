@@ -76,8 +76,8 @@ export function ReceiptInfoCard({
     );
   }, [categories]);
 
-  const modifiedDateShort = dayjs(receipt.updated_at).format('YYYY-MM-DD');
-  const modifiedDate = dayjs(receipt.updated_at).format('MMMM D, YYYY');
+  const modifiedDateShort = dayjs(receipt.created_at).format('YYYY-MM-DD');
+  const modifiedDate = dayjs(receipt.created_at).fromNow();
 
   return (
     <Card className="min-w-0 bg-card sm:shadow sm:border">
@@ -214,7 +214,7 @@ export function ReceiptInfoCard({
       </CardContent>
       <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
         <div className="text-xs text-muted-foreground">
-          Updated <time dateTime={modifiedDateShort}>{modifiedDate}</time>
+          Scanned <time dateTime={modifiedDateShort}>{modifiedDate}</time>
         </div>
       </CardFooter>
     </Card>

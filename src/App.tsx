@@ -16,11 +16,10 @@ import { SubscriptionSettings } from './pages/dashboard/settings/subscription';
 import { AppearanceSettings } from './pages/dashboard/settings/appearance';
 import { ReceiptPage } from './pages/dashboard/receipts/[receiptId]';
 import { CategoryPage } from './pages/dashboard/categories/[categoryId]';
-import { useScrollToTop } from './hooks/use-scroll-to-top';
 import { NotFoundPage } from './layout/not-found-page';
+import { DashboardLayout } from './layout/dashboard-layout';
 
 function App() {
-  useScrollToTop();
   return (
     <>
       <Routes>
@@ -43,6 +42,10 @@ function App() {
               <Route path="subscription" element={<SubscriptionSettings />} />
               <Route path="appearance" element={<AppearanceSettings />} />
             </Route>
+            <Route
+              path="*"
+              element={<DashboardLayout content={<NotFoundPage />} />}
+            />
           </Route>
         </Route>
         <Route path="*" element={<NotFoundPage />} />

@@ -29,7 +29,15 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
       try {
         ensureAuth();
         setLoading(true);
-        await createCheckoutSession('monthly');
+        await createCheckoutSession({
+          subscription_type: 'monthly',
+          success_url: `${
+            import.meta.env.VITE_APP_DOMAIN
+          }/dashboard/settings/subscription`,
+          cancel_url: `${
+            import.meta.env.VITE_APP_DOMAIN
+          }/dashboard/settings/subscription`,
+        });
       } catch (error) {
         console.error(error);
       } finally {
@@ -41,7 +49,15 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
       try {
         ensureAuth();
         setLoading(true);
-        await createCheckoutSession('yearly');
+        await createCheckoutSession({
+          subscription_type: 'yearly',
+          success_url: `${
+            import.meta.env.VITE_APP_DOMAIN
+          }/dashboard/settings/subscription`,
+          cancel_url: `${
+            import.meta.env.VITE_APP_DOMAIN
+          }/dashboard/settings/subscription`,
+        });
       } catch (error) {
         console.error(error);
       } finally {
@@ -72,7 +88,7 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
           </div>
         </nav>
         <h1 className="scroll-m-20 text-2xl sm:text-3xl font-extrabold tracking-tight lg:text-4xl text-center">
-          Choose a plan for after your 7-day free trial
+          Choose a Snapceipt Pro plan
         </h1>
       </header>
       <main className="mb-10">
@@ -85,7 +101,8 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
             <TabsContent value="monthly">
               <PriceCard
                 title="Snapceipt Pro"
-                description="Simplify your expense tracking. Enjoy unlimited receipt scans and access to the latest features."
+                description="Simplify your expense tracking. Access to unlimited receipt scans and the latest
+                features."
                 price="4.99"
                 interval="monthly"
                 onClick={handleMonthlyClick}
@@ -95,7 +112,8 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
               <PriceCard
                 badge="Best deal"
                 title="Snapceipt Pro"
-                description="Simplify your expense tracking. Enjoy unlimited receipt scans and access to the latest features."
+                description="Simplify your expense tracking. Access to unlimited receipt scans and the latest
+                features."
                 price="3.33"
                 interval="yearly"
                 footer="*when billed yearly"

@@ -1,6 +1,8 @@
 import {
   CircleAlert,
+  CircleCheck,
   CircleCheckBig,
+  CircleEllipsis,
   CircleX,
   LoaderCircle,
 } from 'lucide-react';
@@ -10,6 +12,7 @@ export type StatusIndicatorStatus =
   | 'destructive'
   | 'success'
   | 'warning'
+  | 'pending'
   | 'loading';
 
 interface StatusIndicatorProps {
@@ -36,8 +39,10 @@ export function StatusIndicator({
             size={size}
           />
         );
+      case 'pending':
+        return <CircleEllipsis className="text-muted-foreground" size={size} />;
       case 'success':
-        return <CircleCheckBig className="text-muted-foreground" size={size} />;
+        return <CircleCheck className="text-muted-foreground" size={size} />;
     }
   };
   return (
