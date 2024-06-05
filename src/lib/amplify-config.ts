@@ -18,7 +18,11 @@ Amplify.configure({
           providers: ['Google'],
           domain: import.meta.env.VITE_COGNITO_DOMAIN,
           scopes: ['email', 'aws.cognito.signin.user.admin'],
-          redirectSignIn: [`${import.meta.env.VITE_APP_DOMAIN}/dashboard`],
+          redirectSignIn: [
+            'http://localhost:3000/dashboard',
+            'https://snapceipt.com/dashboard',
+            'https://www.snapceipt.com/dashboard',
+          ],
           redirectSignOut: [],
           responseType: 'code',
         },

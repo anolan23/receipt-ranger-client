@@ -16,7 +16,7 @@ export function SubscriptionSettings({ ...props }: SubscriptionSettingsProps) {
       setLoading(true);
       await createPortalSession({
         return_url: `${
-          import.meta.env.VITE_APP_DOMAIN
+          import.meta.env.VITE_APP_URL
         }/dashboard/settings/subscription`,
       });
     } catch (error) {

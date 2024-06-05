@@ -60,7 +60,7 @@ export function getReceiptTitle(receipt: ReceiptData) {
 }
 
 export function getS3FileUrl(objectKey: string) {
-  const bucketDomain = import.meta.env.VITE_S3_BUCKET_DOMAIN;
+  const bucketDomain = import.meta.env.VITE_S3_BUCKET_URL;
   if (!bucketDomain) return '';
   return `${bucketDomain}/${objectKey}`;
 }

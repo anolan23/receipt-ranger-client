@@ -32,10 +32,10 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
         await createCheckoutSession({
           subscription_type: 'monthly',
           success_url: `${
-            import.meta.env.VITE_APP_DOMAIN
+            import.meta.env.VITE_APP_URL
           }/dashboard/settings/subscription`,
           cancel_url: `${
-            import.meta.env.VITE_APP_DOMAIN
+            import.meta.env.VITE_APP_URL
           }/dashboard/settings/subscription`,
         });
       } catch (error) {
@@ -52,10 +52,10 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
         await createCheckoutSession({
           subscription_type: 'yearly',
           success_url: `${
-            import.meta.env.VITE_APP_DOMAIN
+            import.meta.env.VITE_APP_URL
           }/dashboard/settings/subscription`,
           cancel_url: `${
-            import.meta.env.VITE_APP_DOMAIN
+            import.meta.env.VITE_APP_URL
           }/dashboard/settings/subscription`,
         });
       } catch (error) {

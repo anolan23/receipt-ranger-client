@@ -17,8 +17,8 @@ export function DocViewerCard({
   const isMobile = useDeviceWidth();
 
   const ref = useRef<HTMLDivElement>(null);
-  const BUCKET_DOMAIN = import.meta.env.VITE_S3_BUCKET_DOMAIN;
-  const src = `${BUCKET_DOMAIN}/${objectKey}`;
+  const bucketUrl = import.meta.env.VITE_S3_BUCKET_URL;
+  const src = `${bucketUrl}/${objectKey}`;
   return (
     <div className="hidden sm:block">
       <Card className={cn('sticky top-4', className)}>
