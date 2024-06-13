@@ -157,13 +157,6 @@ export function DashboardPage() {
                 selectionType="single"
                 data={receipts || []}
                 loading={isReceiptsLoading}
-                footer={
-                  <CardFooter className="flex justify-center">
-                    <Button variant="link" asChild>
-                      <Link to="/dashboard/receipts">View All Receipts</Link>
-                    </Button>
-                  </CardFooter>
-                }
               />
               <Cards
                 hidden={!isMobile}
