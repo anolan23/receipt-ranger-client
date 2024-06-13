@@ -20,8 +20,7 @@ Amplify.configure({
           scopes: ['email', 'aws.cognito.signin.user.admin'],
           redirectSignIn: [
             'http://localhost:3000/dashboard',
-            'https://snapceipt.com/dashboard',
-            'https://www.snapceipt.com/dashboard',
+            'https://app.snapceipt.com/dashboard',
           ],
           redirectSignOut: [],
           responseType: 'code',
