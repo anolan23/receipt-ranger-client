@@ -45,11 +45,12 @@ export function NivoPieChart<T extends number | string>({
         <ResponsivePie
           data={nivoData}
           margin={{ top: 40, right: 10, bottom: 80, left: 10 }}
-          innerRadius={0.5}
+          // innerRadius={0.5}
           padAngle={0.7}
           cornerRadius={3}
           activeOuterRadiusOffset={8}
           borderWidth={1}
+          colors={{ scheme: 'greys' }}
           borderColor={{
             from: 'color',
             modifiers: [['darker', 0.2]],
@@ -95,6 +96,7 @@ export function NivoPieChart<T extends number | string>({
               fill: 'hsl(var(--foreground))',
             },
           }}
+          arcLinkLabelsTextColor="hsl(var(--primary))"
           {...props}
         />
       )}

@@ -18,6 +18,7 @@ import { ReceiptPage } from './pages/dashboard/receipts/[receiptId]';
 import { CategoryPage } from './pages/dashboard/categories/[categoryId]';
 import { NotFoundPage } from './layout/not-found-page';
 import { DashboardLayout } from './layout/dashboard-layout';
+import { ItemsPage } from './pages/dashboard/items';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="categories" element={<div>Categories</div>} />
             <Route path="categories/:categoryId" element={<CategoryPage />} />
             <Route path="receipts" element={<ReceiptsPage />} />
+            <Route path="items" element={<ItemsPage />} />
             <Route path="receipts/:receiptId" element={<ReceiptPage />} />
             <Route path="scanner" element={<ScannerPage />} />
             <Route path="settings" element={<SettingsPage />}>

@@ -29,7 +29,7 @@ export type ItemData = {
   id: number;
   created_at: string;
   updated_at: string;
-  receipt_id: number;
+  receipt_id: string;
   subcategory: string | null;
   subcategory_id: number | null;
   generated_item_name: string | null;
@@ -37,6 +37,7 @@ export type ItemData = {
   price_per_unit: string | null;
   quantity: number | null;
   total_price: string | null;
+  base_item_type: string | null;
 };
 
 export type CategoryData = {

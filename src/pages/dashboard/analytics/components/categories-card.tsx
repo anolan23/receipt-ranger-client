@@ -54,9 +54,6 @@ export function CategoriesCard({
             truncateTickAt: 0,
             tickValues: 5,
           }}
-          //   axisBottom={null}
-          // layout="horizontal"
-          // label={(val) => val.id.toString()}
         />
       </CardContent>
     </Card>

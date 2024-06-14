@@ -110,7 +110,7 @@ export function NivoBarChart<T extends number | string>({
           valueScale={{ type: 'linear' }}
           valueFormat=">-$.2f"
           indexScale={{ type: 'band', round: true }}
-          colors={{ scheme: 'nivo' }}
+          colors={'hsl(var(--primary))'}
           theme={{
             text: {
               fontFamily: 'inherit',
@@ -143,15 +143,22 @@ export function NivoBarChart<T extends number | string>({
           }}
           labelSkipWidth={48}
           labelSkipHeight={16}
-          labelTextColor={{
-            from: 'color',
-            modifiers: [['darker', 1.6]],
-          }}
+          // labelTextColor={{
+          //   from: 'color',
+          //   modifiers: [['darker', 1.6]],
+          // }}
+          labelTextColor="hsl(var(--primary-foreground))"
           role="application"
           ariaLabel="Spending Explorer"
           barAriaLabel={(e) =>
             e.id + ': ' + e.formattedValue + ' in time period: ' + e.indexValue
           }
+          // tooltip={(props) => {
+          //   props.value;
+          //   return <div>{props.value}</div>;
+          // }}
+          animate={true}
+          layout="vertical"
           {...props}
         />
       )}
