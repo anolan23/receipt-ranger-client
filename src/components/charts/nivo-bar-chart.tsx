@@ -106,7 +106,7 @@ export function NivoBarChart<T extends number | string>({
           indexBy="x"
           margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
           borderRadius={4}
-          padding={0.1}
+          padding={0.3}
           valueScale={{ type: 'linear' }}
           valueFormat=">-$.2f"
           indexScale={{ type: 'band', round: true }}
