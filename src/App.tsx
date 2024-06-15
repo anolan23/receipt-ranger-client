@@ -19,6 +19,8 @@ import { CategoryPage } from './pages/dashboard/categories/[categoryId]';
 import { NotFoundPage } from './layout/not-found-page';
 import { DashboardLayout } from './layout/dashboard-layout';
 import { ItemsPage } from './pages/dashboard/items';
+import { ReceiptInsightsPage } from './pages/dashboard/analytics/receipt-insights';
+import { ItemInsightsPage } from './pages/dashboard/analytics/item-insights';
 
 function App() {
   return (
@@ -31,7 +33,10 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard">
             <Route index element={<DashboardPage />} />
-            <Route path="analytics" element={<AnalyticsPage />} />
+            <Route path="analytics" element={<AnalyticsPage />}>
+              <Route index element={<ReceiptInsightsPage />} />
+              <Route path="item-insights" element={<ItemInsightsPage />} />
+            </Route>
             <Route path="categories" element={<div>Categories</div>} />
             <Route path="categories/:categoryId" element={<CategoryPage />} />
             <Route path="receipts" element={<ReceiptsPage />} />

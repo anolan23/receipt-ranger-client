@@ -1,14 +1,18 @@
 import { backend } from '../backend';
 import {
   CategoryTotalsResult,
+  DateRange,
   GetOverviewParams,
   MerchantCountsResult,
   OverviewResult,
   SpendingExplorerParams,
   SpendingExplorerResult,
   SpendingOverviewResult,
+  SubcategoryTotalsResult,
+  TopBaseItemResult,
   UseCategoryTotalsParams,
   UseMerchantCountsParams,
+  UseTopBaseItemsParams,
 } from '../types';
 
 export async function getOverview(params: GetOverviewParams) {
@@ -43,6 +47,22 @@ export async function getCategoryTotals(params: UseCategoryTotalsParams) {
 export async function getMerchantCounts(params: UseMerchantCountsParams) {
   const response = await backend.get<MerchantCountsResult[]>(
     '/analytics/merchant-counts',
+    { params }
+  );
+  return response.data;
+}
+
+export async function getSubcategoryTotals(params: UseCategoryTotalsParams) {
+  const response = await backend.get<SubcategoryTotalsResult[]>(
+    '/analytics/subcategory-totals',
+    { params }
+  );
+  return response.data;
+}
+
+export async function getTopBaseItems(params?: UseTopBaseItemsParams) {
+  const response = await backend.get<TopBaseItemResult[]>(
+    '/analytics/top-base-items',
     { params }
   );
   return response.data;

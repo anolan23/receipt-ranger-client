@@ -1,7 +1,7 @@
 import { Header } from '@/components/header';
 import { Separator } from '@/components/ui/separator';
 import { Outlet } from 'react-router-dom';
-import { NavButton } from './components/nav-button';
+import { NavButton } from '../../../components/nav-button';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import SmartBreadcrumb from '@/components/smart-breadcrumb';
 import { usePageTitle } from '@/hooks/use-page-title';

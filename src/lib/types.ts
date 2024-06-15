@@ -105,6 +105,15 @@ export type CategoryTotalsResult = {
   category: string;
   total: string;
 };
+export type SubcategoryTotalsResult = {
+  category: string;
+  total: string;
+};
+export type TopBaseItemResult = {
+  label: string | null;
+  total: string;
+  ratio: string;
+};
 export type MerchantCountsResult = {
   merchant: string;
   count: number;
@@ -123,36 +132,26 @@ export type OverviewResult = {
   receipt_count: number;
 };
 
-export interface SpendingExplorerParams {
-  start_date: string;
-  end_date: string;
-  granularity: 'daily' | 'monthly';
-  dimension?: 'category';
-}
-export interface GetOverviewParams {
+export interface DateRange {
   start_date: string;
   end_date: string;
 }
 
-export interface SpendingExplorerParams {
-  start_date: string;
-  end_date: string;
+export interface SpendingExplorerParams extends DateRange {
+  granularity: 'daily' | 'monthly';
+  dimension?: 'category';
+}
+export interface GetOverviewParams extends DateRange {}
+
+export interface SpendingExplorerParams extends DateRange {
   granularity: 'daily' | 'monthly';
   dimension?: 'category';
 }
 
-export interface UseCategoryTotalsParams {
-  start_date: string;
-  end_date: string;
-}
-export interface UseMerchantCountsParams {
-  start_date: string;
-  end_date: string;
-}
-export interface UseMonthlyTotalsParams {
-  start_date: string;
-  end_date: string;
-}
+export interface UseCategoryTotalsParams extends DateRange {}
+export interface UseTopBaseItemsParams extends DateRange {}
+export interface UseMerchantCountsParams extends DateRange {}
+export interface UseMonthlyTotalsParams extends DateRange {}
 
 export type SpendingExplorerResultBase = {
   date: string;
