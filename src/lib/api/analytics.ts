@@ -1,7 +1,7 @@
 import { backend } from '../backend';
 import {
   CategoryTotalsResult,
-  DateRange,
+  DateInterval,
   GetOverviewParams,
   MerchantCountsResult,
   OverviewResult,

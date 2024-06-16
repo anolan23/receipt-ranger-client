@@ -34,8 +34,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       },
       enableSorting: false,
       enableHiding: false,
-      size: 150,
-      maxSize: 150,
+      size: 100,
     }),
     // columnHelper.display({
     //   id: 'logo',
@@ -53,7 +52,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       header: 'Merchant',
       enableSorting: false,
       enableHiding: false,
-      minSize: 215,
+      size: 200,
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));
       },
@@ -100,7 +99,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
 
         return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
       },
-      size: 100,
+      size: 150,
     }),
     // columnHelper.display({
     //   id: 'status',
@@ -142,6 +141,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       selectionType="single"
       empty={'No Receipts found'}
       hidden={isMobile}
+      wrapLines={false}
       {...props}
     />
   );

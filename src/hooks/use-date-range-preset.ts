@@ -1,12 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
 import dayjs from 'dayjs';
 import { DateRange } from 'react-day-picker';
-import { DatePreset } from '@/lib/types';
+import { DateInterval, DatePreset } from '@/lib/types';
+import { useOutletContext } from 'react-router-dom';
 
 export function useDateRangePreset(initialPreset: DatePreset = 'mtd') {
   const [datePreset, setDatePreset] = useState<DatePreset>(initialPreset);
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const dateRangeStr = useMemo(() => {
+  const dateInterval = useMemo<DateInterval>(() => {
     return {
       start_date: dateRange?.from?.toISOString() || '',
       end_date: dateRange?.to?.toISOString() || '',
@@ -56,5 +57,21 @@ export function useDateRangePreset(initialPreset: DatePreset = 'mtd') {
     updateDateRange();
   }, [datePreset]);
 
-  return { datePreset, setDatePreset, dateRange, setDateRange, dateRangeStr };
+  return {
+    datePreset,
+    setDatePreset,
+    dateRange,
+    setDateRange,
+    dateInterval,
+  };
+}
+
+export type DatePresetValues = {
+  datePreset: DatePreset;
+  dateInterval: DateInterval;
+  dateRange?: DateRange;
+};
+
+export function useDateRangePresetOutletContext() {
+  return useOutletContext<DatePresetValues>();
 }

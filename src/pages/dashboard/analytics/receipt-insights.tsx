@@ -1,7 +1,10 @@
 import { DateRangePickerPreset } from '@/components/date-range-picker-preset';
 import { MetricCard } from '@/components/metric-card';
 import { useCategoryTotals } from '@/hooks/use-category-totals';
-import { useDateRangePreset } from '@/hooks/use-date-range-preset';
+import {
+  useDateRangePreset,
+  useDateRangePresetOutletContext,
+} from '@/hooks/use-date-range-preset';
 import { useMerchantCounts } from '@/hooks/use-merchant-counts';
 import { useMonthlyTotals } from '@/hooks/use-monthly-totals';
 
@@ -16,60 +19,22 @@ interface ReceiptInsightsPageProps {}
 
 export function ReceiptInsightsPage({ ...props }: ReceiptInsightsPageProps) {
   usePageTitle('Receipt Insights');
-  const { datePreset, dateRange, dateRangeStr, setDatePreset, setDateRange } =
-    useDateRangePreset('6-months');
+  const { datePreset, dateRange, dateInterval } =
+    useDateRangePresetOutletContext();
 
   const { data: overviewData, isLoading: isOverviewLoading } =
-    useOverview(dateRangeStr);
+    useOverview(dateInterval);
 
   const { data: monthlyTotalsData, isLoading: monthlyTotalsDataLoading } =
-    useMonthlyTotals(dateRangeStr);
+    useMonthlyTotals(dateInterval);
 
   const { data: categoryTotalsResult, isLoading: isCategoryTotalsLoading } =
-    useCategoryTotals(dateRangeStr);
+    useCategoryTotals(dateInterval);
 
-  const { data: merchantCounts } = useMerchantCounts(dateRangeStr);
+  const { data: merchantCounts } = useMerchantCounts(dateInterval);
 
-  const getDescription = function () {
-    switch (datePreset) {
-      case '1-day':
-        return 'Displaying last 1 day';
-      case '7-days':
-        return 'Displaying last 7 days';
-      case '1-month':
-        return 'Displaying last 1 month';
-      case 'mtd':
-        return 'Displaying month to date';
-      case '3-months':
-        return 'Displaying last 3 months';
-      case '6-months':
-        return 'Displaying last 6 months';
-      case '1-year':
-        return 'Displaying last 1 year';
-      case 'ytd':
-        return 'Displaying year to date';
-      case '3-years':
-        return 'Displaying last 3 years';
-
-      default:
-        return null;
-    }
-  };
-
-  const description = getDescription();
   return (
     <div className="grid gap-8">
-      <div className=" space-y-2">
-        <DateRangePickerPreset
-          dateRange={dateRange}
-          onRangeSelect={setDateRange}
-          datePreset={datePreset}
-          onDatePresetChange={setDatePreset}
-        />
-        {description && (
-          <p className="text-[0.8rem] text-muted-foreground">{description}</p>
-        )}
-      </div>
       <div className="grid gap-8 md:grid-cols-3 min-w-0">
         <MetricCard
           title="Total amount"

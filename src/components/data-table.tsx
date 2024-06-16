@@ -59,6 +59,7 @@ export interface DataTableProps<TData> {
   footer?: ReactNode;
   hidden?: boolean;
   className?: string;
+  wrapLines?: boolean;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   tools?: (table: ITable<TData>) => ReactNode;
   footerControls?: (table: ITable<TData>) => ReactNode;
@@ -84,6 +85,7 @@ export function DataTable<TData>({
   footer,
   hidden,
   className,
+  wrapLines = true,
   onRowSelectionChange,
   tools,
   footerControls,
@@ -203,7 +205,11 @@ export function DataTable<TData>({
               <StatusIndicator status="loading">Loading</StatusIndicator>
             </div>
           ) : (
-            <Table>
+            <Table
+            // style={{
+            //   width: table.getCenterTotalSize(),
+            // }}
+            >
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
@@ -224,10 +230,16 @@ export function DataTable<TData>({
                                 )
                               }
                             >
-                              {flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              <div
+                                className={
+                                  !wrapLines ? 'truncate w-full min-w-0' : ''
+                                }
+                              >
+                                {flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                              </div>
                             </HeaderCell>
                           )}
                         </TableHead>
@@ -250,10 +262,16 @@ export function DataTable<TData>({
                             width: cell.column.getSize(),
                           }}
                         >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
+                          <div
+                            className={
+                              !wrapLines ? 'truncate w-full min-w-0' : ''
+                            }
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </div>
                         </TableCell>
                       ))}
                     </TableRow>

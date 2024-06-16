@@ -16,6 +16,8 @@ export function ItemsTable({ ...props }: ItemsTableProps) {
       header: 'Item name',
       enableSorting: false,
       enableHiding: false,
+      size: 200,
+      maxSize: 200,
     }),
     columnHelper.accessor('item_name_raw', {
       id: 'item_name_raw',
@@ -29,6 +31,20 @@ export function ItemsTable({ ...props }: ItemsTableProps) {
       cell: (info) => {
         const value = info.getValue();
         return value;
+      },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+    }),
+
+    columnHelper.accessor('subcategory', {
+      id: 'subcategory',
+      header: 'Item category',
+      enableSorting: true,
+      cell: (info) => {
+        const value = info.getValue();
+        if (!value) return '-';
+        return <Badge variant="default">{value}</Badge>;
       },
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));
@@ -52,19 +68,6 @@ export function ItemsTable({ ...props }: ItemsTableProps) {
         return value.includes(row.getValue(id));
       },
     }),
-    columnHelper.accessor('subcategory', {
-      id: 'subcategory',
-      header: 'Item category',
-      enableSorting: true,
-      cell: (info) => {
-        const value = info.getValue();
-        if (!value) return '-';
-        return <Badge variant="outline">{value}</Badge>;
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
-    }),
     columnHelper.accessor('quantity', {
       id: 'quantity',
       header: 'Quantity',
@@ -79,6 +82,7 @@ export function ItemsTable({ ...props }: ItemsTableProps) {
       },
       enableSorting: true,
       enableHiding: false,
+      size: 125,
     }),
     columnHelper.accessor('total_price', {
       id: 'total',
@@ -89,6 +93,7 @@ export function ItemsTable({ ...props }: ItemsTableProps) {
       },
       enableSorting: true,
       enableHiding: false,
+      size: 125,
     }),
   ];
 

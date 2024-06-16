@@ -5,7 +5,10 @@ import { Pagination } from '@/components/pagination';
 import { TextFilter } from '@/components/text-filter';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useDateRangePreset } from '@/hooks/use-date-range-preset';
+import {
+  useDateRangePreset,
+  useDateRangePresetOutletContext,
+} from '@/hooks/use-date-range-preset';
 import { useItems } from '@/hooks/use-items';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { useSubcategoryTotals } from '@/hooks/use-subcategory-totals';
@@ -20,18 +23,17 @@ interface ItemInsightsPageProps {}
 
 export function ItemInsightsPage({ ...props }: ItemInsightsPageProps) {
   usePageTitle('Item Insights');
-  const { data: items, isLoading } = useItems();
 
-  const { datePreset, dateRange, dateRangeStr, setDatePreset, setDateRange } =
-    useDateRangePreset('6-months');
+  const { dateInterval } = useDateRangePresetOutletContext();
+  const { data: items, isLoading } = useItems(dateInterval);
 
   const {
     data: subcategoryTotalsResult,
     isLoading: isSubcategoryTotalsLoading,
-  } = useSubcategoryTotals(dateRangeStr);
+  } = useSubcategoryTotals(dateInterval);
 
   const { data: topBaseItems, isLoading: isTopBaseItemsLoading } =
-    useTopBaseItems();
+    useTopBaseItems(dateInterval);
 
   const getOptions = useCallback((table: Table<ItemData>, columnId: string) => {
     const options = new Set<string>();
@@ -86,6 +88,7 @@ export function ItemInsightsPage({ ...props }: ItemInsightsPageProps) {
         />
       </div>
       <ItemsTable
+        wrapLines={false}
         data={items || []}
         tools={(table) => {
           const isFiltered = table.getState().columnFilters.length > 0;
@@ -142,7 +145,11 @@ export function ItemInsightsPage({ ...props }: ItemInsightsPageProps) {
         variant="embedded"
         footerControls={(table) => <Pagination table={table} />}
         loading={isLoading}
-        initialColumnVisibility={{ item_name_raw: false }}
+        initialColumnVisibility={{
+          item_name_raw: false,
+          base_item_type: false,
+          receipt_id: false,
+        }}
       />
     </div>
   );

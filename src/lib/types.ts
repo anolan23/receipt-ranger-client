@@ -132,26 +132,26 @@ export type OverviewResult = {
   receipt_count: number;
 };
 
-export interface DateRange {
+export interface DateInterval {
   start_date: string;
   end_date: string;
 }
 
-export interface SpendingExplorerParams extends DateRange {
+export interface SpendingExplorerParams extends DateInterval {
   granularity: 'daily' | 'monthly';
   dimension?: 'category';
 }
-export interface GetOverviewParams extends DateRange {}
+export interface GetOverviewParams extends DateInterval {}
 
-export interface SpendingExplorerParams extends DateRange {
+export interface SpendingExplorerParams extends DateInterval {
   granularity: 'daily' | 'monthly';
   dimension?: 'category';
 }
 
-export interface UseCategoryTotalsParams extends DateRange {}
-export interface UseTopBaseItemsParams extends DateRange {}
-export interface UseMerchantCountsParams extends DateRange {}
-export interface UseMonthlyTotalsParams extends DateRange {}
+export interface UseCategoryTotalsParams extends DateInterval {}
+export interface UseTopBaseItemsParams extends DateInterval {}
+export interface UseMerchantCountsParams extends DateInterval {}
+export interface UseMonthlyTotalsParams extends DateInterval {}
 
 export type SpendingExplorerResultBase = {
   date: string;
