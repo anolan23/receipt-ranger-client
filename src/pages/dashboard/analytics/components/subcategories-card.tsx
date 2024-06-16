@@ -8,6 +8,7 @@ import { useMemo } from 'react';
 interface SubcategoriesCardProps {
   data: SubcategoryTotalsResult[];
   loading: boolean;
+  onCategoryClick?: (category: string) => void;
   className?: string;
 }
 

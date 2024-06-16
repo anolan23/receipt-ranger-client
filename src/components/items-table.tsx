@@ -30,7 +30,7 @@ export function ItemsTable({ ...props }: ItemsTableProps) {
       enableSorting: false,
       cell: (info) => {
         const value = info.getValue();
-        return value;
+        return <div className="capitalize">{value}</div>;
       },
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));
@@ -44,7 +44,7 @@ export function ItemsTable({ ...props }: ItemsTableProps) {
       cell: (info) => {
         const value = info.getValue();
         if (!value) return '-';
-        return <Badge variant="default">{value}</Badge>;
+        return <Badge variant="outline">{value}</Badge>;
       },
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));

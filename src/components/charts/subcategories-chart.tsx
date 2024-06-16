@@ -7,11 +7,13 @@ import { SubcategoryTotalsResult } from '@/lib/types';
 interface SubcategoriesChartProps {
   data: SubcategoryTotalsResult[];
   loading: boolean;
+  onCategoryClick?: (subcategory: string) => void;
 }
 
 export function SubcategoriesChart({
   data,
   loading,
+  onCategoryClick,
   ...props
 }: SubcategoriesChartProps) {
   const series = useMemo<BarSeries<string>[]>(() => {
@@ -26,7 +28,8 @@ export function SubcategoriesChart({
   return (
     <NivoBarChart
       onClick={(datum) => {
-        console.log(datum.id);
+        if (typeof datum.id !== 'string') return;
+        onCategoryClick && onCategoryClick(datum.id);
       }}
       className="h-[200px] sm:h-[300px]"
       series={series}

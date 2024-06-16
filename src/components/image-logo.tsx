@@ -8,7 +8,7 @@ export function ImageLogo({ size = 48, ...props }: ImageLogoProps) {
   return (
     <div>
       <img
-        className="rounded-md bg-muted p-2 object-contain aspect-square"
+        className="rounded-md bg-muted/50 p-2 object-contain aspect-square"
         width={size}
         height={size}
         {...props}

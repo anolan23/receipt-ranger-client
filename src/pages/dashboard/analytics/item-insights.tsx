@@ -147,7 +147,7 @@ export function ItemInsightsPage({ ...props }: ItemInsightsPageProps) {
         loading={isLoading}
         initialColumnVisibility={{
           item_name_raw: false,
-          base_item_type: false,
+          base_item_type: true,
           receipt_id: false,
         }}
       />
