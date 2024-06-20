@@ -9,6 +9,7 @@ import { ImageLogo } from './image-logo';
 import { Badge } from './ui/badge';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { StatusIndicator } from './status-indicator';
+import { getS3FileUrl } from '@/lib/helpers';
 
 interface ReceiptsTableProps
   extends Omit<DataTableProps<ReceiptData>, 'columns'> {}
@@ -36,16 +37,18 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       enableHiding: false,
       size: 100,
     }),
-    // columnHelper.display({
-    //   id: 'logo',
-    //   header: 'Logo',
-    //   cell: ({ row }) => {
-    //     const logoUrl = row.original.merchant.logo_url;
-    //     return <ImageLogo src={logoUrl || undefined} />;
-    //   },
-    //   enableSorting: false,
-    //   size: 100,
-    // }),
+    columnHelper.display({
+      id: 'logo',
+      header: 'Logo',
+      cell: ({ row }) => {
+        const src = row.original.merchant.logo_url
+          ? getS3FileUrl(row.original.merchant.logo_url)
+          : undefined;
+        if (!src) return '-';
+        return <ImageLogo src={src} size={64} />;
+      },
+      enableSorting: false,
+    }),
 
     columnHelper.accessor('merchant.name', {
       id: 'merchant',

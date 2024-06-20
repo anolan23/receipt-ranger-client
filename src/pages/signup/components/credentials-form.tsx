@@ -109,7 +109,7 @@ export function CredentialsForm({ onSubmit, ...props }: CredentialsFormProps) {
               )}
             />
           </div>
-          <Button>
+          <Button variant="black">
             {isSubmitting && (
               <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
             )}

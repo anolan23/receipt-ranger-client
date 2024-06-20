@@ -27,7 +27,7 @@ export function AuthLayout({ content, action, ...props }: AuthLayoutProps) {
               revolutionized the way I keep track of my expenses, saving me time
               and hassle."
             </p>
-            <footer className="text-sm">Alex Thompson</footer>
+            <footer className="text-sm">- Snapceipt user</footer>
           </blockquote>
         </div>
       </div>

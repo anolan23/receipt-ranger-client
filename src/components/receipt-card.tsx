@@ -150,9 +150,6 @@ export function ReceiptCard({
             </CopyableText>
             <div className="text-sm text-muted-foreground flex items-center gap-2 min-h-[22px]">
               <span>{`Date: ${transactionDate || '-'}`}</span>
-              {receipt?.category?.label && (
-                <Badge variant="secondary">{receipt.category.label}</Badge>
-              )}
             </div>
           </div>
           <div className="ml-auto flex items-center gap-1">
