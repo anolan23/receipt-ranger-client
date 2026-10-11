@@ -93,7 +93,6 @@ export type UploadFileStatus =
 export type UploadFile = {
   id: string;
   file: File;
-  taskId?: string;
 };
 
 export type MonthySpendingData = {

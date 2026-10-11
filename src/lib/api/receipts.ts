@@ -30,7 +30,7 @@ export async function getReceiptItems(receiptId: string) {
 }
 
 export type CreateReceiptResult = {
-  task_id: string;
+  receipt_id: string;
 };
 export async function createReceipt(file: File) {
   try {
@@ -43,6 +43,8 @@ export async function createReceipt(file: File) {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        // Processing happens during the request and takes roughly 8-15s
+        timeout: 60_000,
       }
     );
     return response.data;
@@ -51,23 +53,11 @@ export async function createReceipt(file: File) {
       if (error.response?.status === 429) {
         throw new Error('Upgrade to Pro for unlimited Receipt scans');
       }
+      const detail = error.response?.data?.detail;
+      if (typeof detail === 'string') throw new Error(detail);
     }
     throw error;
   }
-}
-
-export type ReceiptTaskResult = {
-  ready: boolean;
-  receipt_id: string;
-  state: string;
-  successful: boolean;
-};
-
-export async function pollReceiptTask(taskId: string) {
-  const response = await backend.get<ReceiptTaskResult>(
-    `/receipts/tasks/${taskId}/status`
-  );
-  return response.data;
 }
 
 export interface ReceiptUpdatePayload {

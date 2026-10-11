@@ -55,8 +55,7 @@ interface ScannerPageProps {}
 export function ScannerPage({ ...props }: ScannerPageProps) {
   usePageTitle('Scanner');
   const navigate = useNavigate();
-  const { uploadFiles, uploadAll, errors, uploading, removeFileFromUpload } =
-    useReceiptUploader();
+  const { uploadFiles, uploadAll } = useReceiptUploader();
   const { toast } = useToast();
   const isMobile = useDeviceWidth();
   const {
@@ -74,6 +73,13 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
 
   const handleFileDrop = async function (files: FileList) {
     const { failedUploads, fulfilled } = await uploadAll(files);
+    if (fulfilled.length) {
+      mutateReceipts();
+      toast({
+        title: `${fulfilled.length === 1 ? 'Receipt' : 'Receipts'} created`,
+        description: 'The receipt details have been stored for your records.',
+      });
+    }
     failedUploads.forEach((failedUpload) => {
       toast({
         variant: 'destructive',
@@ -167,10 +173,6 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                         <UploadFileProgress
                           key={file.id}
                           uploadFile={file}
-                          onUploadSuccess={(result) => {
-                            removeFileFromUpload(file.id);
-                            mutateReceipts();
-                          }}
                         />
                       ))}
                     </div>

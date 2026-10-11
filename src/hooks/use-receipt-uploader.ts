@@ -33,21 +33,11 @@ export function useReceiptUploader() {
     );
   };
 
-  const updateFileTaskId = function (fileId: string, taskId: string) {
-    setUploadFiles((prevState) =>
-      prevState.map((uploadFile) =>
-        uploadFile.id === fileId
-          ? { ...uploadFile, taskId: taskId }
-          : uploadFile
-      )
-    );
-  };
-
   const upload = async function (file: File) {
     const fileId = addFileToUpload(file);
     try {
       const result = await createReceipt(file);
-      updateFileTaskId(fileId, result.task_id);
+      removeFileFromUpload(fileId);
       return result;
     } catch (error) {
       removeFileFromUpload(fileId);
