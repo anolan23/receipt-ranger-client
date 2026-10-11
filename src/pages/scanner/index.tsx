@@ -66,26 +66,10 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
   } = useReceipts({
     reviewed: false,
   });
-  const {
-    data: reviewedReceipts,
-    mutate: mutateReviewedReceipts,
-    isLoading: isReviewedReceiptsLoading,
-  } = useReceipts({
-    reviewed: true,
-  });
 
   const { rowSelection, setRowSelection, selectedRow } = useRowSelection({
     selectFirstOnMOunt: true,
     data: receipts,
-  });
-
-  const {
-    rowSelection: revRowSelection,
-    setRowSelection: setRevRowSelection,
-    selectedRow: selectedRevRow,
-  } = useRowSelection({
-    selectFirstOnMOunt: true,
-    data: reviewedReceipts,
   });
 
   const handleFileDrop = async function (files: FileList) {
@@ -117,7 +101,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
         </Breadcrumb>
       }
       content={
-        <div className="space-y-4 mx-auto max-w-[65rem]">
+        <div className="space-y-4">
           <h1 className="text-xl font-semibold tracking-tight">
             Receipt Scanner
           </h1>
@@ -171,115 +155,67 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                 </SheetContent>
               </Sheet>
             </div>
-            <Tabs defaultValue="for-review" className="space-y-4">
-              <TabsList>
-                <TabsTrigger value="for-review">For review</TabsTrigger>
-                <TabsTrigger value="reviewed">Reviewed</TabsTrigger>
-              </TabsList>
-              <TabsContent value="for-review" className="space-y-4">
-                {uploadFiles.length ? (
-                  <Accordion
-                    type="single"
-                    collapsible
-                    defaultValue="processing"
-                  >
-                    <AccordionItem value="processing">
-                      <AccordionTrigger className="text-lg font-bold">
-                        Processing {`(${uploadFiles.length})`}
-                      </AccordionTrigger>
-                      <AccordionContent className="space-y-2">
-                        <div className="space-y-2">
-                          {uploadFiles.map((file) => (
-                            <UploadFileProgress
-                              key={file.id}
-                              uploadFile={file}
-                              onUploadSuccess={(result) => {
-                                removeFileFromUpload(file.id);
-                                mutateReceipts();
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                ) : null}
-                <ReceiptsTable
-                  variant="border"
-                  data={receipts || []}
-                  tools={(table) => (
-                    <div className="flex items-center">
-                      <TextFilter
-                        table={table}
-                        placeholder="Filter Receipts..."
-                      />
-                      <div className="ml-auto flex items-center gap-2">
-                        <ColumnFilterDropdown table={table} />
-                        <ActionsDropdown
-                          receipt={selectedRow}
-                          onDelete={() => mutateReceipts()}
-                          onReviewed={() => {
+            {uploadFiles.length ? (
+              <Accordion type="single" collapsible defaultValue="processing">
+                <AccordionItem value="processing">
+                  <AccordionTrigger className="text-lg font-bold">
+                    Processing {`(${uploadFiles.length})`}
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-2">
+                    <div className="space-y-2">
+                      {uploadFiles.map((file) => (
+                        <UploadFileProgress
+                          key={file.id}
+                          uploadFile={file}
+                          onUploadSuccess={(result) => {
+                            removeFileFromUpload(file.id);
                             mutateReceipts();
-                            mutateReviewedReceipts();
                           }}
                         />
-                      </div>
+                      ))}
                     </div>
-                  )}
-                  footerControls={(table) => <Pagination table={table} />}
-                  selectionType="single"
-                  rowSelection={rowSelection}
-                  onRowSelectionChange={setRowSelection}
-                  loading={isReceiptsLoading}
-                />
-                <Cards
-                  hidden={!isMobile}
-                  loading={isReceiptsLoading}
-                  loadingText="Loading Receipts"
-                  emptyText="No Receipts to review"
-                  data={receipts || []}
-                  renderCard={(receipt) => (
-                    <ReceiptCardLink key={receipt.id} receipt={receipt} />
-                  )}
-                />
-              </TabsContent>
-              <TabsContent value="reviewed" className="space-y-4">
-                <ReceiptsTable
-                  variant="border"
-                  data={reviewedReceipts || []}
-                  tools={(table) => (
-                    <div className="flex items-center">
-                      <TextFilter
-                        table={table}
-                        placeholder="Filter Receipts..."
-                      />
-                      <div className="ml-auto flex items-center gap-2">
-                        <ColumnFilterDropdown table={table} />
-                        <ActionsDropdown
-                          receipt={selectedRevRow}
-                          onDelete={() => mutateReviewedReceipts()}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  footerControls={(table) => <Pagination table={table} />}
-                  selectionType="single"
-                  rowSelection={revRowSelection}
-                  onRowSelectionChange={setRevRowSelection}
-                  loading={isReviewedReceiptsLoading}
-                />
-                <Cards
-                  hidden={!isMobile}
-                  loading={isReviewedReceiptsLoading}
-                  loadingText="Loading Receipts"
-                  emptyText="No Receipts."
-                  data={reviewedReceipts || []}
-                  renderCard={(receipt) => (
-                    <ReceiptCardLink key={receipt.id} receipt={receipt} />
-                  )}
-                />
-              </TabsContent>
-            </Tabs>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            ) : null}
+            <ReceiptsTable
+              data={receipts || []}
+              header={
+                <CardHeader>
+                  <CardTitle>Receipts pending review</CardTitle>
+                </CardHeader>
+              }
+              tools={(table) => (
+                <div className="flex items-center">
+                  <TextFilter table={table} placeholder="Filter Receipts..." />
+                  <div className="ml-auto flex items-center gap-2">
+                    <ColumnFilterDropdown table={table} />
+                    <ActionsDropdown
+                      receipt={selectedRow}
+                      onDelete={() => mutateReceipts()}
+                      onReviewed={() => {
+                        mutateReceipts();
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+              footerControls={(table) => <Pagination table={table} />}
+              selectionType="single"
+              rowSelection={rowSelection}
+              onRowSelectionChange={setRowSelection}
+              loading={isReceiptsLoading}
+            />
+            <Cards
+              hidden={!isMobile}
+              loading={isReceiptsLoading}
+              loadingText="Loading Receipts"
+              emptyText="No Receipts to review"
+              data={receipts || []}
+              renderCard={(receipt) => (
+                <ReceiptCardLink key={receipt.id} receipt={receipt} />
+              )}
+            />
           </div>
         </div>
       }
