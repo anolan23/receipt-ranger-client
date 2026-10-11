@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './layout/protected-route';
-import { ConfirmPage } from './pages/confirm';
 import { LoginPage } from './pages/login';
 import { SignupPage } from './pages/signup';
 
@@ -28,7 +27,6 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="signup" element={<SignupPage />} />
-        <Route path="confirm" element={<ConfirmPage />} />
         <Route path="membership" element={<MembershipPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard">

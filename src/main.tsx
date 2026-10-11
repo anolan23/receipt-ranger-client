@@ -5,7 +5,6 @@ import ReactGA from 'react-ga4';
 import App from './App.tsx';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
-import './lib/amplify-config.ts';
 import './lib/dayjs-config.ts';
 
 import { ThemeProvider } from './components/context/theme-context.tsx';

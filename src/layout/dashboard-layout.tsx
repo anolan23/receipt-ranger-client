@@ -17,7 +17,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { signOutUser } from '@/lib/api/auth';
+import { logout } from '@/lib/api/auth';
 import { clearSWRCache } from '@/lib/utils';
 import {
   FileBarChart2,
@@ -44,15 +44,10 @@ export function DashboardLayout({
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
-  const handleLogoutSelect = async function () {
-    try {
-      await signOutUser();
-      clearSWRCache();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      navigate('/');
-    }
+  const handleLogoutSelect = function () {
+    logout();
+    clearSWRCache();
+    navigate('/');
   };
 
   const handleSearchSubmit: React.FormEventHandler<HTMLFormElement> = function (

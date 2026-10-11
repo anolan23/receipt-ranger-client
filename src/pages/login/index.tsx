@@ -12,11 +12,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { AuthLayout } from '@/layout/auth-layout';
-import { googleSignIn, loginUser } from '@/lib/api/auth';
+import { getErrorMessage, login } from '@/lib/api/auth';
 import { Credentials } from '@/lib/types';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useNavigate } from 'react-router-dom';
-import { GoogleIcon } from '@/components/google-icon';
 import { usePageTitle } from '@/hooks/use-page-title';
 
 interface LoginPageProps {}
@@ -33,22 +32,10 @@ export function LoginPage({ ...props }: LoginPageProps) {
 
   async function onSubmit(values: Credentials) {
     try {
-      const { isSignedIn, nextStep } = await loginUser({
-        username: values.email,
-        password: values.password,
-      });
-      if (nextStep.signInStep === 'CONFIRM_SIGN_UP') {
-        navigate('/confirm', { state: { username: values.email } });
-      } else {
-        navigate('/dashboard');
-      }
+      await login(values);
+      navigate('/dashboard');
     } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        form.setError('root', {
-          message: error.message,
-        });
-      }
+      form.setError('root', { message: getErrorMessage(error) });
     }
   }
   const { isSubmitting, errors } = form.formState;
@@ -139,20 +126,6 @@ export function LoginPage({ ...props }: LoginPageProps) {
               </form>
             </Form>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t"></span>
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-            <Button variant="outline" type="button" onClick={googleSignIn}>
-              <GoogleIcon />
-              Google
-            </Button>
           </div>
           <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{' '}

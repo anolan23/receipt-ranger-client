@@ -1,11 +1,10 @@
 import { Link } from '@/components/link';
 import { Button } from '@/components/ui/button';
 import { AuthLayout } from '@/layout/auth-layout';
-import { googleSignIn, signUpUser } from '@/lib/api/auth';
+import { register } from '@/lib/api/auth';
 import { Credentials } from '@/lib/types';
 import { useNavigate } from 'react-router-dom';
 import { CredentialsForm } from './components/credentials-form';
-import { GoogleIcon } from '@/components/google-icon';
 import { usePageTitle } from '@/hooks/use-page-title';
 
 interface SignupPageProps {}
@@ -14,10 +13,8 @@ export function SignupPage({ ...props }: SignupPageProps) {
   const navigate = useNavigate();
 
   async function handleCredentialsSubmit(values: Credentials) {
-    const { nextStep } = await signUpUser(values);
-    if (nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
-      navigate('/confirm', { state: { username: values.email } });
-    }
+    await register(values);
+    navigate('/dashboard');
   }
 
   return (
@@ -39,20 +36,6 @@ export function SignupPage({ ...props }: SignupPageProps) {
           </div>
           <div className="grid gap-6">
             <CredentialsForm onSubmit={handleCredentialsSubmit} />
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t"></span>
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-            <Button variant="outline" type="button" onClick={googleSignIn}>
-              <GoogleIcon />
-              Google
-            </Button>
           </div>
           <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{' '}

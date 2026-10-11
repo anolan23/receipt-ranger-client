@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { getErrorMessage } from '@/lib/api/auth';
 import { Credentials } from '@/lib/types';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -30,11 +31,7 @@ export function CredentialsForm({ onSubmit, ...props }: CredentialsFormProps) {
     try {
       await onSubmit(values);
     } catch (error) {
-      if (error instanceof Error) {
-        form.setError('root', {
-          message: error.message,
-        });
-      }
+      form.setError('root', { message: getErrorMessage(error) });
     }
   };
 
@@ -81,12 +78,6 @@ export function CredentialsForm({ onSubmit, ...props }: CredentialsFormProps) {
                 minLength: {
                   value: 8,
                   message: 'Password must have at least 8 characters',
-                },
-                pattern: {
-                  value:
-                    /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
-                  message:
-                    'Password must contain at least 1 number, 1 special character, 1 uppercase letter, and 1 lowercase letter',
                 },
               }}
               render={({ field }) => (
