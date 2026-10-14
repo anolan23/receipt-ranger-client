@@ -18,6 +18,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ActionsDropdown } from '../components/actions-dropdown';
+import { DuplicateReceiptNotice } from './components/duplicate-receipt-notice';
 import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
 import { usePageTitle } from '@/hooks/use-page-title';
@@ -185,6 +186,11 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                     />
                   </div>
                 </div>
+                {receipt.possible_duplicate_of ? (
+                  <DuplicateReceiptNotice
+                    originalReceiptId={receipt.possible_duplicate_of}
+                  />
+                ) : null}
                 <div className="grid gap-8 md:grid-cols-[400px_1fr]">
                   <DocViewerCard objectKey={receipt.object_key || undefined} />
                   <div>

@@ -15,6 +15,7 @@ export type ReceiptData = {
   category_id: number | null;
   category: CategoryData | null;
   reviewed: boolean;
+  possible_duplicate_of?: string | null;
 };
 
 export type MerchantData = {

@@ -42,6 +42,7 @@ import { useReceiptUploader } from '@/hooks/use-receipt-uploader';
 import { useReceipts } from '@/hooks/use-receipts';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { Mail } from 'lucide-react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UploadFileProgress } from './components/upload-file-progress';
 import { ActionsDropdown } from '../dashboard/receipts/components/actions-dropdown';
@@ -49,6 +50,8 @@ import { useRowSelection } from '@/hooks/use-row-selection';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { Cards } from '@/components/cards';
 import { ReceiptCardLink } from '@/components/receipt-card-link';
+import { PossibleDuplicateDialog } from '@/components/possible-duplicate-dialog';
+import { deleteReceipt } from '@/lib/api/receipts';
 
 interface ScannerPageProps {}
 
@@ -71,8 +74,35 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
     data: receipts,
   });
 
+  // Ids of just-uploaded receipts flagged as possible duplicates, asked about one at a time.
+  const [pendingDuplicateIds, setPendingDuplicateIds] = useState<string[]>([]);
+  const currentDuplicateId = pendingDuplicateIds[0];
+  const popDuplicate = () => setPendingDuplicateIds((ids) => ids.slice(1));
+
+  const deleteDuplicate = async function () {
+    // The dialog's close handler pops the queue, so don't pop here too.
+    const receiptId = currentDuplicateId;
+    if (!receiptId) return;
+    try {
+      await deleteReceipt(receiptId);
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Failed to delete receipt',
+        description: error instanceof Error ? error.message : undefined,
+      });
+    }
+    mutateReceipts();
+  };
+
   const handleFileDrop = async function (files: FileList) {
     const { failedUploads, fulfilled } = await uploadAll(files);
+    const duplicateIds = fulfilled
+      .filter((result) => result.potential_duplicate)
+      .map((result) => result.receipt_id);
+    if (duplicateIds.length) {
+      setPendingDuplicateIds((ids) => [...ids, ...duplicateIds]);
+    }
     if (fulfilled.length) {
       mutateReceipts();
       toast({
@@ -108,6 +138,11 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
       }
       content={
         <div className="space-y-4">
+          <PossibleDuplicateDialog
+            open={currentDuplicateId !== undefined}
+            onClose={popDuplicate}
+            onDelete={deleteDuplicate}
+          />
           <h1 className="text-xl font-semibold tracking-tight">
             Receipt Scanner
           </h1>

@@ -31,6 +31,8 @@ export async function getReceiptItems(receiptId: string) {
 
 export type CreateReceiptResult = {
   receipt_id: string;
+  potential_duplicate?: boolean;
+  duplicate_receipt_id?: string | null;
 };
 export async function createReceipt(file: File) {
   try {
