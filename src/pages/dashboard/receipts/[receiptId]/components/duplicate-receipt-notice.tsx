@@ -18,10 +18,7 @@ export function DuplicateReceiptNotice({
       <AlertTitle>Possible duplicate</AlertTitle>
       <AlertDescription>
         This receipt looks similar to{" "}
-        <Link
-          to={`/dashboard/receipts/${originalReceiptId}`}
-          className="font-medium underline underline-offset-4"
-        >
+        <Link to={`/dashboard/receipts/${originalReceiptId}`}>
           {original ? getReceiptTitle(original) : "an earlier receipt"}
         </Link>
         .

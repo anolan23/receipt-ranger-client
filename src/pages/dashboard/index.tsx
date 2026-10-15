@@ -13,6 +13,8 @@ import {
 } from '@/components/ui/card';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { usePageTitle } from '@/hooks/use-page-title';
+import { useDateRangePreset } from '@/hooks/use-date-range-preset';
+import { useMonthlyTotals } from '@/hooks/use-monthly-totals';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
@@ -25,6 +27,7 @@ import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ReceiptsTable } from '../../components/receipts-table';
 import { ReceiptCardLink } from '@/components/receipt-card-link';
+import { MonthlyTotalsCard } from './analytics/components/monthly-totals-card';
 export function DashboardPage() {
   usePageTitle('Dashboard Home');
   const isMobile = useDeviceWidth();
@@ -49,6 +52,11 @@ export function DashboardPage() {
   } = useSpendingOverview();
 
   const { data: subscriptionRecord } = useSubscription();
+
+  const { datePreset, dateRange, dateInterval } =
+    useDateRangePreset('6-months');
+  const { data: monthlyTotals, isLoading: isMonthlyTotalsLoading } =
+    useMonthlyTotals(dateInterval);
 
   const calcPercentChange = (num1: number, num2: number) => {
     if (num2 === 0) return `+0% from last month`;
@@ -142,6 +150,12 @@ export function DashboardPage() {
                   percent={percentForcasted}
                 />
               </div>
+              <MonthlyTotalsCard
+                data={monthlyTotals}
+                loading={isMonthlyTotalsLoading}
+                dateRange={dateRange}
+                datePreset={datePreset}
+              />
               <ReceiptsTable
                 header={
                   <CardHeader>

@@ -1,10 +1,9 @@
 import { DataTable, DataTableProps } from '@/components/data-table';
+import { Link } from '@/components/link';
 import { toDollar } from '@/lib/helpers';
 import { ItemData } from '@/lib/types';
 import { createColumnHelper } from '@tanstack/react-table';
 import { Badge } from './ui/badge';
-import { Link } from 'react-router-dom';
-import { Button } from './ui/button';
 
 interface ItemsTableProps extends Omit<DataTableProps<ItemData>, 'columns'> {}
 
@@ -57,11 +56,7 @@ export function ItemsTable({ ...props }: ItemsTableProps) {
       cell: (info) => {
         const value = info.getValue();
         return (
-          <Button variant="link" asChild>
-            <Link to={`/dashboard/receipts/${value}`}>
-              {value.slice(0, 12) + '...'}
-            </Link>
-          </Button>
+          <Link to={`/dashboard/receipts/${value}`}>{value.slice(0, 8)}</Link>
         );
       },
       filterFn: (row, id, value) => {

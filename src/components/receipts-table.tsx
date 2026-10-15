@@ -1,10 +1,9 @@
 import { DataTable, DataTableProps } from '@/components/data-table';
 import { Link } from '@/components/link';
-import { Button } from '@/components/ui/button';
 import { ReceiptData } from '@/lib/types';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { CircleAlertIcon, ReceiptTextIcon } from 'lucide-react';
+import { CircleAlertIcon } from 'lucide-react';
 import { ImageLogo } from './image-logo';
 import { Badge } from './ui/badge';
 import { useDeviceWidth } from '@/hooks/use-device-width';
@@ -19,44 +18,34 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
   const columnHelper = createColumnHelper<ReceiptData>();
   const columns = [
     columnHelper.display({
-      id: 'action',
+      id: 'receipt',
+      header: 'Receipt',
       cell: ({ row }) => {
-        const receipt = row.original;
+        const { id } = row.original;
         return (
-          <Button asChild variant="outline" size="sm" className="h-7 gap-1">
-            <Link to={`/dashboard/receipts/${receipt.id}`}>
-              <ReceiptTextIcon className="h-3.5 w-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                View
-              </span>
-            </Link>
-          </Button>
+          <Link to={`/dashboard/receipts/${id}`}>{String(id).slice(0, 8)}</Link>
         );
       },
       enableSorting: false,
       enableHiding: false,
-      size: 100,
+      size: 120,
     }),
-    columnHelper.display({
-      id: 'logo',
-      header: 'Logo',
-      cell: ({ row }) => {
-        const src = row.original.merchant.logo_url
-          ? getS3FileUrl(row.original.merchant.logo_url)
-          : undefined;
-        if (!src) return '-';
-        return <ImageLogo src={src} size={64} />;
-      },
-      enableSorting: false,
-    }),
-
     columnHelper.accessor('merchant.name', {
       id: 'merchant',
       header: 'Merchant',
       enableSorting: false,
       enableHiding: false,
       cell: ({ row, getValue }) => (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <ImageLogo
+            src={
+              row.original.merchant.logo_url
+                ? getS3FileUrl(row.original.merchant.logo_url)
+                : undefined
+            }
+            size={40}
+            className="shrink-0"
+          />
           <span>{getValue()}</span>
           {row.original.possible_duplicate_of ? (
             <Badge
