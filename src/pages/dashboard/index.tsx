@@ -1,7 +1,7 @@
 import { Cards } from '@/components/cards';
 import { ImageLogo } from '@/components/image-logo';
 import { MetricCard } from '@/components/metric-card';
-import { ReceiptCard } from '@/components/receipt-card';
+import { ReceiptSheet } from '@/components/receipt-sheet';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -35,10 +35,10 @@ export function DashboardPage() {
   } = useReceipts({ limit: 5 });
   const { rowSelection, setRowSelection, selectedRow, nextRow, prevRow } =
     useRowSelection({
-      selectFirstOnMOunt: true,
+      selectFirstOnMOunt: false,
       data: receipts,
     });
-  const { data: receipt, isLoading: isReceiptLoading } = useReceipt(
+  const { data: receipt } = useReceipt(
     selectedRow?.id.toString()
   );
 
@@ -101,10 +101,10 @@ export function DashboardPage() {
       // }
       content={
         <div className="space-y-4">
-          <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-                <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
+          <div className="grid flex-1 items-start gap-4 md:gap-8">
+            <div className="grid auto-rows-max items-start gap-4 md:gap-8">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <Card className="sm:col-span-2">
                   <CardHeader className="pb-3">
                     <CardTitle>Receipts Overview</CardTitle>
                     <CardDescription className="text-sm max-w-lg text-balance leading-relaxed text-card-foreground">
@@ -170,8 +170,8 @@ export function DashboardPage() {
                 )}
               />
               {!subscriptionRecord?.subscription && (
-                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-                  <Card className="sm:col-span-4">
+                <div className="grid gap-4">
+                  <Card>
                     <CardHeader>
                       <CardTitle>Upgrade to Pro</CardTitle>
                       <CardDescription>
@@ -188,19 +188,18 @@ export function DashboardPage() {
                 </div>
               )}
             </div>
-            <div className="sticky top-4">
-              <ReceiptCard
-                hidden={isMobile}
-                receipt={receipt}
-                loading={isReceiptLoading}
-                onPreviousClick={prevRow}
-                onNextClick={nextRow}
-                onDeleteSuccess={() => {
-                  mutateReceipts();
-                  mutateSpendingOverview();
-                }}
-              />
-            </div>
+            <ReceiptSheet
+              open={!isMobile && !!selectedRow}
+              receipt={receipt}
+              onClose={() => setRowSelection({})}
+              onPreviousClick={prevRow}
+              onNextClick={nextRow}
+              onDeleteSuccess={() => {
+                setRowSelection({});
+                mutateReceipts();
+                mutateSpendingOverview();
+              }}
+            />
           </div>
         </div>
       }
