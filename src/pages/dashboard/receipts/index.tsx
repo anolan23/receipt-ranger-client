@@ -2,7 +2,7 @@ import { Cards } from '@/components/cards';
 import { ColumnFilterDropdown } from '@/components/column-filter-dropdown';
 import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter';
 import { Pagination } from '@/components/pagination';
-import { ReceiptCard } from '@/components/receipt-card';
+import { ReceiptSheetContent } from '@/components/receipt-sheet-content';
 import { ReceiptCardLink } from '@/components/receipt-card-link';
 import { TextFilter } from '@/components/text-filter';
 import {
@@ -29,6 +29,7 @@ import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { downloadReceipts } from '@/lib/api/receipts';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
 import { File } from 'lucide-react';
@@ -218,34 +219,24 @@ export function ReceiptsPage() {
               <ReceiptCardLink key={receipt.id} receipt={receipt} />
             )}
           />
-          <Drawer
-            direction="right"
-            shouldScaleBackground={false}
+          <Sheet
             open={!isMobile && !!selectedRow}
             onOpenChange={(open) => {
               if (!open) setRowSelection({});
             }}
           >
-            <DrawerContent className="inset-y-0 left-auto right-0 mt-0 h-full w-full max-w-md overflow-hidden rounded-none rounded-l-[10px]">
-              <DrawerTitle className="sr-only">Receipt details</DrawerTitle>
-              <DrawerDescription className="sr-only">
-                Line items and merchant information for the selected receipt.
-              </DrawerDescription>
-              <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-                <ReceiptCard
-                  className="shrink-0 rounded-none border-0 shadow-none"
-                  receipt={receipt}
-                  loading={isReceiptLoading}
-                  onPreviousClick={prevRow}
-                  onNextClick={nextRow}
-                  onDeleteSuccess={() => {
-                    setRowSelection({});
-                    mutateReceipts();
-                  }}
-                />
-              </div>
-            </DrawerContent>
-          </Drawer>
+            <SheetContent className="flex w-full flex-col gap-0 p-0 sm:max-w-md">
+              <ReceiptSheetContent
+                receipt={receipt}
+                onPreviousClick={prevRow}
+                onNextClick={nextRow}
+                onDeleteSuccess={() => {
+                  setRowSelection({});
+                  mutateReceipts();
+                }}
+              />
+            </SheetContent>
+          </Sheet>
         </div>
       }
     />
