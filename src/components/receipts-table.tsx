@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ReceiptData } from '@/lib/types';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { ReceiptTextIcon } from 'lucide-react';
+import { CircleAlertIcon, ReceiptTextIcon } from 'lucide-react';
 import { ImageLogo } from './image-logo';
 import { Badge } from './ui/badge';
 import { useDeviceWidth } from '@/hooks/use-device-width';
@@ -55,6 +55,20 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       header: 'Merchant',
       enableSorting: false,
       enableHiding: false,
+      cell: ({ row, getValue }) => (
+        <div className="flex items-center gap-2">
+          <span>{getValue()}</span>
+          {row.original.possible_duplicate_of ? (
+            <Badge
+              variant="outline"
+              className="gap-1 border-orange-300 text-orange-700"
+            >
+              <CircleAlertIcon className="h-3 w-3" />
+              Possible duplicate
+            </Badge>
+          ) : null}
+        </div>
+      ),
       size: 200,
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));
@@ -121,13 +135,15 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       size: 100,
     }),
 
-    // columnHelper.accessor('created_at', {
-    //   id: 'created_at',
-    //   header: 'Upload date',
-    //   cell: (info) => {
-    //     return dayjs(info.row.original.created_at).format('MM/DD/YYYY h:mm A');
-    //   },
-    // }),
+    columnHelper.accessor('created_at', {
+      id: 'created_at',
+      header: 'Upload date',
+      cell: (info) => {
+        return dayjs(info.row.original.created_at).format('YYYY/MM/DD h:mm A');
+      },
+      enableSorting: true,
+      size: 150,
+    }),
     // columnHelper.display({
     //   id: 'actions',
     //   cell: ({ row }) => {
@@ -145,6 +161,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       empty={'No Receipts found'}
       hidden={isMobile}
       wrapLines={false}
+      initialColumnVisibility={{ created_at: false }}
       {...props}
     />
   );
