@@ -61,6 +61,8 @@ export interface DataTableProps<TData> {
   className?: string;
   wrapLines?: boolean;
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+  columnFilters?: ColumnFiltersState;
+  onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
   tools?: (table: ITable<TData>) => ReactNode;
   footerControls?: (table: ITable<TData>) => ReactNode;
   getRowId?:
@@ -87,14 +89,17 @@ export function DataTable<TData>({
   className,
   wrapLines = true,
   onRowSelectionChange,
+  columnFilters: controlledColumnFilters,
+  onColumnFiltersChange,
   tools,
   footerControls,
   getRowId,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [internalColumnFilters, setInternalColumnFilters] =
+    React.useState<ColumnFiltersState>([]);
+  const columnFilters = controlledColumnFilters ?? internalColumnFilters;
+  const setColumnFilters = onColumnFiltersChange ?? setInternalColumnFilters;
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({ ...initialColumnVisibility });
 

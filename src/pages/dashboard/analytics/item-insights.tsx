@@ -5,26 +5,24 @@ import { Pagination } from '@/components/pagination';
 import { TextFilter } from '@/components/text-filter';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  useDateRangePreset,
-  useDateRangePresetOutletContext,
-} from '@/hooks/use-date-range-preset';
+import { useDateRangePresetOutletContext } from '@/hooks/use-date-range-preset';
 import { useItems } from '@/hooks/use-items';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { useSubcategoryTotals } from '@/hooks/use-subcategory-totals';
+import { useTopBaseItems } from '@/hooks/use-top-base-items';
 import { ItemData } from '@/lib/types';
 import { Cross2Icon } from '@radix-ui/react-icons';
-import { Table } from '@tanstack/react-table';
-import { useCallback } from 'react';
+import { ColumnFiltersState, Table } from '@tanstack/react-table';
+import { useCallback, useState } from 'react';
 import { SubcategoriesCard } from './components/subcategories-card';
 import { TopBaseItemCard } from './components/top-base-items-card';
-import { useTopBaseItems } from '@/hooks/use-top-base-items';
 interface ItemInsightsPageProps {}
 
 export function ItemInsightsPage({ ...props }: ItemInsightsPageProps) {
   usePageTitle('Item Insights');
 
   const { dateInterval } = useDateRangePresetOutletContext();
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const { data: items, isLoading } = useItems(dateInterval);
 
   const {
@@ -79,6 +77,12 @@ export function ItemInsightsPage({ ...props }: ItemInsightsPageProps) {
         <SubcategoriesCard
           data={subcategoryTotalsResult || []}
           loading={isSubcategoryTotalsLoading}
+          onCategoryClick={(category) =>
+            setColumnFilters((prev) => [
+              ...prev.filter((f) => f.id !== 'subcategory'),
+              { id: 'subcategory', value: [category] },
+            ])
+          }
           className="lg:col-span-5"
         />
         <TopBaseItemCard
@@ -90,6 +94,8 @@ export function ItemInsightsPage({ ...props }: ItemInsightsPageProps) {
       <ItemsTable
         wrapLines={false}
         data={items || []}
+        columnFilters={columnFilters}
+        onColumnFiltersChange={setColumnFilters}
         tools={(table) => {
           const isFiltered = table.getState().columnFilters.length > 0;
           return (

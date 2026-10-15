@@ -1,10 +1,6 @@
-import { DateRangePickerPreset } from '@/components/date-range-picker-preset';
 import { MetricCard } from '@/components/metric-card';
 import { useCategoryTotals } from '@/hooks/use-category-totals';
-import {
-  useDateRangePreset,
-  useDateRangePresetOutletContext,
-} from '@/hooks/use-date-range-preset';
+import { useDateRangePresetOutletContext } from '@/hooks/use-date-range-preset';
 import { useMerchantCounts } from '@/hooks/use-merchant-counts';
 import { useMonthlyTotals } from '@/hooks/use-monthly-totals';
 
