@@ -1,4 +1,10 @@
+import { Cards } from '@/components/cards';
+import { ColumnFilterDropdown } from '@/components/column-filter-dropdown';
+import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter';
+import { Pagination } from '@/components/pagination';
 import { ReceiptCard } from '@/components/receipt-card';
+import { ReceiptCardLink } from '@/components/receipt-card-link';
+import { TextFilter } from '@/components/text-filter';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,27 +15,26 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+} from '@/components/ui/drawer';
 import { useToast } from '@/components/ui/use-toast';
+import { useDeviceWidth } from '@/hooks/use-device-width';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { downloadReceipts } from '@/lib/api/receipts';
-import { File, ScanText, Utensils } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Cross2Icon } from '@radix-ui/react-icons';
+import { Table } from '@tanstack/react-table';
+import { File } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ReceiptsTable } from '../../../components/receipts-table';
-import { ColumnFilterDropdown } from '@/components/column-filter-dropdown';
-import { TextFilter } from '@/components/text-filter';
-import { Pagination } from '@/components/pagination';
-import { usePageTitle } from '@/hooks/use-page-title';
-import { Cards } from '@/components/cards';
-import { useDeviceWidth } from '@/hooks/use-device-width';
-import { ReceiptCardLink } from '@/components/receipt-card-link';
-import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter';
-import { Table } from '@tanstack/react-table';
-import { Cross2Icon } from '@radix-ui/react-icons';
 
 export function ReceiptsPage() {
   usePageTitle('Receipts');
@@ -46,11 +51,11 @@ export function ReceiptsPage() {
 
   const { rowSelection, setRowSelection, selectedRow, prevRow, nextRow } =
     useRowSelection({
-      selectFirstOnMOunt: !query,
+      selectFirstOnMOunt: false,
       data: receipts,
     });
   const { data: receipt, isLoading: isReceiptLoading } = useReceipt(
-    selectedRow?.id.toString()
+    selectedRow?.id.toString(),
   );
   const [globalFilter, setGlobalFilter] = useState('');
   const [downloading, setDownloading] = useState(false);
@@ -72,7 +77,7 @@ export function ReceiptsPage() {
         return { label: val, value: val };
       });
     },
-    [getOptions]
+    [getOptions],
   );
 
   const getMerchantOptions = useCallback(
@@ -82,7 +87,7 @@ export function ReceiptsPage() {
         return { label: val, value: val };
       });
     },
-    [getOptions]
+    [getOptions],
   );
 
   useEffect(() => {
@@ -123,7 +128,7 @@ export function ReceiptsPage() {
         </Breadcrumb>
       }
       content={
-        <div className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+        <div className="grid flex-1 items-start gap-4 md:gap-8">
           <ReceiptsTable
             tools={(table) => {
               const isFiltered = table.getState().columnFilters.length > 0;
@@ -201,7 +206,6 @@ export function ReceiptsPage() {
             data={receipts || []}
             footerControls={(table) => <Pagination table={table} />}
             loading={isReceiptsLoading}
-            className="lg:col-span-2"
           />
           <Cards
             hidden={!isMobile}
@@ -214,14 +218,34 @@ export function ReceiptsPage() {
               <ReceiptCardLink key={receipt.id} receipt={receipt} />
             )}
           />
-          <ReceiptCard
-            hidden={isMobile}
-            receipt={receipt}
-            loading={isReceiptLoading}
-            onPreviousClick={prevRow}
-            onNextClick={nextRow}
-            onDeleteSuccess={() => mutateReceipts()}
-          />
+          <Drawer
+            direction="right"
+            shouldScaleBackground={false}
+            open={!isMobile && !!selectedRow}
+            onOpenChange={(open) => {
+              if (!open) setRowSelection({});
+            }}
+          >
+            <DrawerContent className="inset-y-0 left-auto right-0 mt-0 h-full w-full max-w-md overflow-hidden rounded-none rounded-l-[10px]">
+              <DrawerTitle className="sr-only">Receipt details</DrawerTitle>
+              <DrawerDescription className="sr-only">
+                Line items and merchant information for the selected receipt.
+              </DrawerDescription>
+              <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+                <ReceiptCard
+                  className="shrink-0 rounded-none border-0 shadow-none"
+                  receipt={receipt}
+                  loading={isReceiptLoading}
+                  onPreviousClick={prevRow}
+                  onNextClick={nextRow}
+                  onDeleteSuccess={() => {
+                    setRowSelection({});
+                    mutateReceipts();
+                  }}
+                />
+              </div>
+            </DrawerContent>
+          </Drawer>
         </div>
       }
     />
