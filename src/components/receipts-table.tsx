@@ -3,12 +3,16 @@ import { Link } from '@/components/link';
 import { ReceiptData } from '@/lib/types';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { CircleAlertIcon } from 'lucide-react';
 import { ImageLogo } from './image-logo';
 import { Badge } from './ui/badge';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { StatusIndicator } from './status-indicator';
 import { getFileUrl } from '@/lib/helpers';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from './ui/popover';
 
 interface ReceiptsTableProps
   extends Omit<DataTableProps<ReceiptData>, 'columns'> {}
@@ -47,15 +51,6 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
             className="shrink-0"
           />
           <span>{getValue()}</span>
-          {row.original.possible_duplicate_of ? (
-            <Badge
-              variant="outline"
-              className="gap-1 border-orange-300 text-orange-700"
-            >
-              <CircleAlertIcon className="h-3 w-3" />
-              Possible duplicate
-            </Badge>
-          ) : null}
         </div>
       ),
       size: 200,
@@ -83,6 +78,32 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       enableSorting: false,
       cell: (info) => {
         const value = info.getValue();
+        const duplicateOf = info.row.original.possible_duplicate_of;
+        if (duplicateOf)
+          return (
+            <Popover>
+              <PopoverTrigger
+                className="underline decoration-dotted underline-offset-4 cursor-pointer"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <StatusIndicator status="warning">
+                  Possible duplicate
+                </StatusIndicator>
+              </PopoverTrigger>
+              <PopoverContent
+                className="space-y-2 text-sm"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="font-medium">Possible duplicate</p>
+                <p className="text-muted-foreground">
+                  This receipt looks similar to an existing one.
+                </p>
+                <Link to={`/dashboard/receipts/${duplicateOf}`}>
+                  View original ({String(duplicateOf).slice(0, 8)})
+                </Link>
+              </PopoverContent>
+            </Popover>
+          );
         if (value)
           return <StatusIndicator status="success">Reviewed</StatusIndicator>;
         return <StatusIndicator status="pending">Pending</StatusIndicator>;
