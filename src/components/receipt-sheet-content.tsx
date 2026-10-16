@@ -1,4 +1,4 @@
-import { getReceiptTitle, getS3FileUrl, toDollar } from '@/lib/helpers';
+import { getReceiptTitle, getFileUrl, toDollar } from '@/lib/helpers';
 import { ReceiptData } from '@/lib/types';
 import { ActionsDropdown } from '@/pages/dashboard/receipts/components/actions-dropdown';
 import dayjs from 'dayjs';
@@ -105,7 +105,7 @@ export function ReceiptSheetContent({
               <dd>
                 {receipt?.merchant.logo_url ? (
                   <ImageLogo
-                    src={getS3FileUrl(receipt.merchant.logo_url)}
+                    src={getFileUrl(receipt.merchant.logo_url)}
                     size={48}
                   />
                 ) : (

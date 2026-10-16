@@ -2,7 +2,7 @@ import { ReceiptData } from '@/lib/types';
 import { Link } from 'react-router-dom';
 import { ImageLogo } from './image-logo';
 import dayjs from 'dayjs';
-import { getS3FileUrl, toDollar } from '@/lib/helpers';
+import { getFileUrl, toDollar } from '@/lib/helpers';
 import { ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -22,7 +22,7 @@ export function ReceiptCardLink({ receipt, ...props }: ReceiptCardLinkProps) {
           <ImageLogo
             src={
               receipt.merchant.logo_url
-                ? getS3FileUrl(receipt.merchant.logo_url)
+                ? getFileUrl(receipt.merchant.logo_url)
                 : ''
             }
             size={64}

@@ -8,7 +8,7 @@ import { ImageLogo } from './image-logo';
 import { Badge } from './ui/badge';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { StatusIndicator } from './status-indicator';
-import { getS3FileUrl } from '@/lib/helpers';
+import { getFileUrl } from '@/lib/helpers';
 
 interface ReceiptsTableProps
   extends Omit<DataTableProps<ReceiptData>, 'columns'> {}
@@ -40,7 +40,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
           <ImageLogo
             src={
               row.original.merchant.logo_url
-                ? getS3FileUrl(row.original.merchant.logo_url)
+                ? getFileUrl(row.original.merchant.logo_url)
                 : undefined
             }
             size={40}

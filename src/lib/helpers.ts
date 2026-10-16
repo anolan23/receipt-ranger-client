@@ -59,8 +59,8 @@ export function getReceiptTitle(receipt: ReceiptData) {
   )}`;
 }
 
-export function getS3FileUrl(objectKey: string) {
-  const bucketDomain = import.meta.env.VITE_S3_BUCKET_URL;
-  if (!bucketDomain) return '';
-  return `${bucketDomain}/${objectKey}`;
+export function getFileUrl(objectKey: string) {
+  const filesUrl = import.meta.env.VITE_FILES_URL as string | undefined;
+  if (!filesUrl) return '';
+  return `${filesUrl}/${objectKey}`;
 }
