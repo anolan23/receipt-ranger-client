@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 import { ReactNode, useState } from 'react';
 import { Option, OptionItemDefinition } from '../option';
 

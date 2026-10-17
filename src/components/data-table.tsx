@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import React, { ReactNode, useMemo } from 'react';
 import { StatusIndicator } from './status-indicator';

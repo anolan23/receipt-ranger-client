@@ -1,10 +1,4 @@
-import { type ClassValue, clsx } from 'clsx';
 import { mutate } from 'swr';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 export function getRandomColor() {
   const letters = '0123456789ABCDEF';

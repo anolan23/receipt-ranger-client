@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { Input } from './ui/input';
 import { DollarSign } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 
 type DollarInputProps = React.ComponentProps<'input'>;
 

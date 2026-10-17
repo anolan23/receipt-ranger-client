@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 import { ResponsivePie } from '@nivo/pie';
 import { StatusIndicator } from '../status-indicator';
 import { NivoPieChartProps } from './interfaces';

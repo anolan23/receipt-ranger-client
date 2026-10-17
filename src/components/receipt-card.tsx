@@ -1,6 +1,6 @@
 import { getReceiptTitle, getFileUrl, toDollar } from '@/lib/helpers';
 import { ItemData, ReceiptData } from '@/lib/types';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 import dayjs from 'dayjs';
 import {
   ChevronLeft,

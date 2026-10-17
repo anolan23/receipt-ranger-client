@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from 'cn';
 import { StoreIcon } from 'lucide-react';
 import { ImgHTMLAttributes } from 'react';
 
@@ -14,7 +14,7 @@ export function ImageLogo({
 }: ImageLogoProps) {
   return (
     <div
-      className={clsx(
+      className={cn(
         'relative flex items-center justify-center rounded-md bg-muted/50 p-1 object-contain aspect-square',
         className
       )}

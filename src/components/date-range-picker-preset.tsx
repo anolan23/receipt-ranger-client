@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { DatePreset } from '@/lib/types';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 import { Label } from './ui/label';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
 

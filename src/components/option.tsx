@@ -1,6 +1,6 @@
 import { SettingsIcon } from 'lucide-react';
 import { ImageLogo } from './image-logo';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 
 export interface OptionItemDefinition {
   label: string;

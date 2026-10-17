@@ -7,7 +7,7 @@ import {
   Select as SelectPrimitive,
 } from './ui/select';
 import { SelectProps as RadixSelectProps } from '@radix-ui/react-select';
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 
 type SelectItemDefinition = {
   label: string;

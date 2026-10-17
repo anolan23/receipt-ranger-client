@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { ResponsiveBar } from '@nivo/bar';
 
-import { cn } from '@/lib/utils';
+import { cn } from 'cn';
 import { StatusIndicator } from '../status-indicator';
 import { Label } from '../ui/label';
 import { Filter } from './filter';

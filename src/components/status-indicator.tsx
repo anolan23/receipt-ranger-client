@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from 'cn';
 import {
   CircleAlert,
   CircleCheck,
@@ -44,7 +44,7 @@ export function StatusIndicator({
         return <CircleX className={color} size={size} />;
       case 'loading':
         return (
-          <LoaderCircle className={clsx(color, 'animate-spin')} size={size} />
+          <LoaderCircle className={cn(color, 'animate-spin')} size={size} />
         );
       case 'pending':
         return <CircleEllipsis className={color} size={size} />;
