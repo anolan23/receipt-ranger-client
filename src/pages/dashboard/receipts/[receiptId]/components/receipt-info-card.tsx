@@ -23,7 +23,7 @@ import { EditReceiptFormValues } from '../interfaces';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { useCategories } from '@/hooks/use-categories';
 import { Select } from '@/components/select';
-import { DollarSign } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { DollarInput } from '@/components/dollar-input';
 import { LineItemsTable } from './line-items-table';
 import { Separator } from '@/components/ui/separator';
@@ -75,6 +75,29 @@ export function ReceiptInfoCard({
       }) || []
     );
   }, [categories]);
+
+  const [items, subtotal, salesTax, total] = form.watch([
+    'items',
+    'subtotal',
+    'sales_tax',
+    'total',
+  ]);
+  const mismatches = useMemo(() => {
+    const out: string[] = [];
+    const num = (v: unknown) => (v === '' || v == null ? NaN : Number(v));
+    const itemSum = (items ?? []).reduce(
+      (sum, i) => sum + (i.price ? Number(i.price) : 0),
+      0,
+    );
+    if (items?.length && Math.abs(itemSum - num(subtotal)) > 0.01) {
+      out.push(`Items add up to $${itemSum.toFixed(2)}, not the subtotal.`);
+    }
+    const expected = num(subtotal) + num(salesTax);
+    if (!Number.isNaN(expected) && Math.abs(expected - num(total)) > 0.01) {
+      out.push(`Subtotal + tax is $${expected.toFixed(2)}, not the total.`);
+    }
+    return out;
+  }, [items, subtotal, salesTax, total]);
 
   const modifiedDateShort = dayjs(receipt.created_at).format('YYYY-MM-DD');
   const modifiedDate = dayjs(receipt.created_at).fromNow();
@@ -154,63 +177,86 @@ export function ReceiptInfoCard({
         <Separator />
         <LineItems receipt={receipt} subcategories={subcategories} />
         <Separator />
-        <FormField
-          control={form.control}
-          name="subtotal"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="subtotal">Subtotal</FormLabel>
-              <FormControl>
-                <DollarInput
-                  id="subtotal"
-                  type="number"
-                  step={0.01}
-                  min={0}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="sales_tax"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="sales_tax">Sales Tax</FormLabel>
-              <FormControl>
-                <DollarInput
-                  id="sales_tax"
-                  type="number"
-                  step={0.01}
-                  min={0}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="total"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="total">Total</FormLabel>
-              <FormControl>
-                <DollarInput
-                  id="total"
-                  type="number"
-                  step={0.01}
-                  min={0}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="space-y-3">
+          <FormField
+            control={form.control}
+            name="subtotal"
+            render={({ field }) => (
+              <FormItem className="grid grid-cols-[1fr_9rem] items-center gap-x-4 space-y-0">
+                <FormLabel htmlFor="subtotal">Subtotal</FormLabel>
+                <div>
+                  <FormControl>
+                    <DollarInput
+                      id="subtotal"
+                      type="number"
+                      step={0.01}
+                      min={0}
+                      {...field}
+                      className="text-right tabular-nums"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="sales_tax"
+            render={({ field }) => (
+              <FormItem className="grid grid-cols-[1fr_9rem] items-center gap-x-4 space-y-0">
+                <FormLabel htmlFor="sales_tax">Sales Tax</FormLabel>
+                <div>
+                  <FormControl>
+                    <DollarInput
+                      id="sales_tax"
+                      type="number"
+                      step={0.01}
+                      min={0}
+                      {...field}
+                      className="text-right tabular-nums"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <Separator />
+          <FormField
+            control={form.control}
+            name="total"
+            render={({ field }) => (
+              <FormItem className="grid grid-cols-[1fr_9rem] items-center gap-x-4 space-y-0">
+                <FormLabel htmlFor="total" className="text-base font-semibold">
+                  Total
+                </FormLabel>
+                <div>
+                  <FormControl>
+                    <DollarInput
+                      id="total"
+                      type="number"
+                      step={0.01}
+                      min={0}
+                      {...field}
+                      className="text-right tabular-nums font-semibold"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          {mismatches.map((m) => (
+            <p
+              key={m}
+              className="flex items-center gap-1.5 text-xs text-muted-foreground"
+            >
+              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
+              {m}
+            </p>
+          ))}
+        </div>
       </CardContent>
       <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
         <div className="text-xs text-muted-foreground">

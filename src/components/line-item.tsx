@@ -1,11 +1,9 @@
 import { toDollar } from '@/lib/helpers';
 import { ItemData } from '@/lib/types';
-import { Badge } from './ui/badge';
 import { DrawerDialog } from './drawer-dialog';
 import { ReactNode } from 'react';
 import { Button } from './ui/button';
-import { Trash2Icon } from 'lucide-react';
-import { useDeviceWidth } from '@/hooks/use-device-width';
+import { ChevronRight, Trash2Icon } from 'lucide-react';
 
 interface LineItemProps {
   variant?: 'default' | 'edit';
@@ -31,25 +29,18 @@ export function LineItem({
         <DrawerDialog
           title="Edit Item"
           trigger={
-            <Button
+            <button
               type="button"
-              variant="outline"
-              className="w-full h-auto block text-base sm:text-sm text-left font-normal"
+              className="group flex min-h-[3.25rem] w-full items-start gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/50 active:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:px-4 sm:py-2.5"
             >
-              <div className="flex items-center justify-between gap-2">
-                <div className="w-full min-w-0">
-                  <div className="truncate sm:mb-1">
-                    {name} x {quantity}
-                  </div>
-                  {subcategory && (
-                    <Badge variant="secondary" className="">
-                      {subcategory}
-                    </Badge>
-                  )}
-                </div>
-                <span className="">{price ? toDollar(price) : '-'}</span>
-              </div>
-            </Button>
+              <ItemSummary
+                name={name}
+                quantity={quantity}
+                price={price}
+                subcategory={subcategory}
+              />
+              <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/60 group-hover:text-foreground" />
+            </button>
           }
           content={content}
           action={
@@ -68,18 +59,47 @@ export function LineItem({
     );
   }
   return (
-    <li className="flex items-center justify-between gap-2 min-w-0">
-      <div className="flex items-center gap-2 flex-1 min-w-0">
-        <span className="text-muted-foreground truncate">
-          {name} x {quantity}
-        </span>
-        {subcategory && (
-          <Badge variant="secondary" className="">
-            {subcategory}
-          </Badge>
-        )}
-      </div>
-      <span className="">{price ? toDollar(price) : '-'}</span>
+    <li className="flex items-start gap-3 px-3 py-3 sm:px-4 sm:py-2.5">
+      <ItemSummary
+        name={name}
+        quantity={quantity}
+        price={price}
+        subcategory={subcategory}
+      />
     </li>
+  );
+}
+
+function ItemSummary({
+  name,
+  quantity,
+  price,
+  subcategory,
+}: Pick<LineItemProps, 'name' | 'quantity' | 'price' | 'subcategory'>) {
+  return (
+    <>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium leading-snug">
+          {name || 'Unnamed item'}
+        </p>
+        <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
+          {quantity && quantity > 1 ? (
+            <span className="tabular-nums">Qty {quantity}</span>
+          ) : null}
+          {subcategory ? (
+            <span className="truncate">{subcategory}</span>
+          ) : (
+            <span className="italic">No category</span>
+          )}
+        </div>
+      </div>
+      <span className="min-w-[4.5rem] shrink-0 text-right text-sm font-medium tabular-nums">
+        {price ? (
+          toDollar(price)
+        ) : (
+          <span className="text-muted-foreground">--</span>
+        )}
+      </span>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import { DocViewerCard } from '@/components/doc-viewer-card';
+import { ReceiptViewer } from '@/components/receipt-viewer';
 import SmartBreadcrumb from '@/components/smart-breadcrumb';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -49,7 +49,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
         price: item.total_price || undefined,
       };
     },
-    []
+    [],
   );
 
   const defaultValues = useMemo<EditReceiptFormValues>(() => {
@@ -79,7 +79,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
   });
 
   useEffect(() => {
-    form.reset(defaultValues);
+    form.reset(defaultValues, { keepDirtyValues: true });
   }, [form, defaultValues]);
 
   const formValues = form.watch();
@@ -91,7 +91,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
     if (!items?.length) return '0';
     const sum = items.reduce(
       (prev, curr) => prev + (curr.price ? +curr.price : 0),
-      0
+      0,
     );
     return sum.toFixed(2);
   }, [formValues]);
@@ -120,7 +120,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
       breadcrumbs={<SmartBreadcrumb />}
       content={
         <ContentLayout
-          className="space-y-4 max-w-[65rem] mx-auto"
+          className="space-y-6 max-w-3xl mx-auto"
           loading={isLoading}
           error={error}
           data={receipt}
@@ -142,22 +142,24 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                     <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight lg:flex-none">
                       {getReceiptTitle(receipt)}
                     </h1>
-                    <Badge variant="outline" className="ml-auto sm:ml-0">
+                    <Badge
+                      variant={receipt.reviewed ? 'secondary' : 'outline'}
+                      className="ml-auto sm:ml-0"
+                    >
                       {receipt.reviewed ? 'Reviewed' : 'Pending review'}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-end gap-2 md:ml-auto md:flex">
-                    <Button
-                      onClick={() => navigate(-1)}
-                      variant="outline"
-                      size="sm"
-                    >
-                      Cancel
-                    </Button>
+                    {form.formState.isDirty ? (
+                      <span className="hidden text-xs text-muted-foreground md:inline">
+                        Unsaved changes
+                      </span>
+                    ) : null}
                     <Button
                       size="sm"
                       form="edit-form"
                       type="submit"
+                      className="hidden md:inline-flex"
                       disabled={
                         form.formState.isSubmitting || !form.formState.isDirty
                       }
@@ -187,23 +189,30 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                     originalReceiptId={receipt.possible_duplicate_of}
                   />
                 ) : null}
-                <div className="grid gap-8 md:grid-cols-[400px_1fr]">
-                  <DocViewerCard imageUrl={receipt.image_url} />
-                  <div>
-                    <Form {...form}>
-                      <form
-                        id="edit-form"
-                        onSubmit={form.handleSubmit(onSubmit)}
-                      >
-                        <div className="grid gap-8">
-                          <ReceiptInfoCard
-                            subcategories={subcategories}
-                            receipt={receipt}
-                          />
-                        </div>
-                      </form>
-                    </Form>
-                  </div>
+                <div className="fixed inset-x-0 bottom-0 z-20 flex items-center gap-3 border-t bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
+                  <span className="flex-1 text-xs text-muted-foreground">
+                    {form.formState.isDirty ? 'Unsaved changes' : null}
+                  </span>
+                  <Button
+                    form="edit-form"
+                    type="submit"
+                    disabled={
+                      form.formState.isSubmitting || !form.formState.isDirty
+                    }
+                  >
+                    Save Receipt
+                  </Button>
+                </div>
+                <div className="grid gap-4 pb-20 md:pb-0">
+                  <ReceiptViewer imageUrl={receipt.image_url} />
+                  <Form {...form}>
+                    <form id="edit-form" onSubmit={form.handleSubmit(onSubmit)}>
+                      <ReceiptInfoCard
+                        subcategories={subcategories}
+                        receipt={receipt}
+                      />
+                    </form>
+                  </Form>
                 </div>
               </>
             );
