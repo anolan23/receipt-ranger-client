@@ -1,6 +1,6 @@
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { format } from 'date-fns';
-import { DateRange, SelectRangeEventHandler } from 'react-day-picker';
+import { DateRange } from 'react-day-picker';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -18,7 +18,7 @@ interface DateRangePickerPresetProps {
   className?: string;
   dateRange?: DateRange;
   datePreset?: DatePreset;
-  onRangeSelect?: SelectRangeEventHandler;
+  onRangeSelect?: (range: DateRange | undefined) => void;
   onDatePresetChange?: (preset: DatePreset) => void;
 }
 
@@ -66,7 +66,7 @@ export function DateRangePickerPreset({
           collisionPadding={32}
         >
           <Calendar
-            initialFocus
+            autoFocus
             mode="range"
             defaultMonth={dateRange?.from}
             selected={dateRange}

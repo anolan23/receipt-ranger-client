@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { addDays, format } from 'date-fns';
-import { DateRange, SelectRangeEventHandler } from 'react-day-picker';
+import { DateRange } from 'react-day-picker';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,7 @@ import {
 interface DateRangePickerProps {
   className?: string;
   dateRange?: DateRange;
-  onRangeSelect?: SelectRangeEventHandler;
+  onRangeSelect?: (range: DateRange | undefined) => void;
 }
 
 export function DateRangePicker({
@@ -60,7 +60,7 @@ export function DateRangePicker({
           collisionPadding={32}
         >
           <Calendar
-            initialFocus
+            autoFocus
             mode="range"
             defaultMonth={dateRange?.from}
             selected={dateRange}

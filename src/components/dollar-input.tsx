@@ -1,9 +1,9 @@
 import { forwardRef } from 'react';
-import { Input, InputProps } from './ui/input';
+import { Input } from './ui/input';
 import { DollarSign } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface DollarInputProps extends InputProps {}
+type DollarInputProps = React.ComponentProps<'input'>;
 
 export const DollarInput = forwardRef<HTMLInputElement, DollarInputProps>(
   ({ className, ...props }, ref) => {

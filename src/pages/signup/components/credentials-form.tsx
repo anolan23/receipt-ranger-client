@@ -100,7 +100,7 @@ export function CredentialsForm({ onSubmit, ...props }: CredentialsFormProps) {
               )}
             />
           </div>
-          <Button variant="black">
+          <Button className="bg-zinc-900 text-primary-foreground hover:bg-zinc-900/90">
             {isSubmitting && (
               <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
             )}

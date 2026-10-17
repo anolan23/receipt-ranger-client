@@ -1,7 +1,7 @@
 import { Table } from '@tanstack/react-table';
-import { Input, InputProps } from './ui/input';
+import { Input } from './ui/input';
 
-interface TextFilterProps extends InputProps {
+interface TextFilterProps extends React.ComponentProps<'input'> {
   table: Table<any>;
 }
 
