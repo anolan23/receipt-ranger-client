@@ -2,16 +2,16 @@ import { DocViewerCard } from '@/components/doc-viewer-card';
 import SmartBreadcrumb from '@/components/smart-breadcrumb';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { useReceipt } from '@/hooks/use-receipt';
 import { useReceiptItems } from '@/hooks/use-receipt-items';
 import { useSubcategories } from '@/hooks/use-subcategories';
 import { ContentLayout } from '@/layout/content-layout';
 import { DashboardLayout } from '@/layout/dashboard-layout';
-import { ErrorLayout } from '@/layout/error-layout';
 import { updateReceipt } from '@/lib/api/receipts';
+import { getFileUrl, getReceiptTitle } from '@/lib/helpers';
 import { ItemData } from '@/lib/types';
 import { ChevronLeft } from 'lucide-react';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -21,10 +21,6 @@ import { ActionsDropdown } from '../components/actions-dropdown';
 import { DuplicateReceiptNotice } from './components/duplicate-receipt-notice';
 import { ReceiptInfoCard } from './components/receipt-info-card';
 import { EditReceiptFormValues, ItemUpdatePayload } from './interfaces';
-import { usePageTitle } from '@/hooks/use-page-title';
-import { useDeviceWidth } from '@/hooks/use-device-width';
-import { getReceiptTitle, getFileUrl, toDollar } from '@/lib/helpers';
-import dayjs from 'dayjs';
 
 interface ReceiptPageProps {}
 
