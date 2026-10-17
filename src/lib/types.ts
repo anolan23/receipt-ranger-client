@@ -3,6 +3,7 @@ export type ReceiptData = {
   created_at: string;
   updated_at: string;
   object_key: string | null;
+  image_url?: string | null;
   merchant_id: string | null;
   merchant: MerchantData;
   subtotal: string | null;

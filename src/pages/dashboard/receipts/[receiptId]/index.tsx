@@ -192,7 +192,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                   />
                 ) : null}
                 <div className="grid gap-8 md:grid-cols-[400px_1fr]">
-                  <DocViewerCard objectKey={receipt.object_key || undefined} />
+                  <DocViewerCard imageUrl={receipt.image_url} />
                   <div>
                     <Form {...form}>
                       <form
