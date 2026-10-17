@@ -189,7 +189,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                     originalReceiptId={receipt.possible_duplicate_of}
                   />
                 ) : null}
-                <div className="fixed inset-x-0 bottom-0 z-20 flex items-center gap-3 border-t bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
+                <div className="fixed inset-x-0 bottom-0 z-20 flex items-center gap-3 border-t bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm md:hidden">
                   <span className="flex-1 text-xs text-muted-foreground">
                     {form.formState.isDirty ? 'Unsaved changes' : null}
                   </span>

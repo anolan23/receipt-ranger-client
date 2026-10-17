@@ -151,7 +151,7 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
               <UploadArea onFileProcessed={handleFileDrop} />
               <Sheet>
                 <SheetTrigger asChild>
-                  <button className="flex w-full flex-col items-center rounded-md border bg-card p-6 text-card-foreground shadow transition-colors hover:bg-muted/50 sm:p-8">
+                  <button className="flex w-full flex-col items-center rounded-md border bg-card p-6 text-card-foreground shadow-sm transition-colors hover:bg-muted/50 sm:p-8">
                     <div className="flex flex-col items-center justify-center text-center">
                       <div>
                         <Mail size={32} />

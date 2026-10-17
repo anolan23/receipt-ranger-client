@@ -103,7 +103,7 @@ export function ReceiptInfoCard({
   const modifiedDate = dayjs(receipt.created_at).fromNow();
 
   return (
-    <Card className="min-w-0 bg-card sm:shadow sm:border">
+    <Card className="min-w-0 bg-card sm:shadow-sm sm:border">
       <CardContent className="px-4 pt-4 space-y-4 sm:p-6 sm:pt-6">
         <FormField
           control={form.control}

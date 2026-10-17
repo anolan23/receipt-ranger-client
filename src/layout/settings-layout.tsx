@@ -20,7 +20,7 @@ export function SettingsLayout({
       </div>
       <div
         data-orientation="horizontal"
-        className="shrink-0 bg-border h-[1px] w-full"
+        className="shrink-0 bg-border h-px w-full"
       ></div>
       {form}
     </div>

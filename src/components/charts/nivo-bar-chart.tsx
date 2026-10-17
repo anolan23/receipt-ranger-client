@@ -79,7 +79,7 @@ export function NivoBarChart<T extends number | string>({
     <div className={cn('h-[300px]', className)}>
       {showFilter && (
         <div className="flex flex-wrap mb-5">
-          <div className="flex-grow-0 flex-shrink basis-[280px] space-y-2 flex flex-col">
+          <div className="grow-0 shrink basis-[280px] space-y-2 flex flex-col">
             <Label>Filter by document year</Label>
             <Filter
               items={selectItems}

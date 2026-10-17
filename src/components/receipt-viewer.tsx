@@ -26,7 +26,7 @@ export function ReceiptViewer({ imageUrl }: ReceiptViewerProps) {
         type="button"
         onClick={() => setOpen(true)}
         disabled={!src}
-        className="flex w-full items-center gap-3 rounded-lg border bg-card p-3 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-60"
+        className="flex w-full items-center gap-3 rounded-lg border bg-card p-3 text-left transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-60"
       >
         <span className="relative flex h-16 w-12 shrink-0 items-center justify-center overflow-hidden rounded border bg-muted text-muted-foreground">
           {!src ? (

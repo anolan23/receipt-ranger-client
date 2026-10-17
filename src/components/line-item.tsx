@@ -31,7 +31,7 @@ export function LineItem({
           trigger={
             <button
               type="button"
-              className="group flex min-h-[3.25rem] w-full items-start gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/50 active:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:px-4 sm:py-2.5"
+              className="group flex min-h-13 w-full items-start gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/50 active:bg-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:px-4 sm:py-2.5"
             >
               <ItemSummary
                 name={name}
@@ -93,7 +93,7 @@ function ItemSummary({
           )}
         </div>
       </div>
-      <span className="min-w-[4.5rem] shrink-0 text-right text-sm font-medium tabular-nums">
+      <span className="min-w-18 shrink-0 text-right text-sm font-medium tabular-nums">
         {price ? (
           toDollar(price)
         ) : (

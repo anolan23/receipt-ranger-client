@@ -39,7 +39,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
         </SelectTrigger>
         <SelectContent
           collisionPadding={16}
-          className="max-h-[var(--radix-popper-available-height)]"
+          className="max-h-(--radix-popper-available-height)"
         >
           {items.map((item) => (
             <SelectItem key={item.value} value={item.value}>

@@ -43,7 +43,7 @@ export function Filter({ items, value, onValueChange }: FilterProps) {
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)]">
+      <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
         {items.map((item) => {
           return (
             <DropdownMenuCheckboxItem
