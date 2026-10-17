@@ -4,6 +4,13 @@ import { DrawerDialog } from './drawer-dialog';
 import { ReactNode } from 'react';
 import { Button } from './ui/button';
 import { ChevronRight, Trash2Icon } from 'lucide-react';
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from './ui/item';
 
 interface LineItemProps {
   variant?: 'default' | 'edit';
@@ -29,18 +36,21 @@ export function LineItem({
         <DrawerDialog
           title="Edit Item"
           trigger={
-            <button
-              type="button"
-              className="group flex min-h-13 w-full items-start gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/50 active:bg-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:px-4 sm:py-2.5"
+            <Item
+              asChild
+              size="sm"
+              className="group min-h-13 w-full cursor-pointer items-start rounded-none text-left hover:bg-muted/50 active:bg-muted"
             >
-              <ItemSummary
-                name={name}
-                quantity={quantity}
-                price={price}
-                subcategory={subcategory}
-              />
-              <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/60 group-hover:text-foreground" />
-            </button>
+              <button type="button">
+                <ItemSummary
+                  name={name}
+                  quantity={quantity}
+                  price={price}
+                  subcategory={subcategory}
+                  chevron
+                />
+              </button>
+            </Item>
           }
           content={content}
           action={
@@ -59,13 +69,15 @@ export function LineItem({
     );
   }
   return (
-    <li className="flex items-start gap-3 px-3 py-3 sm:px-4 sm:py-2.5">
-      <ItemSummary
-        name={name}
-        quantity={quantity}
-        price={price}
-        subcategory={subcategory}
-      />
+    <li className="min-w-0">
+      <Item size="sm" className="items-start rounded-none">
+        <ItemSummary
+          name={name}
+          quantity={quantity}
+          price={price}
+          subcategory={subcategory}
+        />
+      </Item>
     </li>
   );
 }
@@ -75,14 +87,17 @@ function ItemSummary({
   quantity,
   price,
   subcategory,
-}: Pick<LineItemProps, 'name' | 'quantity' | 'price' | 'subcategory'>) {
+  chevron,
+}: Pick<LineItemProps, 'name' | 'quantity' | 'price' | 'subcategory'> & {
+  chevron?: boolean;
+}) {
   return (
     <>
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium leading-snug">
+      <ItemContent className="min-w-0">
+        <ItemTitle className="w-full truncate">
           {name || 'Unnamed item'}
-        </p>
-        <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
+        </ItemTitle>
+        <ItemDescription className="flex items-center gap-2 text-xs">
           {quantity && quantity > 1 ? (
             <span className="tabular-nums">Qty {quantity}</span>
           ) : null}
@@ -91,15 +106,18 @@ function ItemSummary({
           ) : (
             <span className="italic">No category</span>
           )}
-        </div>
-      </div>
-      <span className="min-w-18 shrink-0 text-right text-sm font-medium tabular-nums">
+        </ItemDescription>
+      </ItemContent>
+      <ItemActions className="min-w-18 justify-end text-sm font-medium tabular-nums">
         {price ? (
           toDollar(price)
         ) : (
           <span className="text-muted-foreground">--</span>
         )}
-      </span>
+        {chevron && (
+          <ChevronRight className="size-4 text-muted-foreground/60 group-hover:text-foreground" />
+        )}
+      </ItemActions>
     </>
   );
 }
