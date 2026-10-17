@@ -10,10 +10,10 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { ReceiptData } from '@/lib/types';
-import { DialogProps } from '@radix-ui/react-alert-dialog';
+import { AlertDialogProps } from '@radix-ui/react-alert-dialog';
 import { ReactElement } from 'react';
 
-interface DeleteReceiptDialogProps extends DialogProps {
+interface DeleteReceiptDialogProps extends AlertDialogProps {
   trigger: ReactElement;
   receipt?: ReceiptData;
   onDeleteSubmit: (receipt: ReceiptData) => Promise<void>;
