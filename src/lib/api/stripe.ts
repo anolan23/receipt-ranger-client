@@ -1,9 +1,7 @@
-import { supabase } from '../supabase';
+import { invokeFunction, supabase } from '../supabase';
 import { SubscriptionRecordData } from '../types';
 
-// Checkout and the billing portal need Stripe Edge Functions, which the Supabase
-// backend doesn't have yet.
-const NOT_AVAILABLE = 'Subscriptions are not available yet.';
+type RedirectResult = { redirect_url: string };
 
 interface CreateCheckoutSessionParams {
   subscription_type: 'monthly' | 'yearly';
@@ -11,18 +9,18 @@ interface CreateCheckoutSessionParams {
   cancel_url: string;
 }
 export async function createCheckoutSession(
-  _params: CreateCheckoutSessionParams
-): Promise<void> {
-  throw new Error(NOT_AVAILABLE);
+  params: CreateCheckoutSessionParams
+) {
+  const result = await invokeFunction<RedirectResult>('stripe-checkout', params);
+  window.location.assign(result.redirect_url);
 }
 
 interface CreatePortalSessionParams {
   return_url: string;
 }
-export async function createPortalSession(
-  _params: CreatePortalSessionParams
-): Promise<void> {
-  throw new Error(NOT_AVAILABLE);
+export async function createPortalSession(params: CreatePortalSessionParams) {
+  const result = await invokeFunction<RedirectResult>('stripe-portal', params);
+  window.location.assign(result.redirect_url);
 }
 
 interface SubscriptionRecordResult {

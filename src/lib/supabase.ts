@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, FunctionsHttpError } from '@supabase/supabase-js';
 import type { Database } from './database.types';
 
 // The browser client signs in as the user, so every query below runs under row-level
@@ -30,4 +30,18 @@ export async function fetchAllPages<T>(
     rows.push(...(data ?? []));
     if (!data || data.length < pageSize) return rows;
   }
+}
+
+/**
+ * Calls an Edge Function and returns its JSON body. A non-2xx response throws an Error
+ * carrying the function's `detail` message, which is fit to show the user.
+ */
+export async function invokeFunction<T>(name: string, body: object) {
+  const { data, error } = await supabase.functions.invoke<T>(name, { body });
+  if (!error) return data as T;
+  if (error instanceof FunctionsHttpError) {
+    const problem = await error.context.json().catch(() => null);
+    if (typeof problem?.detail === 'string') throw new Error(problem.detail);
+  }
+  throw error;
 }
