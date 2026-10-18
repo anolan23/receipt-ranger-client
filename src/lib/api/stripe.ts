@@ -1,46 +1,38 @@
-import { backend } from '../backend';
+import { supabase } from '../supabase';
 import { SubscriptionRecordData } from '../types';
 
-interface CreateCheckoutSessionResult {
-  redirect_url: string;
-}
+// Checkout and the billing portal need Stripe Edge Functions, which the Supabase
+// backend doesn't have yet.
+const NOT_AVAILABLE = 'Subscriptions are not available yet.';
+
 interface CreateCheckoutSessionParams {
   subscription_type: 'monthly' | 'yearly';
   success_url: string;
   cancel_url: string;
 }
 export async function createCheckoutSession(
-  params: CreateCheckoutSessionParams
-) {
-  const response = await backend.post<CreateCheckoutSessionResult>(
-    '/stripe/create-checkout-session',
-    params
-  );
+  _params: CreateCheckoutSessionParams
+): Promise<void> {
+  throw new Error(NOT_AVAILABLE);
+}
 
-  window.location.assign(response.data.redirect_url);
-}
-interface CreatePortalSessionResult {
-  redirect_url: string;
-}
 interface CreatePortalSessionParams {
   return_url: string;
 }
-export async function createPortalSession(params: CreatePortalSessionParams) {
-  const response = await backend.post<CreatePortalSessionResult>(
-    '/stripe/create-portal-session',
-    params
-  );
-
-  window.location.assign(response.data.redirect_url);
+export async function createPortalSession(
+  _params: CreatePortalSessionParams
+): Promise<void> {
+  throw new Error(NOT_AVAILABLE);
 }
 
 interface SubscriptionRecordResult {
   subscription?: SubscriptionRecordData;
 }
-export async function getSubscriptionRecord() {
-  const response = await backend.get<SubscriptionRecordResult>(
-    '/stripe/subscription'
-  );
-
-  return response.data;
+export async function getSubscriptionRecord(): Promise<SubscriptionRecordResult> {
+  const { data, error } = await supabase
+    .from('subscription_records')
+    .select('*')
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return { subscription: (data as SubscriptionRecordData | null) ?? undefined };
 }

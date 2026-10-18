@@ -59,8 +59,8 @@ export function DashboardLayout({
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
-  const handleLogoutSelect = function () {
-    logout();
+  const handleLogoutSelect = async function () {
+    await logout();
     clearQueryCache();
     navigate('/');
   };

@@ -17,12 +17,5 @@ export default defineConfig({
     // Listen on all interfaces so the dockerised ngrok agent can reach it
     // via host.docker.internal (IPv4); the default binds to [::1] only.
     host: true,
-    // Dev only: forward /api/* to the Flask backend (see VITE_API_BASE_URL).
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8080',
-        rewrite: (p) => p.replace(/^\/api/, ''),
-      },
-    },
   },
 });

@@ -13,10 +13,8 @@ export function ReceiptViewer({ imageUrl }: ReceiptViewerProps) {
   const [open, setOpen] = useState(false);
   const [thumb, setThumb] = useState<'loading' | 'loaded' | 'error'>('loading');
 
-  // Signed, expiring path from the API; works in a plain <img> without the JWT
-  const src = imageUrl
-    ? `${import.meta.env.VITE_API_BASE_URL}${imageUrl}`
-    : undefined;
+  // Signed, expiring storage URL; works in a plain <img> without the JWT
+  const src = imageUrl ?? undefined;
 
   useEffect(() => setThumb('loading'), [src]);
 

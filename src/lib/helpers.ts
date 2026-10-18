@@ -60,7 +60,8 @@ export function getReceiptTitle(receipt: ReceiptData) {
 }
 
 export function getFileUrl(objectKey: string) {
-  const filesUrl = import.meta.env.VITE_FILES_URL as string | undefined;
-  if (!filesUrl) return '';
-  return `${filesUrl}/${objectKey}`;
+  // Merchant logos live in the public `merchants` storage bucket.
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+  if (!supabaseUrl) return '';
+  return `${supabaseUrl}/storage/v1/object/public/merchants/${objectKey}`;
 }

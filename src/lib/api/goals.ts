@@ -1,12 +1,25 @@
-import { backend } from '../backend';
+import { requireUserId, supabase } from '../supabase';
 import { GoalData } from '../types';
+import { money } from './mappers';
 
-export async function createOrUpdateGoal(amount: string) {
-  const response = await backend.post('/goals', { amount });
-  return response.data;
+function toGoal(row: Omit<GoalData, 'amount'> & { amount: number }): GoalData {
+  return { ...row, amount: money(row.amount) as string };
 }
 
+export async function createOrUpdateGoal(amount: string) {
+  const userId = await requireUserId();
+  const { data, error } = await supabase
+    .from('goals')
+    .upsert({ user_id: userId, amount: Number(amount) }, { onConflict: 'user_id' })
+    .select()
+    .single();
+  if (error) throw new Error(error.message);
+  return toGoal(data as never);
+}
+
+/** The user's monthly goal, or null if they haven't set one. */
 export async function fetchGoalData() {
-  const response = await backend.get<GoalData>('/goals');
-  return response.data;
+  const { data, error } = await supabase.from('goals').select('*').maybeSingle();
+  if (error) throw new Error(error.message);
+  return data ? toGoal(data as never) : null;
 }

@@ -1,14 +1,22 @@
-import { backend } from '../backend';
-import { ItemData, MerchantData } from '../types';
+import { supabase } from '../supabase';
+import { MerchantData } from '../types';
 
 export async function getMerchants() {
-  const response = await backend.get<MerchantData[]>('/merchants');
-  return response.data;
+  const { data, error } = await supabase
+    .from('merchants')
+    .select('*')
+    .order('name');
+  if (error) throw new Error(error.message);
+  return data as MerchantData[];
 }
 
 export async function searchMerchant(query: string) {
-  const response = await backend.get<MerchantData[]>('/merchants/search', {
-    params: { q: query },
-  });
-  return response.data;
+  const escaped = query.replace(/[\\%_]/g, '\\$&');
+  const { data, error } = await supabase
+    .from('merchants')
+    .select('*')
+    .ilike('name', `%${escaped}%`)
+    .limit(5);
+  if (error) throw new Error(error.message);
+  return data as MerchantData[];
 }
