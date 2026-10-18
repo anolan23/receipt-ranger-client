@@ -28,9 +28,7 @@ export function SignupPage({ ...props }: SignupPageProps) {
       content={
         <>
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="type-h1">
-              Let's get you set up!
-            </h1>
+            <h1 className="type-h1">Let's get you set up!</h1>
             <p className="text-sm text-ink-muted">
               Make an account and scan your first receipt in a minute.
             </p>
@@ -44,11 +42,11 @@ export function SignupPage({ ...props }: SignupPageProps) {
           </div>
           <p className="px-4 text-center text-sm text-ink-muted">
             By signing up, you agree to our{' '}
-            <Link external href="https://snapceipt.com/terms-of-service/">
+            <Link external href="https://receiptranger.com/terms-of-service/">
               Terms of Service
             </Link>{' '}
             and{' '}
-            <Link external href="https://snapceipt.com/privacy-policy/">
+            <Link external href="https://receiptranger.com/privacy-policy/">
               Privacy Policy
             </Link>
           </p>

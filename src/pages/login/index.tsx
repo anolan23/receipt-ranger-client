@@ -52,9 +52,7 @@ export function LoginPage({ ...props }: LoginPageProps) {
       content={
         <>
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="type-h1">
-              Welcome back!
-            </h1>
+            <h1 className="type-h1">Welcome back!</h1>
             <p className="text-sm text-ink-muted">
               Log in to see how this month is going.
             </p>
@@ -127,15 +125,14 @@ export function LoginPage({ ...props }: LoginPageProps) {
                 </div>
               </form>
             </Form>
-
           </div>
           <p className="px-4 text-center text-sm text-ink-muted">
             By logging in, you agree to our{' '}
-            <Link external href="https://snapceipt.com/terms-of-service/">
+            <Link external href="https://receiptranger.com/terms-of-service/">
               Terms of Service
             </Link>{' '}
             and{' '}
-            <Link external href="https://snapceipt.com/privacy-policy/">
+            <Link external href="https://receiptranger.com/privacy-policy/">
               Privacy Policy
             </Link>
           </p>
