@@ -172,7 +172,7 @@ export function DashboardLayout({
         </header>
         <main
           id="main"
-          className="relative isolate flex-1 px-4 pt-5 pb-36 md:px-8 md:pt-6 md:pb-10"
+          className="relative isolate flex-1 overflow-x-clip px-4 pt-5 pb-36 md:px-8 md:pt-6 md:pb-10"
         >
           <Blob
             color="peach"

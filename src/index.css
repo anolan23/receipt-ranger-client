@@ -171,6 +171,7 @@
   --animate-grow-x: grow-x 420ms var(--ease-soft) both;
   --animate-grow-up: grow-up 420ms var(--ease-soft) both;
   --animate-stripes: stripes 1s linear infinite;
+  --animate-beam: beam 2.4s var(--ease-soft) infinite alternate;
   --animate-success-pop: success-pop 420ms var(--ease-bounce) both;
 
   @keyframes fade-in {
@@ -265,6 +266,14 @@
     }
     to {
       background-position: 28px 0;
+    }
+  }
+  @keyframes beam {
+    from {
+      top: 20%;
+    }
+    to {
+      top: 76%;
     }
   }
   @keyframes success-pop {
@@ -408,6 +417,17 @@
   background-size: 220% 100%;
   animation: var(--animate-shimmer);
   border-radius: var(--radius-sm);
+}
+
+/* Moving diagonal stripes on an in-progress bar */
+@utility progress-stripes {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--primary) 0 10px,
+    var(--primary-hover) 10px 20px
+  );
+  background-size: 28px 28px;
+  animation: var(--animate-stripes);
 }
 
 /* Pip's idle motion */
