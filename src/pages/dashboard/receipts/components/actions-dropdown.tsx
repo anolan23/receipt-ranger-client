@@ -43,42 +43,49 @@ export function ActionsDropdown({
     }
   }
 
-  const { mutateAsync: deleteReceipt } = useDeleteReceipt();
-  const { mutateAsync: updateReviewStatus } = useUpdateReceiptReviewStatus();
+  const deleteReceipt = useDeleteReceipt();
+  const updateReviewStatus = useUpdateReceiptReviewStatus();
 
-  const handleDeleteSubmit = useCallback(
-    async (receipt: ReceiptData) => {
-      try {
-        if (!receipt?.id) return;
-        await deleteReceipt(receipt.id);
-        onDelete && onDelete(receipt);
-        toast({ title: 'Receipt deleted', description: 'All tidied up.' });
-      } catch (error) {
-        let message = 'Something went wrong';
-        if (error instanceof Error) {
-          message = error.message;
-        }
-        toast({ variant: 'oops', title: "Oops, that didn't work", description: message });
-      } finally {
-        setDropdownOpen(false);
-        setHasOpenDialog(false);
-      }
+  const showError = useCallback(
+    (error: unknown) => {
+      toast({
+        variant: 'oops',
+        title: "Oops, that didn't work",
+        description:
+          error instanceof Error ? error.message : 'Something went wrong',
+      });
     },
-    [toast, onDelete, deleteReceipt]
+    [toast]
   );
 
-  const handleReviewSelect = async function () {
-    try {
-      if (!receipt) return;
-      await updateReviewStatus({ receiptId: receipt.id, reviewed: true });
-      onReviewed && onReviewed(receipt);
-    } catch (error) {
-      let message = 'Something went wrong';
-      if (error instanceof Error) {
-        message = error.message;
+  const { mutate: deleteReceiptMutate } = deleteReceipt;
+  const handleDeleteSubmit = useCallback(
+    (receipt: ReceiptData) => {
+      if (!receipt?.id) return;
+      deleteReceiptMutate(receipt.id, {
+        onSuccess: () => {
+          onDelete && onDelete(receipt);
+          toast({ title: 'Receipt deleted', description: 'All tidied up.' });
+        },
+        onError: showError,
+        onSettled: () => {
+          setDropdownOpen(false);
+          setHasOpenDialog(false);
+        },
+      });
+    },
+    [toast, onDelete, deleteReceiptMutate, showError]
+  );
+
+  const handleReviewSelect = function () {
+    if (!receipt) return;
+    updateReviewStatus.mutate(
+      { receiptId: receipt.id, reviewed: true },
+      {
+        onSuccess: () => onReviewed && onReviewed(receipt),
+        onError: showError,
       }
-      toast({ variant: 'oops', title: "Oops, that didn't work", description: message });
-    }
+    );
   };
 
   return (
@@ -96,7 +103,7 @@ export function ActionsDropdown({
       <DropdownMenuContent align="end" hidden={hasOpenDialog}>
         <DropdownMenuItem disabled>Export to .csv</DropdownMenuItem>
         <DropdownMenuItem
-          disabled={receipt?.reviewed}
+          disabled={receipt?.reviewed || updateReviewStatus.isPending}
           onSelect={handleReviewSelect}
         >
           Looks good, mark reviewed
@@ -112,6 +119,7 @@ export function ActionsDropdown({
             </DropdownMenuItem>
           }
           receipt={receipt}
+          deleting={deleteReceipt.isPending}
           onDeleteSubmit={handleDeleteSubmit}
           onOpenChange={handleDialogItemOpenChange}
         />

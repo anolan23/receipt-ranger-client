@@ -41,22 +41,17 @@ export function SubscriptionSettings({ ...props }: SubscriptionSettingsProps) {
       clearTimeout(stop);
     };
   }, [waiting, refetch]);
-  const [loading, setLoading] = useState(false);
-  const { mutateAsync: createPortalSession } = useCreatePortalSession();
+  const createPortalSession = useCreatePortalSession();
 
-  const handleManageClick = async function () {
-    try {
-      setLoading(true);
-      await createPortalSession({
+  const handleManageClick = function () {
+    createPortalSession.mutate(
+      {
         return_url: `${
           import.meta.env.VITE_APP_URL
         }/dashboard/settings/subscription`,
-      });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+      },
+      { onError: (error) => console.error(error) }
+    );
   };
 
   return (

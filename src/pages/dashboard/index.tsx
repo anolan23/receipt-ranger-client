@@ -77,7 +77,8 @@ export function DashboardPage() {
     useOverview(monthInterval);
   const { data: categoryTotals, isLoading: isCategoryTotalsLoading } =
     useCategoryTotals(monthInterval);
-  const { data: merchantCounts } = useMerchantCounts(monthInterval);
+  const { data: merchantCounts, isLoading: isMerchantCountsLoading } =
+    useMerchantCounts(monthInterval);
 
   const { current_month_spend, forecasted_spend, previous_month_spend, goal_budget } =
     spendingOverview || {};
@@ -230,7 +231,10 @@ export function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <MerchantBars data={merchantRows} />
+                  <MerchantBars
+                    data={merchantRows}
+                    loading={isMerchantCountsLoading}
+                  />
                 </CardContent>
               </Card>
             </div>

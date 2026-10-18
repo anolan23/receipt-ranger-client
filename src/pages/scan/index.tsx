@@ -72,7 +72,7 @@ export function ScanPage() {
   const [scanLimit, setScanLimit] = useState<ScanLimit | null>(null);
   const scanLimitRef = useRef<ScanLimit | null>(null);
   const { tier, isLoading: planLoading } = usePlan();
-  const { mutateAsync: createReceipt } = useCreateReceipt();
+  const createReceipt = useCreateReceipt();
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -122,32 +122,38 @@ export function ScanPage() {
       prev.map((item) => (item.id === id ? { ...item, ...patch } : item))
     );
 
-  const read = useCallback(async (item: BatchItem) => {
-    update(item.id, { status: 'reading', message: undefined });
-    try {
-      const result = await createReceipt(item.file);
-      update(item.id, {
-        status: result.potential_duplicate ? 'review' : 'done',
-        receiptId: result.receipt_id,
+  const { mutate: createReceiptMutate } = createReceipt;
+  const read = useCallback(
+    (item: BatchItem) => {
+      update(item.id, { status: 'reading', message: undefined });
+      createReceiptMutate(item.file, {
+        onSuccess: (result) => {
+          update(item.id, {
+            status: result.potential_duplicate ? 'review' : 'done',
+            receiptId: result.receipt_id,
+          });
+        },
+        onError: (error) => {
+          if (error instanceof ScanLimitError) {
+            const details = {
+              limit: error.limit,
+              used: error.used,
+              resetsAt: error.resetsAt,
+            };
+            scanLimitRef.current = details;
+            setScanLimit(details);
+            update(item.id, { status: 'blocked' });
+            return;
+          }
+          update(item.id, {
+            status: 'failed',
+            message: error instanceof Error ? error.message : undefined,
+          });
+        },
       });
-    } catch (error) {
-      if (error instanceof ScanLimitError) {
-        const details = {
-          limit: error.limit,
-          used: error.used,
-          resetsAt: error.resetsAt,
-        };
-        scanLimitRef.current = details;
-        setScanLimit(details);
-        update(item.id, { status: 'blocked' });
-        return;
-      }
-      update(item.id, {
-        status: 'failed',
-        message: error instanceof Error ? error.message : undefined,
-      });
-    }
-  }, [createReceipt]);
+    },
+    [createReceiptMutate]
+  );
 
   const addFiles = useCallback(
     (files: File[]) => {

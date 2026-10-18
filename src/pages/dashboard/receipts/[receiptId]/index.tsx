@@ -84,7 +84,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
   const formValues = form.watch();
 
   const { data: subcategories } = useSubcategories(formValues.category_id);
-  const { mutateAsync: updateReceipt } = useUpdateReceipt();
+  const updateReceipt = useUpdateReceipt();
 
   const calculatedSubtotal = useMemo<string>(() => {
     const { items } = formValues;
@@ -96,22 +96,30 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
     return sum.toFixed(2);
   }, [formValues]);
 
-  async function onSubmit(values: EditReceiptFormValues) {
-    try {
-      if (!receipt?.id) return;
-      const { merchantOption, ...rest } = values;
-      await updateReceipt({
+  function onSubmit(values: EditReceiptFormValues) {
+    if (!receipt?.id) return;
+    const { merchantOption, ...rest } = values;
+    updateReceipt.mutate(
+      {
         receiptId: receipt.id,
         updates: { ...rest, merchant_id: merchantOption?.value || '' },
-      });
-      toast({ title: 'Saved!', description: 'Your receipt is all up to date.' });
-    } catch (error) {
-      toast({
-        variant: 'oops',
-        title: "Oops, that didn't save",
-        description: 'Try saving the receipt again?',
-      });
-    }
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: 'Saved!',
+            description: 'Your receipt is all up to date.',
+          });
+        },
+        onError: () => {
+          toast({
+            variant: 'oops',
+            title: "Oops, that didn't save",
+            description: 'Try saving the receipt again?',
+          });
+        },
+      }
+    );
   }
 
   return (
@@ -160,7 +168,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                       type="submit"
                       className="hidden md:inline-flex"
                       disabled={
-                        form.formState.isSubmitting || !form.formState.isDirty
+                        updateReceipt.isPending || !form.formState.isDirty
                       }
                     >
                       Save receipt
@@ -196,7 +204,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                     form="edit-form"
                     type="submit"
                     disabled={
-                      form.formState.isSubmitting || !form.formState.isDirty
+                      updateReceipt.isPending || !form.formState.isDirty
                     }
                   >
                     Save receipt

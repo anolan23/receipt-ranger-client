@@ -12,7 +12,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { AuthLayout } from '@/layout/auth-layout';
-import { getErrorMessage, login } from '@/lib/api/auth';
+import { getErrorMessage } from '@/lib/api/auth';
+import { useLogin } from '@/queries/user';
 import { Credentials } from '@/lib/types';
 import { LoaderCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -30,15 +31,16 @@ export function LoginPage({ ...props }: LoginPageProps) {
     },
   });
 
-  async function onSubmit(values: Credentials) {
-    try {
-      await login(values);
-      navigate('/dashboard');
-    } catch (error) {
-      form.setError('root', { message: getErrorMessage(error) });
-    }
+  const login = useLogin();
+
+  function onSubmit(values: Credentials) {
+    login.mutate(values, {
+      onSuccess: () => navigate('/dashboard'),
+      onError: (error) =>
+        form.setError('root', { message: getErrorMessage(error) }),
+    });
   }
-  const { isSubmitting, errors } = form.formState;
+  const { errors } = form.formState;
 
   return (
     <AuthLayout
@@ -116,8 +118,8 @@ export function LoginPage({ ...props }: LoginPageProps) {
                       )}
                     />
                   </div>
-                  <Button size="lg" className="mt-2" disabled={isSubmitting}>
-                    {isSubmitting && (
+                  <Button size="lg" className="mt-2" disabled={login.isPending}>
+                    {login.isPending && (
                       <LoaderCircle aria-hidden className="animate-spin" />
                     )}
                     Log in

@@ -47,23 +47,24 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
     form.reset(defaultValues);
   }, [form, defaultValues]);
 
-  const { mutateAsync: saveGoal } = useSaveGoal();
+  const saveGoal = useSaveGoal();
 
-  async function onSubmit(values: GoalsSettingsValues) {
-    try {
-      await saveGoal(values.amount);
-      toast({ title: 'Goal saved!', description: 'Nice, your budget is all set.' });
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        form.setError('root', {
-          message: error.message,
+  function onSubmit(values: GoalsSettingsValues) {
+    saveGoal.mutate(values.amount, {
+      onSuccess: () => {
+        toast({
+          title: 'Goal saved!',
+          description: 'Nice, your budget is all set.',
         });
-      }
-    }
+      },
+      onError: (error) => {
+        console.error(error);
+        form.setError('root', { message: error.message });
+      },
+    });
   }
 
-  const { errors, isSubmitting, isValid } = form.formState;
+  const { errors, isValid } = form.formState;
   if (isLoading) return <LoadingState label="Fetching your goal…" />;
   return (
     <Form {...form}>
@@ -115,8 +116,8 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
             <AlertDescription>{errors.root.message}</AlertDescription>
           </Alert>
         )}
-        <Button disabled={isSubmitting}>
-          {isSubmitting && <LoaderCircle className="animate-spin" aria-hidden />}
+        <Button disabled={saveGoal.isPending}>
+          {saveGoal.isPending && <LoaderCircle className="animate-spin" aria-hidden />}
           Save goal
         </Button>
       </form>

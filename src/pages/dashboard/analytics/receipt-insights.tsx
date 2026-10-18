@@ -27,7 +27,8 @@ export function ReceiptInsightsPage({ ...props }: ReceiptInsightsPageProps) {
   const { data: categoryTotalsResult, isLoading: isCategoryTotalsLoading } =
     useCategoryTotals(dateInterval);
 
-  const { data: merchantCounts } = useMerchantCounts(dateInterval);
+  const { data: merchantCounts, isLoading: isMerchantCountsLoading } =
+    useMerchantCounts(dateInterval);
 
   return (
     <div className="grid gap-4">
@@ -69,7 +70,10 @@ export function ReceiptInsightsPage({ ...props }: ReceiptInsightsPageProps) {
           data={categoryTotalsResult || []}
           loading={isCategoryTotalsLoading}
         />
-        <MerchantsCard data={merchantCounts || []} />
+        <MerchantsCard
+          data={merchantCounts || []}
+          loading={isMerchantCountsLoading}
+        />
       </div>
     </div>
   );

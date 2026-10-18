@@ -1,3 +1,4 @@
+import { LoadingState } from '@/components/loading-state';
 import { cn } from '@/lib/utils';
 
 export interface MerchantBar {
@@ -9,13 +10,16 @@ interface MerchantBarsProps {
   data: MerchantBar[];
   /** How many merchants to show. */
   limit?: number;
+  loading?: boolean;
   className?: string;
 }
 
 /** Ranked merchants: butter rank circle, name, and a peach bar that grows in from the left. */
-export function MerchantBars({ data, limit = 6, className }: MerchantBarsProps) {
+export function MerchantBars({ data, limit = 6, loading, className }: MerchantBarsProps) {
   const rows = [...data].sort((a, b) => b.count - a.count).slice(0, limit);
   const max = Math.max(1, ...rows.map((row) => row.count));
+
+  if (loading) return <LoadingState className={className} />;
 
   if (!rows.length) {
     return (

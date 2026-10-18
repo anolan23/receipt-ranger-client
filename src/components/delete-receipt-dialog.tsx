@@ -16,21 +16,23 @@ import { ReactElement } from 'react';
 interface DeleteReceiptDialogProps extends AlertDialogProps {
   trigger: ReactElement;
   receipt?: ReceiptData;
-  onDeleteSubmit: (receipt: ReceiptData) => Promise<void>;
+  deleting?: boolean;
+  onDeleteSubmit: (receipt: ReceiptData) => void;
 }
 
 export function DeleteReceiptDialog({
   trigger,
   receipt,
+  deleting,
   onDeleteSubmit,
   ...props
 }: DeleteReceiptDialogProps) {
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async function (
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = function (
     event
   ) {
     event.preventDefault();
     if (!receipt) return;
-    await onDeleteSubmit(receipt);
+    onDeleteSubmit(receipt);
   };
   return (
     <AlertDialog {...props}>
@@ -52,6 +54,7 @@ export function DeleteReceiptDialog({
               type="submit"
               form="delete-receipt-form"
               variant="danger"
+              disabled={deleting}
             >
               Delete receipt
             </Button>

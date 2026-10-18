@@ -52,7 +52,8 @@ export function ReceiptInfoCard({
   const { data: merchants, isLoading: isMerchantSearchLoading } =
     useMerchantSearch(debouncedFilterValue);
 
-  const { data: categories } = useCategories();
+  const { data: categories, isLoading: isCategoriesLoading } =
+    useCategories();
 
   const options = useMemo<Array<OptionItemDefinition>>(() => {
     if (!merchants?.length) return [];
@@ -158,7 +159,10 @@ export function ReceiptInfoCard({
                 <FormControl>
                   <Select
                     id="category_id"
-                    placeholder="Pick a category"
+                    placeholder={
+                      isCategoriesLoading ? 'Loading…' : 'Pick a category'
+                    }
+                    disabled={isCategoriesLoading}
                     items={categoryItems}
                     value={field.value}
                     onValueChange={(value) => {

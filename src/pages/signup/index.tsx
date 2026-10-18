@@ -1,7 +1,7 @@
 import { Link } from '@/components/link';
 import { Button } from '@/components/ui/button';
 import { AuthLayout } from '@/layout/auth-layout';
-import { register } from '@/lib/api/auth';
+import { useRegister } from '@/queries/user';
 import { Credentials } from '@/lib/types';
 import { useNavigate } from 'react-router-dom';
 import { CredentialsForm } from './components/credentials-form';
@@ -12,9 +12,10 @@ export function SignupPage({ ...props }: SignupPageProps) {
   usePageTitle('Sign Up');
   const navigate = useNavigate();
 
-  async function handleCredentialsSubmit(values: Credentials) {
-    await register(values);
-    navigate('/dashboard');
+  const register = useRegister();
+
+  function handleCredentialsSubmit(values: Credentials) {
+    register.mutate(values, { onSuccess: () => navigate('/dashboard') });
   }
 
   return (
@@ -35,7 +36,11 @@ export function SignupPage({ ...props }: SignupPageProps) {
             </p>
           </div>
           <div className="grid gap-6">
-            <CredentialsForm onSubmit={handleCredentialsSubmit} />
+            <CredentialsForm
+              onSubmit={handleCredentialsSubmit}
+              pending={register.isPending}
+              error={register.error}
+            />
           </div>
           <p className="px-4 text-center text-sm text-ink-muted">
             By signing up, you agree to our{' '}

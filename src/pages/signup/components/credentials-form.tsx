@@ -15,9 +15,11 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface CredentialsFormProps {
   onSubmit: SubmitHandler<Credentials>;
+  pending?: boolean;
+  error?: unknown;
 }
 
-export function CredentialsForm({ onSubmit, ...props }: CredentialsFormProps) {
+export function CredentialsForm({ onSubmit, pending, error, ...props }: CredentialsFormProps) {
   const form = useForm<Credentials>({
     defaultValues: {
       email: '',
@@ -25,20 +27,12 @@ export function CredentialsForm({ onSubmit, ...props }: CredentialsFormProps) {
     },
   });
 
-  const { isSubmitting, errors } = form.formState;
-
-  const internalOnSubmit: SubmitHandler<Credentials> = async function (values) {
-    try {
-      await onSubmit(values);
-    } catch (error) {
-      form.setError('root', { message: getErrorMessage(error) });
-    }
-  };
+  const { errors } = form.formState;
 
   return (
     <Form {...form}>
-      {errors.root?.message && <FormMessage>{errors.root.message}</FormMessage>}
-      <form onSubmit={form.handleSubmit(internalOnSubmit)}>
+      {error != null && <FormMessage>{getErrorMessage(error)}</FormMessage>}
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <FormField
@@ -100,8 +94,8 @@ export function CredentialsForm({ onSubmit, ...props }: CredentialsFormProps) {
               )}
             />
           </div>
-          <Button size="lg" className="mt-2" disabled={isSubmitting}>
-            {isSubmitting && (
+          <Button size="lg" className="mt-2" disabled={pending}>
+            {pending && (
               <LoaderCircle aria-hidden className="animate-spin" />
             )}
             Sign up

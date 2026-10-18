@@ -1,8 +1,6 @@
 import SmartBreadcrumb from '@/components/smart-breadcrumb';
 import { Button } from '@/components/ui/button';
 import { useCategory } from '@/queries/categories';
-import { useCategoryItems } from '@/queries/categories';
-import { useReceipt } from '@/queries/receipts';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { ChevronLeft } from 'lucide-react';
 import { LoadingState } from '@/components/loading-state';
@@ -15,11 +13,10 @@ export function CategoryPage({ ...props }: CategoryPageProps) {
 
   const navigate = useNavigate();
 
-  const { data: category } = useCategory(categoryId);
+  const { data: category, isLoading, isError } = useCategory(categoryId);
 
-  const { data: items } = useCategoryItems(categoryId);
-
-  if (!category) return <LoadingState />;
+  if (isLoading) return <LoadingState />;
+  if (isError || !category) return <p>We couldn't find that category.</p>;
 
   return (
     <DashboardLayout

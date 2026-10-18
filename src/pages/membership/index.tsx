@@ -23,9 +23,9 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
   const [error, setError] = useState<string>();
   const { isAuthenticated } = useUser();
 
-  const { mutateAsync: createCheckoutSession } = useCreateCheckoutSession();
+  const createCheckoutSession = useCreateCheckoutSession();
 
-  const startCheckout = async (plan: 'monthly' | 'yearly') => {
+  const startCheckout = (plan: 'monthly' | 'yearly') => {
     if (isAuthenticated === false) {
       navigate('/signup');
       return;
@@ -33,19 +33,22 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
     const appUrl = import.meta.env.VITE_APP_URL;
     setError(undefined);
     setLoadingPlan(plan);
-    try {
-      await createCheckoutSession({
+    createCheckoutSession.mutate(
+      {
         subscription_type: plan,
         success_url: `${appUrl}/dashboard/settings/subscription?checkout=success`,
         cancel_url: `${appUrl}/membership?checkout=canceled${
           searchParams.get('c') ? `&c=${searchParams.get('c')}` : ''
         }`,
-      });
-    } catch (e) {
-      console.error(e);
-      setError("We couldn't open checkout. Nothing was charged. Try again.");
-      setLoadingPlan(null);
-    }
+      },
+      {
+        onError: (e) => {
+          console.error(e);
+          setError("We couldn't open checkout. Nothing was charged. Try again.");
+          setLoadingPlan(null);
+        },
+      }
+    );
   };
 
   return (
