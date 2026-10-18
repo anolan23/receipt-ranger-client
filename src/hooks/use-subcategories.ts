@@ -1,9 +1,10 @@
 import { getSubcategories } from '@/lib/api/categories';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useSubcategories(categoryId?: number | string | null) {
-  return useSWR(
-    categoryId ? `/categories/${categoryId}/subcategories` : undefined,
-    () => (categoryId ? getSubcategories(categoryId) : undefined)
-  );
+  return useQuery({
+    queryKey: ['categories', categoryId, 'subcategories'],
+    queryFn: () => getSubcategories(categoryId!),
+    enabled: !!categoryId,
+  });
 }

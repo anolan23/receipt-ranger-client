@@ -1,6 +1,6 @@
 import { getCurrentUser } from '@/lib/api/auth';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useUserAttributes() {
-  return useSWR('user-attributes', () => getCurrentUser());
+  return useQuery({ queryKey: ['user-attributes'], queryFn: getCurrentUser });
 }

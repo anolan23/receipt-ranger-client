@@ -1,8 +1,6 @@
 import { getMerchants } from '@/lib/api/merchants';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useMerchants() {
-  const key = '/merchants';
-
-  return useSWR(key, getMerchants);
+  return useQuery({ queryKey: ['merchants'], queryFn: getMerchants });
 }

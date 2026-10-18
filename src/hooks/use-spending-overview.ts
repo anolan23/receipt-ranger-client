@@ -1,7 +1,9 @@
 import { getSpendingOverview } from '@/lib/api/analytics';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useSpendingOverview() {
-  const key = `/analytics/spending-overview`;
-  return useSWR(key, getSpendingOverview);
+  return useQuery({
+    queryKey: ['analytics', 'spending-overview'],
+    queryFn: getSpendingOverview,
+  });
 }

@@ -1,6 +1,6 @@
 import { fetchGoalData } from '@/lib/api/goals';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useGoal() {
-  return useSWR('/goals', fetchGoalData);
+  return useQuery({ queryKey: ['goals'], queryFn: fetchGoalData });
 }

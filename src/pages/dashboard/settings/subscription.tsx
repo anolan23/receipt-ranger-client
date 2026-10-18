@@ -16,7 +16,7 @@ export function SubscriptionSettings({ ...props }: SubscriptionSettingsProps) {
     tier,
     state,
     isLoading: isSubscriptionLoading,
-    mutate,
+    refetch,
   } = usePlan();
   const [searchParams, setSearchParams] = useSearchParams();
   // Remember a checkout return, then drop the param so a refresh doesn't replay it.
@@ -34,13 +34,13 @@ export function SubscriptionSettings({ ...props }: SubscriptionSettingsProps) {
   const waiting = returnedFromCheckout && tier !== 'pro' && !gaveUp;
   useEffect(() => {
     if (!waiting) return;
-    const poll = setInterval(() => mutate(), 2000);
+    const poll = setInterval(() => refetch(), 2000);
     const stop = setTimeout(() => setGaveUp(true), 20000);
     return () => {
       clearInterval(poll);
       clearTimeout(stop);
     };
-  }, [waiting, mutate]);
+  }, [waiting, refetch]);
   const [loading, setLoading] = useState(false);
 
   const handleManageClick = async function () {

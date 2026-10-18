@@ -1,6 +1,6 @@
 import { getScanUsage } from '@/lib/api/receipts';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useScanUsage() {
-  return useSWR('/receipts/usage', getScanUsage);
+  return useQuery({ queryKey: ['receipts', 'usage'], queryFn: getScanUsage });
 }

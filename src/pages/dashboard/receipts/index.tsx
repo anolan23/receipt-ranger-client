@@ -35,7 +35,7 @@ export function ReceiptsPage() {
   const isMobile = useDeviceWidth();
   const {
     data: receipts,
-    mutate: mutateReceipts,
+    refetch: refetchReceipts,
     isLoading: isReceiptsLoading,
   } = useReceipts();
   const [searchParams] = useSearchParams();
@@ -223,7 +223,7 @@ export function ReceiptsPage() {
             onNextClick={nextRow}
             onDeleteSuccess={() => {
               setRowSelection({});
-              mutateReceipts();
+              refetchReceipts();
             }}
           />
         </div>

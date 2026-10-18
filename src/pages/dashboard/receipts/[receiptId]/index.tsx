@@ -33,7 +33,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
 
   const {
     data: receipt,
-    mutate: mutateReceipt,
+    refetch: refetchReceipt,
     error,
     isLoading,
   } = useReceipt(receiptId);
@@ -104,7 +104,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
         ...rest,
         merchant_id: merchantOption?.value || '',
       });
-      mutateReceipt();
+      refetchReceipt();
       toast({ title: 'Saved!', description: 'Your receipt is all up to date.' });
     } catch (error) {
       toast({
@@ -171,7 +171,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                       onDelete={(receipt) => navigate('/dashboard/receipts')}
                       onReviewed={async () => {
                         try {
-                          mutateReceipt();
+                          refetchReceipt();
                           toast({ title: 'Looks good!', description: 'Marked as reviewed.' });
                         } catch (error) {
                           toast({

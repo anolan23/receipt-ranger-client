@@ -72,7 +72,7 @@ export function ScanPage() {
   const [scanLimit, setScanLimit] = useState<ScanLimit | null>(null);
   const scanLimitRef = useRef<ScanLimit | null>(null);
   const { tier, isLoading: planLoading } = usePlan();
-  const { mutate: refreshUsage } = useScanUsage();
+  const { refetch: refreshUsage } = useScanUsage();
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -196,7 +196,7 @@ export function ScanPage() {
     addFiles(Array.from(e.dataTransfer.files));
   };
 
-  // SWR revalidates the plan when the tab regains focus, so upgrading in
+  // React Query refetches the plan when the tab regains focus, so upgrading in
   // another tab shows up here without any effect.
   const readHeld = async () => {
     scanLimitRef.current = null;

@@ -1,10 +1,10 @@
 import { searchMerchant } from '@/lib/api/merchants';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useMerchantSearch(search?: string) {
-  const queryString = new URLSearchParams({ q: search } as any).toString();
-  const key = `/merchants/search?${queryString}`;
-  return useSWR(search && key, () =>
-    search ? searchMerchant(search) : undefined
-  );
+  return useQuery({
+    queryKey: ['merchants', 'search', search],
+    queryFn: () => searchMerchant(search!),
+    enabled: !!search,
+  });
 }

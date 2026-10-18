@@ -1,6 +1,9 @@
 import { getSubscriptionRecord } from '@/lib/api/stripe';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useSubscription() {
-  return useSWR('/stripe/subscription', getSubscriptionRecord);
+  return useQuery({
+    queryKey: ['stripe', 'subscription'],
+    queryFn: getSubscriptionRecord,
+  });
 }

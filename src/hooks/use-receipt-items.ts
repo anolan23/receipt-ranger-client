@@ -1,18 +1,11 @@
 import { getReceiptItems } from '@/lib/api/receipts';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useReceiptItems(receiptId?: string) {
-  const fetcher = async function () {
-    if (!receiptId) return;
-    const receipt = await getReceiptItems(receiptId);
-    return receipt;
-  };
-
-  const swrResponse = useSWR(
-    receiptId ? `/receipts/${receiptId}/items` : undefined,
-    fetcher,
-    { revalidateOnMount: true, shouldRetryOnError: false }
-  );
-
-  return swrResponse;
+  return useQuery({
+    queryKey: ['receipts', receiptId, 'items'],
+    queryFn: () => getReceiptItems(receiptId!),
+    enabled: !!receiptId,
+    retry: false,
+  });
 }

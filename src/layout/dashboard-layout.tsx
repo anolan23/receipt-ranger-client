@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { logout } from '@/lib/api/auth';
-import { clearSWRCache, cn } from '@/lib/utils';
+import { clearQueryCache, cn } from '@/lib/utils';
 import {
   Camera,
   Home,
@@ -61,7 +61,7 @@ export function DashboardLayout({
 
   const handleLogoutSelect = function () {
     logout();
-    clearSWRCache();
+    clearQueryCache();
     navigate('/');
   };
 

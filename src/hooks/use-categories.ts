@@ -1,8 +1,6 @@
 import { getCategories } from '@/lib/api/categories';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useCategories() {
-  const key = `/categories`;
-
-  return useSWR(key, getCategories);
+  return useQuery({ queryKey: ['categories'], queryFn: getCategories });
 }

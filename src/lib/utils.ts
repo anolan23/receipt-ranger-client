@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { mutate } from 'swr';
+import { queryClient } from './query-client';
 
 export function getRandomColor() {
   const letters = '0123456789ABCDEF';
@@ -11,8 +11,8 @@ export function getRandomColor() {
   return color;
 }
 
-export function clearSWRCache() {
-  mutate(() => true, undefined, { revalidate: false });
+export function clearQueryCache() {
+  queryClient.clear();
 }
 
 export function cn(...inputs: ClassValue[]) {

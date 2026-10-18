@@ -1,9 +1,10 @@
 import { getOverview } from '@/lib/api/analytics';
 import { GetOverviewParams } from '@/lib/types';
-import useSWR from 'swr';
+import { useQuery } from '@tanstack/react-query';
 
 export function useOverview(params: GetOverviewParams) {
-  const queryString = new URLSearchParams(params as any).toString();
-  const key = `/analytics/overview?${queryString}`;
-  return useSWR(key, () => getOverview(params));
+  return useQuery({
+    queryKey: ['analytics', 'overview', params],
+    queryFn: () => getOverview(params),
+  });
 }

@@ -48,7 +48,7 @@ export function DashboardPage() {
   const isMobile = useDeviceWidth();
   const {
     data: receipts,
-    mutate: mutateReceipts,
+    refetch: refetchReceipts,
     isLoading: isReceiptsLoading,
   } = useReceipts({ limit: 5 });
   const { rowSelection, setRowSelection, selectedRow, nextRow, prevRow } =
@@ -61,7 +61,7 @@ export function DashboardPage() {
   const {
     data: spendingOverview,
     isLoading: isSpendingOverviewLoading,
-    mutate: mutateSpendingOverview,
+    refetch: refetchSpendingOverview,
   } = useSpendingOverview();
 
   const { tier: planTier, isLoading: isPlanLoading } = usePlan();
@@ -302,8 +302,8 @@ export function DashboardPage() {
             onNextClick={nextRow}
             onDeleteSuccess={() => {
               setRowSelection({});
-              mutateReceipts();
-              mutateSpendingOverview();
+              refetchReceipts();
+              refetchSpendingOverview();
             }}
           />
         </div>
