@@ -8,8 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { ChevronDownIcon } from 'lucide-react';
-import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import { SlidersHorizontal } from 'lucide-react';
 
 interface ColumnFilterDropdownProps {
   table: Table<any>;
@@ -22,8 +21,8 @@ export function ColumnFilterDropdown({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
-          <MixerHorizontalIcon className="h-3.5 w-3.5 mr-2" /> View
+        <Button variant="secondary" size="sm">
+          <SlidersHorizontal aria-hidden /> View
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

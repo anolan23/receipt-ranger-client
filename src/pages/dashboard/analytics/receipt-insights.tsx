@@ -30,10 +30,10 @@ export function ReceiptInsightsPage({ ...props }: ReceiptInsightsPageProps) {
   const { data: merchantCounts } = useMerchantCounts(dateInterval);
 
   return (
-    <div className="grid gap-8">
-      <div className="grid gap-8 md:grid-cols-3 min-w-0">
+    <div className="grid gap-4">
+      <div className="grid min-w-0 gap-4 md:grid-cols-3">
         <MetricCard
-          title="Total amount"
+          title="Total spent"
           value={
             overviewData?.total_amount
               ? toDollar(overviewData.total_amount)
@@ -42,7 +42,7 @@ export function ReceiptInsightsPage({ ...props }: ReceiptInsightsPageProps) {
           loading={isOverviewLoading}
         />
         <MetricCard
-          title="Average receipt total"
+          title="Average per receipt"
           value={
             overviewData?.avg_receipt_total
               ? toDollar(overviewData.avg_receipt_total)
@@ -51,7 +51,7 @@ export function ReceiptInsightsPage({ ...props }: ReceiptInsightsPageProps) {
           loading={isOverviewLoading}
         />
         <MetricCard
-          title="Receipt count"
+          title="Receipts scanned"
           value={overviewData?.receipt_count ? overviewData.receipt_count : '0'}
           loading={isOverviewLoading}
         />
@@ -64,7 +64,7 @@ export function ReceiptInsightsPage({ ...props }: ReceiptInsightsPageProps) {
           datePreset={datePreset}
         />
       </div>
-      <div className="grid gap-8 sm:grid-cols-2 min-w-0">
+      <div className="grid min-w-0 gap-4 lg:grid-cols-2">
         <CategoriesCard
           data={categoryTotalsResult || []}
           loading={isCategoryTotalsLoading}

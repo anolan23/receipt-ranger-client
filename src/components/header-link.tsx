@@ -7,8 +7,8 @@ export function HeaderLink({ ...props }: HeaderLinkProps) {
     <NavLink
       className={({ isActive }) =>
         isActive
-          ? 'text-sm font-medium transition-colors hover:text-primary'
-          : 'text-sm font-medium text-muted-foreground transition-colors hover:text-primary'
+          ? 'text-sm font-bold text-ink transition-colors hover:text-primary'
+          : 'text-sm font-bold text-ink-muted transition-colors hover:text-primary'
       }
       {...props}
     >

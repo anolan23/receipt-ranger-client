@@ -155,9 +155,9 @@ export function LineItemsTable({
               onClick={() => {
                 remove(row.index);
               }}
-              variant="outline"
+              variant="secondary"
               size="icon"
-              className="h-7 w-7"
+              className=""
             >
               <Trash2Icon className="h-4 w-4" />
             </Button>
@@ -185,7 +185,7 @@ export function LineItemsTable({
             quantity: 1,
           })
         }
-        variant="outline"
+        variant="secondary"
         className="gap-1"
       >
         <PlusCircle className="h-3.5 w-3.5" />

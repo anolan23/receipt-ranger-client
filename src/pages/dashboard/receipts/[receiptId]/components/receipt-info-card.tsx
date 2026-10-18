@@ -103,8 +103,8 @@ export function ReceiptInfoCard({
   const modifiedDate = dayjs(receipt.created_at).fromNow();
 
   return (
-    <Card className="min-w-0 bg-card sm:shadow-sm sm:border">
-      <CardContent className="px-4 pt-4 space-y-4 sm:p-6 sm:pt-6">
+    <Card className="min-w-0">
+      <CardContent className="space-y-5">
         <FormField
           control={form.control}
           name="merchantOption"
@@ -118,8 +118,8 @@ export function ReceiptInfoCard({
                     selectedOption={field.value}
                     onOptionChange={field.onChange}
                     triggerVariant="option"
-                    searchPlaceHolder="Search Merchants..."
-                    empty="No Merchant found."
+                    searchPlaceHolder="Search stores…"
+                    empty="I couldn't find that store."
                     loading={isMerchantSearchLoading}
                     filterValue={filterValue}
                     onFilterChange={setFilterValue}
@@ -135,7 +135,7 @@ export function ReceiptInfoCard({
           name="transaction_date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="transaction_date">Transaction Date</FormLabel>
+              <FormLabel htmlFor="transaction_date">Date on the receipt</FormLabel>
               <FormControl>
                 <DatePicker
                   date={field.value}
@@ -154,11 +154,11 @@ export function ReceiptInfoCard({
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel htmlFor="category_id">Receipt Category</FormLabel>
+                <FormLabel htmlFor="category_id">Category</FormLabel>
                 <FormControl>
                   <Select
                     id="category_id"
-                    placeholder="Select Category"
+                    placeholder="Pick a category"
                     items={categoryItems}
                     value={field.value}
                     onValueChange={(value) => {
@@ -192,7 +192,7 @@ export function ReceiptInfoCard({
                       step={0.01}
                       min={0}
                       {...field}
-                      className="text-right tabular-nums"
+                      className="num text-right"
                     />
                   </FormControl>
                   <FormMessage />
@@ -205,7 +205,7 @@ export function ReceiptInfoCard({
             name="sales_tax"
             render={({ field }) => (
               <FormItem className="grid grid-cols-[1fr_9rem] items-center gap-x-4 space-y-0">
-                <FormLabel htmlFor="sales_tax">Sales Tax</FormLabel>
+                <FormLabel htmlFor="sales_tax">Sales tax</FormLabel>
                 <div>
                   <FormControl>
                     <DollarInput
@@ -214,7 +214,7 @@ export function ReceiptInfoCard({
                       step={0.01}
                       min={0}
                       {...field}
-                      className="text-right tabular-nums"
+                      className="num text-right"
                     />
                   </FormControl>
                   <FormMessage />
@@ -228,7 +228,7 @@ export function ReceiptInfoCard({
             name="total"
             render={({ field }) => (
               <FormItem className="grid grid-cols-[1fr_9rem] items-center gap-x-4 space-y-0">
-                <FormLabel htmlFor="total" className="text-base font-semibold">
+                <FormLabel htmlFor="total" className="font-display text-lg font-semibold">
                   Total
                 </FormLabel>
                 <div>
@@ -239,7 +239,7 @@ export function ReceiptInfoCard({
                       step={0.01}
                       min={0}
                       {...field}
-                      className="text-right tabular-nums font-semibold"
+                      className="num text-right"
                     />
                   </FormControl>
                   <FormMessage />
@@ -250,16 +250,16 @@ export function ReceiptInfoCard({
           {mismatches.map((m) => (
             <p
               key={m}
-              className="flex items-center gap-1.5 text-xs text-muted-foreground"
+              className="flex items-start gap-2 rounded-md bg-rise-bg px-3 py-2 text-[13px] leading-[18px] font-bold text-rise-ink"
             >
-              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
+              <AlertTriangle aria-hidden className="mt-px size-4 shrink-0" />
               {m}
             </p>
           ))}
         </div>
       </CardContent>
-      <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-        <div className="text-xs text-muted-foreground">
+      <CardFooter className="-mx-5 -mb-5 rounded-b-lg border-t border-line bg-surface-200 px-5 py-3">
+        <div className="text-xs font-bold text-ink-muted">
           Scanned <time dateTime={modifiedDateShort}>{modifiedDate}</time>
         </div>
       </CardFooter>

@@ -26,9 +26,9 @@ export function ReceiptViewer({ imageUrl }: ReceiptViewerProps) {
         type="button"
         onClick={() => setOpen(true)}
         disabled={!src}
-        className="flex w-full items-center gap-3 rounded-lg border bg-card p-3 text-left transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-60"
+        className="flex w-full items-center gap-3 rounded-md bg-surface-200 p-3 text-left transition-colors hover:bg-primary-soft disabled:pointer-events-none disabled:opacity-60"
       >
-        <span className="relative flex h-16 w-12 shrink-0 items-center justify-center overflow-hidden rounded border bg-muted text-muted-foreground">
+        <span className="relative flex h-16 w-12 shrink-0 items-center justify-center overflow-hidden rounded-[10px] border-[1.5px] border-outline bg-[#fffdf8] text-[#755d56]">
           {!src ? (
             <FileQuestion className="h-5 w-5" />
           ) : thumb === 'error' ? (
@@ -36,7 +36,7 @@ export function ReceiptViewer({ imageUrl }: ReceiptViewerProps) {
           ) : (
             <>
               {thumb === 'loading' ? (
-                <span className="absolute inset-0 animate-pulse bg-muted" />
+                <span className="skeleton absolute inset-0 rounded-none" />
               ) : null}
               <img
                 src={src}
@@ -49,14 +49,14 @@ export function ReceiptViewer({ imageUrl }: ReceiptViewerProps) {
           )}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block text-sm font-medium">Original receipt</span>
-          <span className="block text-xs text-muted-foreground">
+          <span className="block text-sm font-bold">Original receipt</span>
+          <span className="block text-xs text-ink-muted">
             {src
-              ? 'Tap to compare with the details below'
-              : 'No image for this receipt'}
+              ? 'Tap to take a closer look'
+              : 'No photo saved for this receipt'}
           </span>
         </span>
-        {src ? <Maximize2 className="h-4 w-4 text-muted-foreground" /> : null}
+        {src ? <Maximize2 className="h-4 w-4 text-ink-muted" /> : null}
       </button>
       {src ? (
         <Lightbox

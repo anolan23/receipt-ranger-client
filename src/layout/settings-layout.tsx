@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Separator } from '@/components/ui/separator';
 
 interface SettingsLayoutProps {
   title: string;
@@ -7,21 +8,17 @@ interface SettingsLayoutProps {
 }
 
 export function SettingsLayout({
-  title = 'Settings Title',
-  description = 'This is a description',
+  title = 'Settings',
+  description = 'Make it yours.',
   form,
-  ...props
 }: SettingsLayoutProps) {
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">{title}</h3>
-        <p className="text-sm text-muted-foreground">{description}</p>
+      <div className="space-y-1">
+        <h2 className="type-h2">{title}</h2>
+        <p className="text-sm text-ink-muted">{description}</p>
       </div>
-      <div
-        data-orientation="horizontal"
-        className="shrink-0 bg-border h-px w-full"
-      ></div>
+      <Separator />
       {form}
     </div>
   );

@@ -1,0 +1,3 @@
+The review step puts the scanned image on the left and the editable fields on the right (stacked on phones, image first). Editable: merchant, category chips and each line item. Anything the reader was unsure about is highlighted with `rise-*` and a kind note, never an error.
+
+The primary action is "Looks good!"; "Skip for now" keeps the receipt flagged as ✋ Take a peek in the table. Confirming triggers the success pop and a small sparkle.

@@ -1,0 +1,3 @@
+The receipts table has sortable headers (a `button` inside each `th`, with `aria-sort` on the active one), a search field, a category filter and a date range, and pagination of 10 rows. Each row is a rounded tile; the category is a `CategoryBadge`, the total is `money` with tabular numerals, and the status is a `StatusPill`.
+
+Rows open the receipt drawer on click or Enter. On phones the table becomes a list of receipt cards with the merchant, date, total and status.

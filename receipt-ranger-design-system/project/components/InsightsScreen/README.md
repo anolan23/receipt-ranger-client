@@ -1,0 +1,1 @@
+The Insights screen: switch between Categories and Merchants, pick a chip, then read the headline amount, a six-month trend, the top line items and where you buy them. Both themes shown.

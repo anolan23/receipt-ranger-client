@@ -1,3 +1,4 @@
+import { LoadingState } from '@/components/loading-state';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { cn } from 'cn';
+import { cn } from '@/lib/utils';
 import { ReactNode, useState } from 'react';
 import { Option, OptionItemDefinition } from '../option';
 
@@ -51,7 +52,7 @@ export function Combobox({
       <PopoverTrigger asChild>
         <Button
           id={id}
-          variant="outline"
+          variant="secondary"
           role="combobox"
           aria-expanded={open}
           className={cn('flex w-full justify-between', {
@@ -81,7 +82,7 @@ export function Combobox({
           />
           {/* {loading && (
             <div className="py-6 flex justify-center items-center">
-              <StatusIndicator status="loading">Loading</StatusIndicator>
+              <LoadingState />
             </div>
           )} */}
           <CommandEmpty>{empty}</CommandEmpty>

@@ -1,0 +1,3 @@
+The drawer slides in from the right (`dur-base`) over a `scrim`, 420px wide on desktop and full-width on phones. It shows the scanned image on a `surface-200` mat, the category as an editable chip row, a kind low-confidence note when needed, the parsed line items with tabular amounts and the total.
+
+A line the reader was unsure about gets the `rise-*` highlight and the note "Can you double-check this one?". Focus moves into the drawer on open and returns to the row on close; Escape closes it.

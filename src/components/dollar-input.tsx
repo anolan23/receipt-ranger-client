@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { Input } from './ui/input';
 import { DollarSign } from 'lucide-react';
-import { cn } from 'cn';
+import { cn } from '@/lib/utils';
 
 type DollarInputProps = React.ComponentProps<'input'>;
 
@@ -9,10 +9,13 @@ export const DollarInput = forwardRef<HTMLInputElement, DollarInputProps>(
   ({ className, ...props }, ref) => {
     return (
       <div className="relative">
-        <DollarSign className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <DollarSign
+          aria-hidden
+          className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink-muted"
+        />
         <Input
           ref={ref}
-          className={cn('w-full rounded-lg bg-background pl-8', className)}
+          className={cn('w-full pl-9', className)}
           type="number"
           inputMode="decimal"
           step={0.01}

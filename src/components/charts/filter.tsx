@@ -38,7 +38,7 @@ export function Filter({ items, value, onValueChange }: FilterProps) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="justify-between">
+        <Button variant="secondary" className="justify-between">
           Filter data
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>

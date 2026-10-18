@@ -31,7 +31,7 @@ const SmartBreadcrumb = ({
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/dashboard">Overview</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {filteredPathnames.map((name, index) => {

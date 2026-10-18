@@ -1,4 +1,4 @@
-import { cn } from 'cn';
+import { cn } from '@/lib/utils';
 import { forwardRef } from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 
@@ -13,10 +13,10 @@ export const DashboardLink = forwardRef<HTMLAnchorElement, DashboardLinkProps>(
         ref={ref}
         className={({ isActive }) => {
           return cn(
-            'flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8',
+            'flex size-11 items-center justify-center rounded-full transition-colors',
             {
-              'bg-accent text-accent-foreground': isActive,
-              'text-muted-foreground hover:text-foreground': !isActive,
+              'bg-primary-soft text-ink': isActive,
+              'text-ink-muted hover:text-ink': !isActive,
             }
           );
         }}

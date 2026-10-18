@@ -4,7 +4,7 @@ import { useItems } from '@/hooks/use-items';
 import { TextFilter } from '@/components/text-filter';
 import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter';
 import { Button } from '@/components/ui/button';
-import { Cross2Icon } from '@radix-ui/react-icons';
+import { X } from 'lucide-react';
 import { useCallback } from 'react';
 import { Table } from '@tanstack/react-table';
 import { ItemData } from '@/lib/types';
@@ -66,7 +66,7 @@ export function ItemsPage({ ...props }: ItemsPageProps) {
               return (
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <TextFilter table={table} placeholder="Filter Items..." />
+                    <TextFilter table={table} placeholder="Search items…" />
                     {table.getColumn('subcategory') && (
                       <DataTableFacetedFilter
                         column={table.getColumn('subcategory')}
@@ -91,11 +91,11 @@ export function ItemsPage({ ...props }: ItemsPageProps) {
                     {isFiltered && (
                       <Button
                         variant="ghost"
+                        size="sm"
                         onClick={() => table.resetColumnFilters()}
-                        className="h-8 px-2 lg:px-3"
                       >
                         Reset
-                        <Cross2Icon className="ml-2 h-4 w-4" />
+                        <X aria-hidden className="size-4" />
                       </Button>
                     )}
                   </div>
@@ -107,9 +107,9 @@ export function ItemsPage({ ...props }: ItemsPageProps) {
             }}
             header={
               <CardHeader>
-                <CardTitle>Receipt Items</CardTitle>
+                <CardTitle>Everything you bought</CardTitle>
                 <CardDescription>
-                  All Items extracted from your receipts
+                  Every item I found on your receipts
                 </CardDescription>
               </CardHeader>
             }

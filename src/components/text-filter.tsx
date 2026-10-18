@@ -12,7 +12,7 @@ export function TextFilter({ table, ...props }: TextFilterProps) {
       placeholder="Filter resources..."
       value={table.getState().globalFilter || ''}
       onChange={(e) => table.setGlobalFilter(e.target.value)}
-      className="max-w-sm bg-background h-8 w-[150px] lg:w-[250px]"
+      className="w-full min-w-40 sm:w-64"
       {...props}
     />
   );

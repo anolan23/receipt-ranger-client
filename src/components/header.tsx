@@ -6,14 +6,15 @@ interface HeaderProps {
   actions?: ReactNode;
 }
 
-export function Header({ title, description, actions, ...props }: HeaderProps) {
+/** Screen greeting: `h1` in Fredoka with a muted line of microcopy beneath. */
+export function Header({ title, description, actions }: HeaderProps) {
   return (
-    <div className="flex flex-wrap justify-between gap-4">
-      <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
-        {description && <p className="text-muted-foreground">{description}</p>}
+    <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="space-y-1">
+        <h1 className="type-h1">{title}</h1>
+        {description && <p className="text-ink-muted">{description}</p>}
       </div>
-      {actions && <div className="">{actions}</div>}
+      {actions && <div>{actions}</div>}
     </div>
   );
 }

@@ -1,0 +1,3 @@
+Buttons are pills with a minimum 48px height (44px for `btn--sm`). Use one `primary` button per view for the main job, `secondary` (outlined with `outline`) for alternatives, and `ghost` for low-priority links.
+
+Primary buttons carry the `shadow-button` sticker edge and bounce with `ease-bounce` on hover. Labels are sentence case and friendly: "Scan a receipt", "Looks good!", never "Submit". The raised circular Scan button belongs only in the centre of the phone tab bar. Icons are 20px, rounded-stroke, and always paired with a text label except in the tab bar.

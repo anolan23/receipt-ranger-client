@@ -1,0 +1,3 @@
+Monthly totals are rounded-top bars on a 0 to $2k axis with soft `line` gridlines. The current month uses `primary`, past months `blob-peach`; every bar has a 2px `ink` outline so it holds 3:1 against the page in both themes.
+
+Offer a 3M, 6M and 12M `seg` selector above the chart. Hover and keyboard focus show a rounded tooltip with the month, the amount and a short friendly note ("Back-to-school month 🎒"). Direct-label only the current month. Always offer "View as table". Bars grow in over `dur-slow`; with reduced motion they appear instantly.

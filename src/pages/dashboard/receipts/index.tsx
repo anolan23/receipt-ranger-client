@@ -1,4 +1,5 @@
 import { Cards } from '@/components/cards';
+import { Header } from '@/components/header';
 import { ColumnFilterDropdown } from '@/components/column-filter-dropdown';
 import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter';
 import { Pagination } from '@/components/pagination';
@@ -15,12 +16,6 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerTitle,
-} from '@/components/ui/drawer';
 import { useToast } from '@/components/ui/use-toast';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { usePageTitle } from '@/hooks/use-page-title';
@@ -29,9 +24,8 @@ import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { downloadReceipts } from '@/lib/api/receipts';
-import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
-import { File } from 'lucide-react';
+import { Download, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ReceiptsTable } from '../../../components/receipts-table';
@@ -101,9 +95,9 @@ export function ReceiptsPage() {
       await downloadReceipts();
     } catch (error) {
       toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to export Receipts',
+        variant: 'oops',
+        title: "Oops, that export didn't work",
+        description: 'Try exporting again?',
       });
     } finally {
       setDownloading(false);
@@ -117,7 +111,7 @@ export function ReceiptsPage() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/dashboard">Overview</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -128,7 +122,11 @@ export function ReceiptsPage() {
         </Breadcrumb>
       }
       content={
-        <div className="grid flex-1 items-start gap-4 md:gap-8">
+        <div className="grid flex-1 items-start gap-4">
+          <Header
+            title="Your receipts"
+            description="Every receipt I've read, ready to search and sort."
+          />
           <ReceiptsTable
             tools={(table) => {
               const isFiltered = table.getState().columnFilters.length > 0;
@@ -138,7 +136,7 @@ export function ReceiptsPage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <TextFilter
                       table={table}
-                      placeholder="Filter Receipts..."
+                      placeholder="Search receipts…"
                     />
                     {table.getColumn('merchant') && (
                       <DataTableFacetedFilter
@@ -159,19 +157,19 @@ export function ReceiptsPage() {
                         column={table.getColumn('status')}
                         title="Status"
                         options={[
-                          { label: 'Pending', value: false },
-                          { label: 'Reviewed', value: true },
+                          { label: 'Needs a look', value: false },
+                          { label: 'Looks good', value: true },
                         ]}
                       />
                     )}
                     {isFiltered && (
                       <Button
                         variant="ghost"
+                        size="sm"
                         onClick={() => table.resetColumnFilters()}
-                        className="h-8 px-2 lg:px-3"
                       >
                         Reset
-                        <Cross2Icon className="ml-2 h-4 w-4" />
+                        <X aria-hidden className="size-4" />
                       </Button>
                     )}
                   </div>
@@ -179,11 +177,10 @@ export function ReceiptsPage() {
                     <Button
                       onClick={handleExportClick}
                       size="sm"
-                      variant="outline"
-                      className="gap-1"
+                      variant="secondary"
                       disabled={downloading}
                     >
-                      <File className="h-3.5 w-3.5" />
+                      <Download aria-hidden />
                       <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                         Export
                       </span>
@@ -209,10 +206,10 @@ export function ReceiptsPage() {
           />
           <Cards
             hidden={!isMobile}
-            title="Reviewed Receipts"
+            title="Your receipts"
             loading={isReceiptsLoading}
-            loadingText="Loading Receipts"
-            emptyText="No Receipts."
+            loadingText="Counting the coupons…"
+            emptyText="No receipts yet. Let's scan your first one!"
             data={receipts || []}
             renderCard={(receipt) => (
               <ReceiptCardLink key={receipt.id} receipt={receipt} />

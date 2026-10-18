@@ -1,0 +1,1 @@
+Desktop uses a left sidebar of pill nav items (Overview, Receipts, Scan, Insights) with a persistent "Scan a receipt" button at its foot; the current page is `primary-soft` with `aria-current="page"`. On phones it collapses to a bottom tab bar with a raised, round Scan button in the centre, and a fifth "Me" tab. Targets are at least 48px.

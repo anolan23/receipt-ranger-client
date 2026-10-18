@@ -1,3 +1,4 @@
+import { LoadingState } from '@/components/loading-state';
 import {
   Card,
   CardDescription,
@@ -5,12 +6,10 @@ import {
   CardTitle,
   CardContent,
 } from '@/components/ui/card';
-import styles from './index.module.scss';
 import { Progress } from '@/components/ui/progress';
 import { useMemo } from 'react';
 import { toDollar } from '@/lib/helpers';
 import { TopBaseItemResult } from '@/lib/types';
-import { StatusIndicator } from '@/components/status-indicator';
 
 interface TopBaseItemCardProps {
   data: TopBaseItemResult[];
@@ -27,12 +26,12 @@ export function TopBaseItemCard({
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Top Base Items</CardTitle>
-        <CardDescription>e.g. chicken, apple, beef</CardDescription>
+        <CardTitle>Your top items</CardTitle>
+        <CardDescription>Like chicken, apples or milk</CardDescription>
       </CardHeader>
       <CardContent>
         {loading ? (
-          <StatusIndicator status="loading">Loading</StatusIndicator>
+          <LoadingState />
         ) : (
           <div className="flex flex-col">
             {data.map((datum) => (
@@ -54,10 +53,10 @@ function BaseItemStat({ topBaseItem }: BaseItemStatProps) {
     [topBaseItem.ratio]
   );
   return (
-    <div className="p-2 space-y-1">
-      <div className="text-sm flex items-center justify-between">
-        <div className="capitalize">{topBaseItem.label || 'Not specified'}</div>
-        <div>{`${percent}%, ${toDollar(topBaseItem.total)}`}</div>
+    <div className="space-y-1.5 py-2">
+      <div className="flex items-center justify-between gap-3 text-sm font-bold">
+        <div className="capitalize">{topBaseItem.label || 'Not sure what this is'}</div>
+        <div className="num">{`${percent}% · ${toDollar(topBaseItem.total)}`}</div>
       </div>
       <Progress value={percent} />
     </div>

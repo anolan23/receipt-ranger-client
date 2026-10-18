@@ -1,8 +1,7 @@
-import { cn } from 'cn';
+import { cn } from '@/lib/utils';
 import {
   CircleAlert,
   CircleCheck,
-  CircleCheckBig,
   CircleEllipsis,
   CircleX,
   LoaderCircle,
@@ -19,43 +18,53 @@ export type StatusIndicatorStatus =
 interface StatusIndicatorProps {
   status: StatusIndicatorStatus;
   children: ReactNode;
+  className?: string;
 }
 
+/**
+ * Status pill. Status is never colour alone: every pill has an icon and a word.
+ * success = done, warning = take a peek, destructive = oops, pending = queued,
+ * loading = reading.
+ */
 export function StatusIndicator({
   status,
   children,
-  ...props
+  className,
 }: StatusIndicatorProps) {
-  const statusColorMap: Record<StatusIndicatorStatus, string> = {
-    warning: 'text-orange-700',
-    destructive: 'text-red-700',
-    loading: 'text-muted-secondary',
-    pending: 'text-muted-secondary',
-    success: 'text-green-700',
+  const styles: Record<StatusIndicatorStatus, string> = {
+    success: 'bg-win-bg text-win-ink',
+    warning: 'bg-rise-bg text-rise-ink',
+    destructive: 'bg-oops-bg text-oops-ink',
+    pending:
+      'border-[1.5px] border-dashed border-outline bg-surface-200 text-ink',
+    loading: 'bg-info-bg text-info-ink',
   };
 
   const renderIcon = function (status: StatusIndicatorStatus) {
-    const size = 16;
-    const color = statusColorMap[status];
+    const props = { size: 14, 'aria-hidden': true } as const;
     switch (status) {
       case 'warning':
-        return <CircleAlert className={color} size={size} />;
+        return <CircleAlert {...props} />;
       case 'destructive':
-        return <CircleX className={color} size={size} />;
+        return <CircleX {...props} />;
       case 'loading':
-        return (
-          <LoaderCircle className={cn(color, 'animate-spin')} size={size} />
-        );
+        return <LoaderCircle {...props} className="animate-spin" />;
       case 'pending':
-        return <CircleEllipsis className={color} size={size} />;
+        return <CircleEllipsis {...props} />;
       case 'success':
-        return <CircleCheck className={color} size={size} />;
+        return <CircleCheck {...props} />;
     }
   };
   return (
-    <div className="flex gap-1 items-center text-sm">
+    <span
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-full px-3 py-[3px] text-[13px] leading-5 font-bold whitespace-nowrap',
+        styles[status],
+        className
+      )}
+    >
       {renderIcon(status)}
-      <span className={statusColorMap[status]}>{children}</span>
-    </div>
+      {children}
+    </span>
   );
 }

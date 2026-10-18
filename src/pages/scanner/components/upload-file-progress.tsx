@@ -1,12 +1,6 @@
-import {
-  Attachment,
-  AttachmentContent,
-  AttachmentDescription,
-  AttachmentMedia,
-  AttachmentTitle,
-} from '@/components/ui/attachment';
 import { UploadFile } from '@/lib/types';
-import { FileText, Loader2 } from 'lucide-react';
+import { FileText } from 'lucide-react';
+import { StatusIndicator } from '@/components/status-indicator';
 
 interface FileProgressProps {
   uploadFile: UploadFile;
@@ -17,20 +11,21 @@ function formatSize(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+/** One thumbnail in the batch tray: file name, size and a "reading" status pill. */
 export function UploadFileProgress({ uploadFile }: FileProgressProps) {
   const { file } = uploadFile;
   return (
-    <Attachment state="processing" className="w-full">
-      <AttachmentMedia>
-        <FileText />
-      </AttachmentMedia>
-      <AttachmentContent>
-        <AttachmentTitle>{file.name}</AttachmentTitle>
-        <AttachmentDescription>
-          Processing · {formatSize(file.size)}
-        </AttachmentDescription>
-      </AttachmentContent>
-      <Loader2 className="mr-1 size-4 animate-spin text-muted-foreground" />
-    </Attachment>
+    <div className="flex w-full min-w-0 items-center gap-3 rounded-md border border-line bg-surface-raised p-3">
+      <div className="grid h-12 w-10 shrink-0 place-items-center rounded-[10px] border-[1.5px] border-outline bg-[#fffdf8] text-[#755d56]">
+        <FileText aria-hidden className="size-5" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="truncate text-sm font-bold">{file.name}</div>
+        <div className="num text-[13px] text-ink-muted">
+          {formatSize(file.size)}
+        </div>
+      </div>
+      <StatusIndicator status="loading">Reading…</StatusIndicator>
+    </div>
   );
 }

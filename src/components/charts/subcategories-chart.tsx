@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import styles from './index.module.scss';
 import { NivoBarChart } from './nivo-bar-chart';
 import { BarSeries } from './interfaces';
 import { SubcategoryTotalsResult } from '@/lib/types';

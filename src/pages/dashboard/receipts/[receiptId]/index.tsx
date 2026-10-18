@@ -1,6 +1,6 @@
 import { ReceiptViewer } from '@/components/receipt-viewer';
 import SmartBreadcrumb from '@/components/smart-breadcrumb';
-import { Badge } from '@/components/ui/badge';
+import { StatusIndicator } from '@/components/status-indicator';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
@@ -105,12 +105,12 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
         merchant_id: merchantOption?.value || '',
       });
       mutateReceipt();
-      toast({ title: 'Receipt successfully updated' });
+      toast({ title: 'Saved!', description: 'Your receipt is all up to date.' });
     } catch (error) {
       toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to update Receipt',
+        variant: 'oops',
+        title: "Oops, that didn't save",
+        description: 'Try saving the receipt again?',
       });
     }
   }
@@ -120,7 +120,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
       breadcrumbs={<SmartBreadcrumb />}
       content={
         <ContentLayout
-          className="space-y-6 max-w-3xl mx-auto"
+          className="mx-auto max-w-3xl space-y-6"
           loading={isLoading}
           error={error}
           data={receipt}
@@ -132,26 +132,26 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                   <div className="flex items-center gap-4">
                     <Button
                       onClick={() => navigate(-1)}
-                      variant="outline"
+                      variant="secondary"
                       size="icon"
-                      className="h-7 w-7"
+                      className="shrink-0"
                     >
-                      <ChevronLeft className="h-4 w-4" />
+                      <ChevronLeft aria-hidden />
                       <span className="sr-only">Back</span>
                     </Button>
-                    <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight lg:flex-none">
+                    <h1 className="type-h2 min-w-0 flex-1 truncate lg:flex-none">
                       {getReceiptTitle(receipt)}
                     </h1>
-                    <Badge
-                      variant={receipt.reviewed ? 'secondary' : 'outline'}
+                    <StatusIndicator
+                      status={receipt.reviewed ? 'success' : 'warning'}
                       className="ml-auto sm:ml-0"
                     >
-                      {receipt.reviewed ? 'Reviewed' : 'Pending review'}
-                    </Badge>
+                      {receipt.reviewed ? 'Looks good' : 'Needs a look'}
+                    </StatusIndicator>
                   </div>
                   <div className="flex items-center justify-end gap-2 md:ml-auto md:flex">
                     {form.formState.isDirty ? (
-                      <span className="hidden text-xs text-muted-foreground md:inline">
+                      <span className="hidden text-xs text-ink-muted md:inline">
                         Unsaved changes
                       </span>
                     ) : null}
@@ -164,7 +164,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                         form.formState.isSubmitting || !form.formState.isDirty
                       }
                     >
-                      Save Receipt
+                      Save receipt
                     </Button>
                     <ActionsDropdown
                       receipt={receipt}
@@ -172,12 +172,12 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                       onReviewed={async () => {
                         try {
                           mutateReceipt();
-                          toast({ title: 'Receipt reviewed' });
+                          toast({ title: 'Looks good!', description: 'Marked as reviewed.' });
                         } catch (error) {
                           toast({
-                            variant: 'destructive',
-                            title: 'Error',
-                            description: 'Failed to review receipt',
+                            variant: 'oops',
+                            title: "Oops, that didn't work",
+                            description: 'Try marking it as reviewed again?',
                           });
                         }
                       }}
@@ -189,8 +189,8 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                     originalReceiptId={receipt.possible_duplicate_of}
                   />
                 ) : null}
-                <div className="fixed inset-x-0 bottom-0 z-20 flex items-center gap-3 border-t bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm md:hidden">
-                  <span className="flex-1 text-xs text-muted-foreground">
+                <div className="fixed inset-x-0 bottom-[calc(5.25rem+env(safe-area-inset-bottom))] z-20 flex items-center gap-3 border-t border-line bg-surface-raised/95 p-3 backdrop-blur-sm md:hidden">
+                  <span className="flex-1 text-xs font-bold text-ink-muted">
                     {form.formState.isDirty ? 'Unsaved changes' : null}
                   </span>
                   <Button
@@ -200,10 +200,10 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
                       form.formState.isSubmitting || !form.formState.isDirty
                     }
                   >
-                    Save Receipt
+                    Save receipt
                   </Button>
                 </div>
-                <div className="grid gap-4 pb-20 md:pb-0">
+                <div className="grid gap-4 pb-16 md:pb-0">
                   <ReceiptViewer imageUrl={receipt.image_url} />
                   <Form {...form}>
                     <form id="edit-form" onSubmit={form.handleSubmit(onSubmit)}>

@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
 } from '@/components/ui/card';
-import { ReloadIcon } from '@radix-ui/react-icons';
+import { LoaderCircle } from 'lucide-react';
 
 interface PriceCardProps {
   title: string;
@@ -39,15 +39,15 @@ export function PriceCard({
       <CardHeader>
         {badge && (
           <div>
-            <Badge>{badge}</Badge>
+            <Badge variant="win">{badge}</Badge>
           </div>
         )}
-        <div className="text-lg font-semibold">{title}</div>
+        <div className="type-h2">{title}</div>
       </CardHeader>
       <CardContent className="flex flex-col ">
-        <p className="text-sm text-muted-foreground mb-8">{description}</p>
+        <p className="mb-8 text-sm text-ink-muted">{description}</p>
         <div className="flex flex-col items-center mb-4">
-          <span className="font-bold text-2xl">
+          <span className="num font-display text-3xl font-semibold">
             <span>
               ${dollar}
               <span>.{cents}</span> <span>/ month</span>
@@ -57,20 +57,20 @@ export function PriceCard({
           {/* <span className="text-3xl font-bold tracking-tighter mr-1">
           {price}
         </span>
-        <span className="text-xs text-muted-foreground">
+        <span className="text-xs text-ink-muted">
           per
           <br />
           {intervalText}
         </span> */}
         </div>
         <Button onClick={onClick} size="lg">
-          {loading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+          {loading && <LoaderCircle aria-hidden className="animate-spin" />}
           {buttonText}
         </Button>
       </CardContent>
       {footer ? (
         <CardFooter className="text-center justify-center">
-          <span className="text-xs text-muted-foreground">{footer}</span>
+          <span className="text-xs text-ink-muted">{footer}</span>
         </CardFooter>
       ) : null}
     </Card>

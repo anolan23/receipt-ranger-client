@@ -1,7 +1,7 @@
-import * as React from "react"
-import { cn } from "cn"
-import { CheckIcon } from "lucide-react"
-import { Checkbox as CheckboxPrimitive } from "radix-ui"
+import * as React from 'react';
+import { Check, Minus } from 'lucide-react';
+import { Checkbox as CheckboxPrimitive } from 'radix-ui';
+import { cn } from '@/lib/utils';
 
 function Checkbox({
   className,
@@ -9,21 +9,23 @@ function Checkbox({
 }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
   return (
     <CheckboxPrimitive.Root
-      data-slot="checkbox"
       className={cn(
-        "peer size-4 shrink-0 rounded-[4px] border border-input shadow-xs transition-shadow outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:data-[state=checked]:bg-primary",
+        'peer inline-flex size-6 shrink-0 items-center justify-center rounded-[9px] border-2 border-outline bg-surface-raised text-on-primary transition-colors',
+        'data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary',
+        'disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-oops-ink',
         className
       )}
       {...props}
     >
-      <CheckboxPrimitive.Indicator
-        data-slot="checkbox-indicator"
-        className="grid place-content-center text-current transition-none"
-      >
-        <CheckIcon className="size-3.5" />
+      <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
+        {props.checked === 'indeterminate' ? (
+          <Minus className="size-4" strokeWidth={3} />
+        ) : (
+          <Check className="size-4" strokeWidth={3} />
+        )}
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
-  )
+  );
 }
 
-export { Checkbox }
+export { Checkbox };

@@ -1,3 +1,5 @@
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import { mutate } from 'swr';
 
 export function getRandomColor() {
@@ -11,4 +13,8 @@ export function getRandomColor() {
 
 export function clearSWRCache() {
   mutate(() => true, undefined, { revalidate: false });
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }

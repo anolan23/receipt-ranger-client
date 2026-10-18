@@ -1,0 +1,1 @@
+The Receipts screen: search, category and date filters over a sortable table with status pills and pagination on desktop; on phones the same data becomes receipt cards. Both themes shown.

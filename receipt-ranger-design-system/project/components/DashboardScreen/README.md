@@ -1,0 +1,1 @@
+The Overview screen: a friendly greeting, five KPI cards, the monthly totals chart, the category donut with legend, top merchants and recent receipts. Desktop uses the sidebar and a 3-column KPI grid; the phone stacks everything under a 2-column KPI grid and a bottom tab bar. Both themes shown.

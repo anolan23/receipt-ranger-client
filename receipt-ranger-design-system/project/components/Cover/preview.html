@@ -1,0 +1,25 @@
+<!-- @dsCard height=320 -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"><style>
+body{margin:0}
+.cv{position:relative;width:960px;height:320px;background:var(--surface-100);overflow:hidden}
+.cv svg{position:absolute;inset:0}
+.txt{position:absolute;left:40px;bottom:32px;width:420px}
+.txt h1{margin:0;font:600 96px/.95 var(--font-display);color:var(--ink);letter-spacing:-.01em}
+.txt p{margin:12px 0 0;font:600 14px/20px var(--font-sans);color:var(--ink-muted)}
+.a{fill:var(--blob-peach)}.b{fill:var(--primary)}.c{fill:var(--blob-sage)}.d{fill:var(--blob-butter)}.e{fill:var(--blob-lavender)}.f{fill:var(--ink)}.g{fill:var(--surface-100)}
+</style></head><body><div class="cv">
+<!-- Derivation
+blocks: peach slab 200x272 (radius-xl 36), coral disc r88 (primary), sage pill 72x200 (radius-pill), butter disc r40, lavender half-disc r88 bleeding off the right edge, one small ink tile 88x64 (radius-md 18).
+arrangement: a staggered cluster right of x=480; the coral disc overlaps the peach slab like a stamped sticker; sage and butter stack in a column; lavender bleeds off the right.
+pattern: soft, friendly, very rounded system, so discs and pills from the radius scale; a 5x3 dot grid at 16px pitch in the ground colour is cut out of the peach slab like a receipt perforation.
+steps: space-1 4px dot radius, space-4 16px pitch, radius-md 18, radius-xl 36, radius-pill on the sage pill. -->
+<svg viewBox="0 0 960 320" width="960" height="320" aria-hidden="true">
+<rect class="a" x="504" y="24" width="200" height="272" rx="36"/>
+<circle class="b" cx="704" cy="118" r="88"/>
+<rect class="c" x="800" y="24" width="72" height="200" rx="36"/>
+<circle class="d" cx="836" cy="262" r="40"/>
+<circle class="e" cx="960" cy="150" r="88"/>
+<rect class="f" x="596" y="232" width="88" height="64" rx="18"/>
+<circle class="g" cx="528" cy="48" r="4"/><circle class="g" cx="528" cy="64" r="4"/><circle class="g" cx="528" cy="80" r="4"/><circle class="g" cx="544" cy="48" r="4"/><circle class="g" cx="544" cy="64" r="4"/><circle class="g" cx="544" cy="80" r="4"/><circle class="g" cx="560" cy="48" r="4"/><circle class="g" cx="560" cy="64" r="4"/><circle class="g" cx="560" cy="80" r="4"/><circle class="g" cx="576" cy="48" r="4"/><circle class="g" cx="576" cy="64" r="4"/><circle class="g" cx="576" cy="80" r="4"/><circle class="g" cx="592" cy="48" r="4"/><circle class="g" cx="592" cy="64" r="4"/><circle class="g" cx="592" cy="80" r="4"/>
+</svg>
+<div class="txt"><h1>Receipt<br>Ranger</h1><p>Receipts in, good news out.</p></div></div></body></html>

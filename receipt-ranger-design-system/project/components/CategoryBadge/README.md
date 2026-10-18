@@ -1,0 +1,3 @@
+A category badge is always the emoji plus the name on its `cat-*` fill with `on-cat` text and a 1.5px `on-cat` border, so it never relies on colour alone. The six categories are 🛒 Groceries, 🧸 Kids, 🍕 Eating out, 🏠 Home, 🎒 School and ✨ Everything else.
+
+In the receipt drawer the badge becomes a picker: unselected chips are `surface-raised` with an `outline` border, the selected one takes its category fill. Chip targets are at least 44px tall.

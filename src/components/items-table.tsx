@@ -43,7 +43,7 @@ export function ItemsTable({ ...props }: ItemsTableProps) {
       cell: (info) => {
         const value = info.getValue();
         if (!value) return '-';
-        return <Badge variant="outline">{value}</Badge>;
+        return <Badge variant="neutral">{value}</Badge>;
       },
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));

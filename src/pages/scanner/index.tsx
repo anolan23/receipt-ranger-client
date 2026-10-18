@@ -49,6 +49,7 @@ import { ActionsDropdown } from '../dashboard/receipts/components/actions-dropdo
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { Cards } from '@/components/cards';
+import { Header } from '@/components/header';
 import { ReceiptCardLink } from '@/components/receipt-card-link';
 import { PossibleDuplicateDialog } from '@/components/possible-duplicate-dialog';
 import { deleteReceipt } from '@/lib/api/receipts';
@@ -87,8 +88,8 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
       await deleteReceipt(receiptId);
     } catch (error) {
       toast({
-        variant: 'destructive',
-        title: 'Failed to delete receipt',
+        variant: 'oops',
+        title: "Oops, I couldn't delete that receipt",
         description: error instanceof Error ? error.message : undefined,
       });
     }
@@ -106,14 +107,16 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
     if (fulfilled.length) {
       mutateReceipts();
       toast({
-        title: `${fulfilled.length === 1 ? 'Receipt' : 'Receipts'} created`,
-        description: 'The receipt details have been stored for your records.',
+        title: `Nice, ${fulfilled.length} ${
+          fulfilled.length === 1 ? 'receipt' : 'receipts'
+        } scanned!`,
+        description: 'Take a quick look below to make sure I got it right.',
       });
     }
     failedUploads.forEach((failedUpload) => {
       toast({
-        variant: 'destructive',
-        title: `Failed to upload ${failedUpload.file.name}`,
+        variant: 'oops',
+        title: `Oops, ${failedUpload.file.name} was tricky to read`,
         description: failedUpload.message,
       });
     });
@@ -126,12 +129,12 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/dashboard">Overview</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Scanner</BreadcrumbPage>
+              <BreadcrumbPage>Scan</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -143,25 +146,26 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
             onClose={popDuplicate}
             onDelete={deleteDuplicate}
           />
-          <h1 className="text-xl font-semibold tracking-tight">
-            Receipt Scanner
-          </h1>
+          <Header
+            title="Let's scan a receipt!"
+            description="Snap a photo or drop a file and I'll read the rest."
+          />
           <div className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <UploadArea onFileProcessed={handleFileDrop} />
               <Sheet>
                 <SheetTrigger asChild>
-                  <button className="flex w-full flex-col items-center rounded-md border bg-card p-6 text-card-foreground shadow-sm transition-colors hover:bg-muted/50 sm:p-8">
+                  <button className="flex w-full flex-col items-center rounded-lg border border-line bg-surface-raised p-6 text-ink shadow-soft transition-[transform,box-shadow] duration-[220ms] ease-bounce hover:-translate-y-[3px] hover:shadow-lift sm:p-8">
                     <div className="flex flex-col items-center justify-center text-center">
-                      <div>
-                        <Mail size={32} />
-                      </div>
+                      <span className="grid size-14 place-items-center rounded-full border-2 border-ink bg-blob-sky">
+                        <Mail aria-hidden className="size-7" />
+                      </span>
                       <div className="space-y-1">
-                        <h3 className="mt-2 font-semibold">
-                          Receipt processing via email
+                        <h3 className="mt-3 font-display text-xl font-semibold">
+                          Email it to me
                         </h3>
-                        <p className="mt-2 text-sm text-muted-foreground">
-                          Quickly add receipts to your account
+                        <p className="mt-1 text-sm text-ink-muted">
+                          Forward a receipt and I'll add it for you
                         </p>
                       </div>
                     </div>
@@ -172,18 +176,18 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
                   side={isMobile ? 'bottom' : 'right'}
                 >
                   <SheetHeader>
-                    <SheetTitle>Receipt processing via email</SheetTitle>
+                    <SheetTitle>Email it to me</SheetTitle>
                     <SheetDescription>
-                      An alternative way to enter receipts.
+                      Another way to add receipts.
                     </SheetDescription>
                   </SheetHeader>
                   <div className="mt-4">
                     <Card>
                       <CardHeader>
-                        <CardTitle>Your forwarding email</CardTitle>
+                        <CardTitle>Your forwarding address</CardTitle>
                         <CardDescription>
-                          Send an email with a receipt image in the attachment
-                          to the below email address.
+                          Attach a photo of your receipt and send it to the address
+                          below.
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
@@ -199,8 +203,11 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
             {uploadFiles.length ? (
               <Accordion type="single" collapsible defaultValue="processing">
                 <AccordionItem value="processing">
-                  <AccordionTrigger className="text-lg font-bold">
-                    Processing {`(${uploadFiles.length})`}
+                  <AccordionTrigger>
+                    Reading your receipts…{' '}
+                    <span className="num font-sans text-base font-bold text-ink-muted">
+                      ({uploadFiles.length})
+                    </span>
                   </AccordionTrigger>
                   <AccordionContent className="space-y-2">
                     <div className="space-y-2">
@@ -219,12 +226,12 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
               data={receipts || []}
               header={
                 <CardHeader>
-                  <CardTitle>Receipts pending review</CardTitle>
+                  <CardTitle>Waiting for a quick look</CardTitle>
                 </CardHeader>
               }
               tools={(table) => (
                 <div className="flex items-center">
-                  <TextFilter table={table} placeholder="Filter Receipts..." />
+                  <TextFilter table={table} placeholder="Search receipts…" />
                   <div className="ml-auto flex items-center gap-2">
                     <ColumnFilterDropdown table={table} />
                     <ActionsDropdown
@@ -246,8 +253,8 @@ export function ScannerPage({ ...props }: ScannerPageProps) {
             <Cards
               hidden={!isMobile}
               loading={isReceiptsLoading}
-              loadingText="Loading Receipts"
-              emptyText="No Receipts to review"
+              loadingText="Counting the coupons…"
+              emptyText="All caught up! Nothing to review."
               data={receipts || []}
               renderCard={(receipt) => (
                 <ReceiptCardLink key={receipt.id} receipt={receipt} />

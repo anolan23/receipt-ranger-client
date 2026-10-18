@@ -10,7 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { getErrorMessage } from '@/lib/api/auth';
 import { Credentials } from '@/lib/types';
-import { ReloadIcon } from '@radix-ui/react-icons';
+import { LoaderCircle } from 'lucide-react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface CredentialsFormProps {
@@ -100,11 +100,11 @@ export function CredentialsForm({ onSubmit, ...props }: CredentialsFormProps) {
               )}
             />
           </div>
-          <Button className="bg-zinc-900 text-primary-foreground hover:bg-zinc-900/90">
+          <Button size="lg" className="mt-2" disabled={isSubmitting}>
             {isSubmitting && (
-              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              <LoaderCircle aria-hidden className="animate-spin" />
             )}
-            Sign up with Email
+            Sign up
           </Button>
         </div>
       </form>

@@ -1,46 +1,41 @@
-import { ReceiptData } from '@/lib/types';
-import { Link } from 'react-router-dom';
-import { ImageLogo } from './image-logo';
-import dayjs from 'dayjs';
 import { getFileUrl, toDollar } from '@/lib/helpers';
+import { ReceiptData } from '@/lib/types';
+import dayjs from 'dayjs';
 import { ChevronRight } from 'lucide-react';
-import { Button } from './ui/button';
+import { Link } from 'react-router-dom';
+import { CategoryBadge } from './category-badge';
+import { ImageLogo } from './image-logo';
 
 interface ReceiptCardLinkProps {
   receipt: ReceiptData;
 }
 
-export function ReceiptCardLink({ receipt, ...props }: ReceiptCardLinkProps) {
+/** Phone receipt card: merchant, date, amount and category badge. */
+export function ReceiptCardLink({ receipt }: ReceiptCardLinkProps) {
   return (
-    <Button
-      asChild
-      variant="outline"
-      className="h-auto w-full min-w-0 text-left items-center"
+    <Link
+      to={`/dashboard/receipts/${receipt.id}`}
+      className="flex min-h-14 items-center gap-3 rounded-md border border-line bg-surface-raised p-3 transition-[transform,box-shadow] duration-[220ms] ease-bounce hover:-translate-y-0.5 hover:shadow-soft"
     >
-      <Link to={`/dashboard/receipts/${receipt.id}`}>
-        <div className="flex items-center min-w-0">
-          <ImageLogo
-            src={
-              receipt.merchant.logo_url
-                ? getFileUrl(receipt.merchant.logo_url)
-                : ''
-            }
-            size={64}
-          />
-          <div className="flex-1 overflow-hidden mx-2">
-            <div className="truncate">{receipt.merchant.name}</div>
-            <div className="text-xs text-muted-foreground">
-              {dayjs(receipt.transaction_date).format('YYYY/MM/DD')}
-            </div>
-          </div>
+      <ImageLogo
+        src={
+          receipt.merchant.logo_url ? getFileUrl(receipt.merchant.logo_url) : ''
+        }
+        size={48}
+      />
+      <div className="min-w-0 flex-1">
+        <div className="truncate font-bold">{receipt.merchant.name}</div>
+        <div className="num text-[13px] text-ink-muted">
+          {dayjs(receipt.transaction_date).format('MMM D, YYYY')}
         </div>
-        <div className="ml-auto flex gap-2 items-center">
-          {receipt.total_amount && (
-            <span>{toDollar(receipt.total_amount)}</span>
-          )}
-          <ChevronRight />
-        </div>
-      </Link>
-    </Button>
+      </div>
+      <div className="flex flex-col items-end gap-1">
+        {receipt.total_amount && (
+          <span className="num font-bold">{toDollar(receipt.total_amount)}</span>
+        )}
+        <CategoryBadge label={receipt.category?.label} />
+      </div>
+      <ChevronRight aria-hidden className="size-5 shrink-0 text-ink-muted" />
+    </Link>
   );
 }

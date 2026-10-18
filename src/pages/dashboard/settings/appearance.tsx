@@ -42,7 +42,7 @@ export function AppearanceSettings({ ...props }: AppearanceSettingsProps) {
     } catch (error) {
       if (error instanceof Error) {
         toast({
-          variant: 'destructive',
+          variant: 'oops',
           title: 'Error',
           description: error.message,
         });

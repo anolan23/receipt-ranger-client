@@ -1,0 +1,1 @@
+Top merchants are a ranked list: a butter rank badge, the merchant, its receipt count and the amount, with a `blob-peach` bar under the row scaled to the leader. Show five rows. The bars use the 2px `ink` outline and animate from the left with `dur-slow`. Rows are links into the merchant drill-down on Insights.

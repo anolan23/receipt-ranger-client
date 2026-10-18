@@ -1,59 +1,39 @@
+import { PieSeries } from '@/components/charts/interfaces';
+import { NivoPieChart } from '@/components/charts/nivo-pie-chart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import styles from './index.module.scss';
-import { NivoBarChart } from '@/components/charts/nivo-bar-chart';
+import { toDollar } from '@/lib/helpers';
 import { CategoryTotalsResult } from '@/lib/types';
 import { useMemo } from 'react';
-import { BarSeries } from '@/components/charts/interfaces';
 
 interface CategoriesCardProps {
   data: CategoryTotalsResult[];
   loading: boolean;
 }
 
-export function CategoriesCard({
-  data,
-  loading,
-  ...props
-}: CategoriesCardProps) {
-  const series = useMemo<BarSeries<string>[]>(() => {
-    return data.map((dataPoint) => {
-      return {
-        type: 'bar',
-        title: dataPoint.category,
-        data: [{ x: dataPoint.category, y: +dataPoint.total }],
-      };
-    });
+export function CategoriesCard({ data, loading }: CategoriesCardProps) {
+  const series = useMemo<PieSeries<number>[]>(() => {
+    return data.map((dataPoint) => ({
+      type: 'pie',
+      title: dataPoint.category,
+      data: {
+        id: dataPoint.category,
+        label: dataPoint.category,
+        value: +dataPoint.total,
+      },
+    }));
   }, [data]);
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Top Categories</CardTitle>
+        <CardTitle>Where it went</CardTitle>
       </CardHeader>
       <CardContent>
-        <NivoBarChart
-          onClick={(datum) => {
-            console.log(datum.id);
-          }}
-          className="h-[200px] sm:h-[300px]"
+        <NivoPieChart
           series={series}
-          hideFilter
           loading={loading}
-          margin={{ top: 10, right: 0, bottom: 50, left: 50 }}
-          gridYValues={5}
-          axisLeft={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            truncateTickAt: 0,
-            tickValues: 5,
-          }}
-          axisBottom={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            truncateTickAt: 0,
-            tickValues: 5,
-          }}
+          categoryColors
+          centerLabel="Spent"
+          formatValue={(value) => toDollar(value, 'dollar')}
         />
       </CardContent>
     </Card>

@@ -1,103 +1,230 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark *));
 
-@utility container {
-  margin-inline: auto;
-  padding-inline: 2rem;
-  @media (width >= --theme(--breakpoint-sm)) {
-    max-width: none;
-  }
-  @media (width >= 1400px) {
-    max-width: 1400px;
-  }
-}
-
+/* ------------------------------------------------------------------ */
+/* Receipt Ranger design tokens. Light is cream, dark is plum.         */
+/* ------------------------------------------------------------------ */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 221.2 83.2% 53.3%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 221.2 83.2% 53.3%;
-  --radius: 0.5rem;
+  color-scheme: light;
+
+  --surface-100: #fff7ec;
+  --surface-200: #fdeedd;
+  --surface-raised: #ffffff;
+  --ink: #3a2a27;
+  --ink-muted: #755d56;
+  --line: #efdcc8;
+  --outline: #a08478;
+
+  --primary: #c93f29;
+  --primary-hover: #b33621;
+  --on-primary: #ffffff;
+  --primary-soft: #ffe0d1;
+  --focus: #2a6f97;
+
+  --blob-peach: #ffd2b8;
+  --blob-butter: #ffe28a;
+  --blob-sage: #c4e6d1;
+  --blob-lavender: #ddd3f7;
+  --blob-sky: #cbe6f6;
+
+  --win-bg: #def3e5;
+  --win-ink: #1d6544;
+  --rise-bg: #ffeab8;
+  --rise-ink: #7d4a00;
+  --info-bg: #dff0fb;
+  --info-ink: #1d4f73;
+  --oops-bg: #ffe0d6;
+  --oops-ink: #8f2a17;
+
+  --cat-groceries: #8fd1a8;
+  --cat-kids: #ffcf5e;
+  --cat-eating: #ff9c80;
+  --cat-home: #8ec9ee;
+  --cat-school: #c0acf2;
+  --cat-other: #e6c39b;
+  --on-cat: #2b1d24;
+
+  --scrim: rgba(58, 42, 39, 0.45);
+
+  --shadow-soft-v: 0 1px 0 rgba(117, 93, 86, 0.08),
+    0 8px 24px rgba(117, 93, 86, 0.12);
+  --shadow-lift-v: 0 2px 0 rgba(117, 93, 86, 0.1),
+    0 16px 32px rgba(117, 93, 86, 0.2);
+  --shadow-button-v: 0 3px 0 rgba(110, 30, 18, 0.35);
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 217.2 91.2% 59.8%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 224.3 76.3% 48%;
+  color-scheme: dark;
+
+  --surface-100: #2a1d2b;
+  --surface-200: #231723;
+  --surface-raised: #382838;
+  --ink: #fbeee0;
+  --ink-muted: #d2bec3;
+  --line: #4a3849;
+  --outline: #9c8393;
+
+  --primary: #ff8f70;
+  --primary-hover: #ffa68c;
+  --on-primary: #2b1d24;
+  --primary-soft: #54313a;
+  --focus: #8ec9ee;
+
+  --blob-peach: #6b3f40;
+  --blob-butter: #6e5a26;
+  --blob-sage: #365f4c;
+  --blob-lavender: #50427a;
+  --blob-sky: #35597a;
+
+  --win-bg: #234a3b;
+  --win-ink: #b9f0cf;
+  --rise-bg: #5a4318;
+  --rise-ink: #ffd98a;
+  --info-bg: #29415a;
+  --info-ink: #bfe2ff;
+  --oops-bg: #5a2f2c;
+  --oops-ink: #ffc9b8;
+
+  --scrim: rgba(12, 6, 14, 0.62);
+
+  --shadow-soft-v: 0 8px 24px rgba(8, 3, 10, 0.45);
+  --shadow-lift-v: 0 16px 32px rgba(8, 3, 10, 0.55);
+  --shadow-button-v: 0 3px 0 rgba(10, 4, 12, 0.55);
 }
 
 @theme inline {
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
+  --color-surface-100: var(--surface-100);
+  --color-surface-200: var(--surface-200);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-outline: var(--outline);
 
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-focus: var(--focus);
 
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-blob-peach: var(--blob-peach);
+  --color-blob-butter: var(--blob-butter);
+  --color-blob-sage: var(--blob-sage);
+  --color-blob-lavender: var(--blob-lavender);
+  --color-blob-sky: var(--blob-sky);
 
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-win-bg: var(--win-bg);
+  --color-win-ink: var(--win-ink);
+  --color-rise-bg: var(--rise-bg);
+  --color-rise-ink: var(--rise-ink);
+  --color-info-bg: var(--info-bg);
+  --color-info-ink: var(--info-ink);
+  --color-oops-bg: var(--oops-bg);
+  --color-oops-ink: var(--oops-ink);
 
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-cat-groceries: var(--cat-groceries);
+  --color-cat-kids: var(--cat-kids);
+  --color-cat-eating: var(--cat-eating);
+  --color-cat-home: var(--cat-home);
+  --color-cat-school: var(--cat-school);
+  --color-cat-other: var(--cat-other);
+  --color-on-cat: var(--on-cat);
 
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-scrim: var(--scrim);
 
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
+  --shadow-soft: var(--shadow-soft-v);
+  --shadow-lift: var(--shadow-lift-v);
+  --shadow-button: var(--shadow-button-v);
+}
 
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
+@theme {
+  /* Fonts */
+  --font-display: 'Fredoka', 'Quicksand', ui-rounded, system-ui, sans-serif;
+  --font-sans: 'Nunito', ui-rounded, system-ui, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji';
 
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  /* Radii: sm inputs/skeletons, md tiles/rows, lg cards, xl frames/drawers.
+     Buttons, badges, chips and inputs use rounded-full (pill). */
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
 
-  --font-sans: 'GeistSans', ui-sans-serif, system-ui, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  /* Motion */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-fade-in: fade-in 120ms var(--ease-soft) both;
+  --animate-fade-out: fade-out 120ms var(--ease-soft) both;
+  --animate-pop-in: pop-in 220ms var(--ease-bounce) both;
+  --animate-pop-out: pop-out 120ms var(--ease-soft) both;
+  --animate-slide-in-right: slide-in-right 220ms var(--ease-soft) both;
+  --animate-slide-out-right: slide-out-right 180ms var(--ease-soft) both;
+  --animate-slide-in-left: slide-in-left 220ms var(--ease-soft) both;
+  --animate-slide-out-left: slide-out-left 180ms var(--ease-soft) both;
+  --animate-slide-in-bottom: slide-in-bottom 220ms var(--ease-soft) both;
+  --animate-slide-out-bottom: slide-out-bottom 180ms var(--ease-soft) both;
+  --animate-accordion-down: accordion-down 220ms var(--ease-soft);
+  --animate-accordion-up: accordion-up 180ms var(--ease-soft);
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-grow-x: grow-x 420ms var(--ease-soft) both;
+  --animate-grow-up: grow-up 420ms var(--ease-soft) both;
+  --animate-stripes: stripes 1s linear infinite;
+  --animate-success-pop: success-pop 420ms var(--ease-bounce) both;
 
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.94) translateY(-4px);
+    }
+  }
+  @keyframes pop-out {
+    to {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes slide-out-right {
+    to {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes slide-in-left {
+    from {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes slide-out-left {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes slide-in-bottom {
+    from {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes slide-out-bottom {
+    to {
+      transform: translateY(100%);
+    }
+  }
   @keyframes accordion-down {
     from {
       height: 0;
@@ -114,6 +241,126 @@
       height: 0;
     }
   }
+  @keyframes shimmer {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: -100% 0;
+    }
+  }
+  @keyframes grow-x {
+    from {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes grow-up {
+    from {
+      transform: scaleY(0);
+    }
+  }
+  @keyframes stripes {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 28px 0;
+    }
+  }
+  @keyframes success-pop {
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.08);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Type styles. Headings use Fredoka, body uses Nunito.                */
+/* ------------------------------------------------------------------ */
+@utility type-display-xl {
+  font-family: var(--font-display);
+  font-size: 44px;
+  line-height: 48px;
+  font-weight: 600;
+}
+@utility type-h1 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 600;
+  @media (width >= 40rem) {
+    font-size: 32px;
+    line-height: 38px;
+  }
+}
+@utility type-h2 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 600;
+}
+@utility type-h3 {
+  font-family: var(--font-display);
+  font-size: 19px;
+  line-height: 24px;
+  font-weight: 500;
+}
+@utility type-money-xl {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 44px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+@utility type-body-lg {
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 500;
+}
+@utility type-body-sm {
+  font-size: 14px;
+  line-height: 20px;
+}
+@utility type-label {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+}
+@utility type-caption {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+}
+@utility type-money {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+/* Every amount, KPI value, table total and chart label. */
+@utility num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* Desktop content width */
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 2rem;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
 }
 
 @layer base {
@@ -122,55 +369,114 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    @apply border-border;
+    border-color: var(--line);
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    background: var(--surface-100);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+  /* Solid 3px focus ring with a 2px offset on every control. */
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--primary-soft);
+    color: var(--ink);
   }
 }
 
-@font-face {
-  font-family: 'GeistSans';
-  src: url('/src/assets/Geist/Geist-Black.woff2') format('woff2'),
-    url('/src/assets/Geist/Geist-Black.otf') format('opentype');
-  font-weight: 900;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'GeistSans';
-  src: url('/src/assets/Geist/Geist-Bold.woff2') format('woff2'),
-    url('/src/assets/Geist/Geist-Bold.otf') format('opentype');
-  font-weight: bold; /* 700 */
-  font-style: normal;
+/* Skeleton shimmer ground */
+@utility skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-200) 0 35%,
+    var(--line) 50%,
+    var(--surface-200) 65% 100%
+  );
+  background-size: 220% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: var(--radius-sm);
 }
 
-@font-face {
-  font-family: 'GeistSans';
-  src: url('/src/assets/Geist/Geist-SemiBold.woff2') format('woff2'),
-    url('/src/assets/Geist/Geist-SemiBold.otf') format('opentype');
-  font-weight: 600;
-  font-style: normal;
+/* Pip's idle motion */
+.pip .bob {
+  animation: pip-bob 3.2s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.pip .tw {
+  animation: pip-twinkle 1.4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.pip .tw2 {
+  animation-delay: 0.5s;
+}
+.pip .tw3 {
+  animation-delay: 0.9s;
+}
+.pip .rcpt {
+  animation: pip-rcpt 1.6s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+@keyframes pip-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+@keyframes pip-twinkle {
+  0%,
+  100% {
+    transform: scale(0.7) rotate(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.15) rotate(20deg);
+    opacity: 1;
+  }
+}
+@keyframes pip-rcpt {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(5deg);
+  }
 }
 
-@font-face {
-  font-family: 'GeistSans';
-  src: url('/src/assets/Geist/Geist-Medium.woff2') format('woff2'),
-    url('/src/assets/Geist/Geist-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
+/* Radix toast swipe + nivo tooltips share the same soft motion. */
+[data-swipe='move'] {
+  transform: translateX(var(--radix-toast-swipe-move-x));
+}
+[data-swipe='cancel'] {
+  transform: translateX(0);
+  transition: transform 200ms var(--ease-soft);
 }
 
-@font-face {
-  font-family: 'GeistSans';
-  src: url('/src/assets/Geist/Geist-Regular.woff2') format('woff2'),
-    url('/src/assets/Geist/Geist-Regular.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'GeistSans';
-  src: url('/src/assets/Geist/Geist-Light.woff2') format('woff2'),
-    url('/src/assets/Geist/Geist-Light.otf') format('opentype');
-  font-weight: 100;
-  font-style: normal;
+/* Respect prefers-reduced-motion: remove all animation, keep the content. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

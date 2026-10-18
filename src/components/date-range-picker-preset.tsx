@@ -1,4 +1,4 @@
-import { CalendarIcon } from '@radix-ui/react-icons';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 
@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { DatePreset } from '@/lib/types';
-import { cn } from 'cn';
+import { cn } from '@/lib/utils';
 import { Label } from './ui/label';
 import { ToggleGroup, ToggleGroupItem } from './ui/toggle-group';
 
@@ -38,14 +38,14 @@ export function DateRangePickerPreset({
         <PopoverTrigger asChild>
           <Button
             id="date"
-            variant={'outline'}
+            variant="secondary"
             className={cn(
-              'w-[300px] justify-start text-left font-normal',
-              !dateRange && 'text-muted-foreground',
+              'w-full justify-start text-left sm:w-[300px]',
+              !dateRange && 'text-ink-muted',
               className
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon aria-hidden />
             {dateRange?.from ? (
               dateRange.to ? (
                 <>
@@ -73,13 +73,13 @@ export function DateRangePickerPreset({
             onSelect={onRangeSelect}
             numberOfMonths={2}
           />
-          <div className="p-4 space-y-2 max-w-[500px]">
-            <Label>Auto-select range (Relative)</Label>
+          <div className="max-w-[520px] space-y-2 border-t border-dashed border-line p-4">
+            <Label>Or pick a quick range</Label>
             <ToggleGroup
               type="single"
               value={datePreset}
               onValueChange={onDatePresetChange}
-              className="flex flex-wrap justify-start"
+              className="flex flex-wrap justify-start rounded-md"
             >
               <ToggleGroupItem value="1-day">1 Day</ToggleGroupItem>
               <ToggleGroupItem value="7-days">7 Days</ToggleGroupItem>

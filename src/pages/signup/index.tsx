@@ -27,18 +27,18 @@ export function SignupPage({ ...props }: SignupPageProps) {
       content={
         <>
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Create an account
+            <h1 className="type-h1">
+              Let's get you set up!
             </h1>
-            <p className="text-sm text-muted-foreground">
-              Enter your email below to create your account
+            <p className="text-sm text-ink-muted">
+              Make an account and scan your first receipt in a minute.
             </p>
           </div>
           <div className="grid gap-6">
             <CredentialsForm onSubmit={handleCredentialsSubmit} />
           </div>
-          <p className="px-8 text-center text-sm text-muted-foreground">
-            By clicking continue, you agree to our{' '}
+          <p className="px-4 text-center text-sm text-ink-muted">
+            By signing up, you agree to our{' '}
             <Link external href="https://snapceipt.com/terms-of-service/">
               Terms of Service
             </Link>{' '}

@@ -1,5 +1,6 @@
 import { ReactElement, ReactNode } from 'react';
-import { StatusIndicator } from './status-indicator';
+import { EmptyState } from './empty-state';
+import { LoadingState } from './loading-state';
 
 interface CardsProps<TData> {
   data: TData[];
@@ -14,34 +15,26 @@ interface CardsProps<TData> {
 
 export function Cards<TData>({
   loading,
-  loadingText = 'Loading',
-  error,
-  emptyText = 'No resources.',
+  loadingText = 'Counting the coupons…',
+  emptyText = 'Nothing here yet.',
   data,
   title,
   hidden,
   renderCard,
-  ...props
 }: CardsProps<TData>) {
   if (hidden) return null;
   return (
-    <div>
-      <div className="mb-4">
-        {title && <div className="text-lg font-semibold">{title}</div>}
-      </div>
-      <div className="grid gap-4">
+    <section>
+      {title && <h2 className="type-h3 mb-3">{title}</h2>}
+      <div className="grid gap-2">
         {loading ? (
-          <div className="p-2 h-24 flex items-center justify-center">
-            <StatusIndicator status="loading">{loadingText}</StatusIndicator>
-          </div>
+          <LoadingState label={loadingText} />
         ) : !data.length ? (
-          <div className="p-2 h-24 text-center flex items-center justify-center">
-            {emptyText}
-          </div>
+          <EmptyState title={String(emptyText)} className="rounded-md bg-surface-raised" />
         ) : (
           data.map((data) => renderCard(data))
         )}
       </div>
-    </div>
+    </section>
   );
 }

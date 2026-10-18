@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "cn";
+import { cn } from '@/lib/utils';
 
 interface PossibleDuplicateDialogProps {
   open: boolean;
@@ -29,14 +29,14 @@ export function PossibleDuplicateDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Possible duplicate</AlertDialogTitle>
           <AlertDialogDescription>
-            This looks like a receipt you&apos;ve already added. Keep both, or
-            delete the one you just uploaded?
+            This looks a lot like a receipt you already added. Keep both, or
+            delete the one you just scanned?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Keep both</AlertDialogCancel>
           <AlertDialogAction
-            className={cn(buttonVariants({ variant: "destructive" }))}
+            className={cn(buttonVariants({ variant: "danger" }))}
             onClick={onDelete}
           >
             Delete this one

@@ -39,23 +39,21 @@ export function DeleteReceiptDialog({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {receipt?.id
-                ? `Permanently delete Receipt ${receipt?.id}?`
-                : 'Permanently delete receipt?'}
+              Delete this receipt?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              receipt along with any associated line items.
+              This will delete the receipt and all of its line items for good, so
+              there's no undoing it.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Keep it</AlertDialogCancel>
             <Button
               type="submit"
               form="delete-receipt-form"
-              variant="destructive"
+              variant="danger"
             >
-              Delete
+              Delete receipt
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

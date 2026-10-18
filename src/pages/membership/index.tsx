@@ -3,11 +3,10 @@ import { PriceCard } from './components/price-card';
 import { createCheckoutSession, createPortalSession } from '@/lib/api/stripe';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import { ArrowLeft } from 'lucide-react';
 
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useUser } from '@/hooks/use-user';
-import { ScanLogo } from '@/components/scan-logo';
 import { Logo } from '@/components/logo';
 import { usePageTitle } from '@/hooks/use-page-title';
 
@@ -66,14 +65,15 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
     };
 
   return (
-    <div className=" max-w-[1200px] m-auto">
+    <div className="min-h-dvh bg-surface-100 text-ink">
+    <div className="m-auto max-w-[1200px]">
       <header className="p-5 sm:p-6 flex flex-col items-center space-y-8 sm:space-y-10">
         <nav className="flex justify-between items-center w-full">
           <div className="flex space-x-1 items-center">
             <Logo />
           </div>
           <div>
-            <Button variant="link" asChild>
+            <Button variant="ghost" asChild>
               <Link
                 to={
                   searchParams.get('c') === 'settings'
@@ -81,14 +81,14 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
                     : '/dashboard'
                 }
               >
-                <ArrowLeftIcon className="mr-2" />
+                <ArrowLeft aria-hidden />
                 Back
               </Link>
             </Button>
           </div>
         </nav>
-        <h1 className="scroll-m-20 text-2xl sm:text-3xl font-extrabold tracking-tight lg:text-4xl text-center">
-          Choose a Snapceipt Pro plan
+        <h1 className="type-h1 text-center lg:text-[44px] lg:leading-[48px]">
+          Choose a Receipt Ranger Pro plan
         </h1>
       </header>
       <main className="mb-10">
@@ -100,9 +100,8 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
             </TabsList>
             <TabsContent value="monthly">
               <PriceCard
-                title="Snapceipt Pro"
-                description="Simplify your expense tracking. Access to unlimited receipt scans and the latest
-                features."
+                title="Receipt Ranger Pro"
+                description="Scan as many receipts as you like and get the latest features first."
                 price="4.99"
                 interval="monthly"
                 onClick={handleMonthlyClick}
@@ -111,9 +110,8 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
             <TabsContent value="yearly">
               <PriceCard
                 badge="Best deal"
-                title="Snapceipt Pro"
-                description="Simplify your expense tracking. Access to unlimited receipt scans and the latest
-                features."
+                title="Receipt Ranger Pro"
+                description="Scan as many receipts as you like and get the latest features first."
                 price="3.33"
                 interval="yearly"
                 footer="*when billed yearly"
@@ -121,12 +119,13 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
               />
             </TabsContent>
           </Tabs>
-          <p className=" text-muted-foreground text-center w-full sm:w-[50%]">
+          <p className="w-full text-center text-ink-muted sm:w-[50%]">
             Both plans include <strong>unlimited receipt scans</strong>. By
             choosing the yearly plan, you save 50% compared to paying monthly.
           </p>
         </div>
       </main>
+    </div>
     </div>
   );
 }

@@ -1,16 +1,8 @@
 import { toDollar } from '@/lib/helpers';
-import { ItemData } from '@/lib/types';
-import { DrawerDialog } from './drawer-dialog';
+import { ChevronRight, Trash2 } from 'lucide-react';
 import { ReactNode } from 'react';
+import { DrawerDialog } from './drawer-dialog';
 import { Button } from './ui/button';
-import { ChevronRight, Trash2Icon } from 'lucide-react';
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from './ui/item';
 
 interface LineItemProps {
   variant?: 'default' | 'edit';
@@ -19,6 +11,8 @@ interface LineItemProps {
   quantity?: number;
   price?: string;
   subcategory?: string;
+  /** Pip's gentle "can you double-check this one?" highlight. */
+  flagged?: boolean;
   onRemoveClick?: () => void;
 }
 export function LineItem({
@@ -28,40 +22,39 @@ export function LineItem({
   subcategory,
   variant = 'default',
   content,
+  flagged,
   onRemoveClick,
 }: LineItemProps) {
   if (variant === 'edit') {
     return (
       <li className="min-w-0">
         <DrawerDialog
-          title="Edit Item"
+          title="Edit item"
           trigger={
-            <Item
-              asChild
-              size="sm"
-              className="group min-h-13 w-full cursor-pointer items-start rounded-none text-left hover:bg-muted/50 active:bg-muted"
+            <button
+              type="button"
+              className="group flex min-h-13 w-full cursor-pointer items-start gap-3 rounded-md px-3 py-2.5 text-left transition-colors hover:bg-surface-200 active:bg-primary-soft"
             >
-              <button type="button">
-                <ItemSummary
-                  name={name}
-                  quantity={quantity}
-                  price={price}
-                  subcategory={subcategory}
-                  chevron
-                />
-              </button>
-            </Item>
+              <ItemSummary
+                name={name}
+                quantity={quantity}
+                price={price}
+                subcategory={subcategory}
+                flagged={flagged}
+                chevron
+              />
+            </button>
           }
           content={content}
           action={
             <Button
               type="button"
               onClick={onRemoveClick}
-              variant="destructive"
-              className="gap-1"
+              variant="danger"
+              size="sm"
             >
-              <Trash2Icon className="h-3.5 w-3.5" />
-              Remove Item
+              <Trash2 aria-hidden />
+              Remove item
             </Button>
           }
         />
@@ -69,15 +62,16 @@ export function LineItem({
     );
   }
   return (
-    <li className="min-w-0">
-      <Item size="sm" className="items-start rounded-none">
+    <li className="min-w-0 border-b-[1.5px] border-dashed border-line last:border-b-0">
+      <div className="flex items-start gap-3 py-2">
         <ItemSummary
           name={name}
           quantity={quantity}
           price={price}
           subcategory={subcategory}
+          flagged={flagged}
         />
-      </Item>
+      </div>
     </li>
   );
 }
@@ -87,37 +81,46 @@ function ItemSummary({
   quantity,
   price,
   subcategory,
+  flagged,
   chevron,
-}: Pick<LineItemProps, 'name' | 'quantity' | 'price' | 'subcategory'> & {
+}: Pick<LineItemProps, 'name' | 'quantity' | 'price' | 'subcategory' | 'flagged'> & {
   chevron?: boolean;
 }) {
   return (
     <>
-      <ItemContent className="min-w-0">
-        <ItemTitle className="w-full truncate">
+      <div className="min-w-0 flex-1">
+        <div className="w-full truncate text-sm leading-5 font-bold">
           {name || 'Unnamed item'}
-        </ItemTitle>
-        <ItemDescription className="flex items-center gap-2 text-xs">
+        </div>
+        <div className="flex items-center gap-2 text-xs leading-4 text-ink-muted">
           {quantity && quantity > 1 ? (
-            <span className="tabular-nums">Qty {quantity}</span>
+            <span className="num">Qty {quantity}</span>
           ) : null}
           {subcategory ? (
             <span className="truncate">{subcategory}</span>
           ) : (
-            <span className="italic">No category</span>
+            <span className="italic">No category yet</span>
           )}
-        </ItemDescription>
-      </ItemContent>
-      <ItemActions className="min-w-18 justify-end text-sm font-medium tabular-nums">
+          {flagged && (
+            <span className="rounded-full bg-rise-bg px-2 text-rise-ink">
+              Can you double-check this one?
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="num flex min-w-18 items-center justify-end gap-1 text-sm font-bold">
         {price ? (
           toDollar(price)
         ) : (
-          <span className="text-muted-foreground">--</span>
+          <span className="text-ink-muted">--</span>
         )}
         {chevron && (
-          <ChevronRight className="size-4 text-muted-foreground/60 group-hover:text-foreground" />
+          <ChevronRight
+            aria-hidden
+            className="size-4 text-ink-muted group-hover:text-ink"
+          />
         )}
-      </ItemActions>
+      </div>
     </>
   );
 }

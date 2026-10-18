@@ -1,0 +1,3 @@
+The drill-down for one category or merchant opens with its chip row, then a trend line and the top line items. The line is `ink` with a soft category-tinted area and 7px markers outlined in `ink`; hover or focus a marker for the month and amount.
+
+Frame the change kindly: an increase is a `delta--rise` chip with context ("mostly fresh produce"), a decrease is a win. Top line items show how many times each was bought.

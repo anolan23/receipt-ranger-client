@@ -20,6 +20,7 @@ type LinkProps = InternalLinkProps | ExternalLinkProps;
 export function Link(props: LinkProps) {
   if (props.external) {
     const {
+      external: _external,
       href,
       target = '_blank',
       rel = 'noopener noreferrer',
@@ -30,7 +31,7 @@ export function Link(props: LinkProps) {
         href={href}
         target={target}
         rel={rel}
-        className="text-muted-foreground underline underline-offset-4 hover:text-primary"
+        className="font-bold text-primary underline underline-offset-4 hover:text-primary-hover"
         {...rest}
       >
         {rest.children}
@@ -39,7 +40,7 @@ export function Link(props: LinkProps) {
   }
   return (
     <RouterLink
-      className="text-muted-foreground underline underline-offset-4 hover:text-primary"
+      className="font-bold text-primary underline underline-offset-4 hover:text-primary-hover"
       {...props}
     >
       {props.children}

@@ -2,10 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { ResponsiveBar } from '@nivo/bar';
 
-import { cn } from 'cn';
-import { StatusIndicator } from '../status-indicator';
+import { cn } from '@/lib/utils';
+import { LoadingState } from '../loading-state';
 import { Label } from '../ui/label';
 import { Filter } from './filter';
+import { chartTheme, MARK_OUTLINE, MARK_OUTLINE_WIDTH } from './chart-theme';
+import { ChartTooltip } from './chart-tooltip';
+import { assignCategoryColors } from '@/lib/categories';
 import { NivoBarChartProps, NivoData } from './interfaces';
 
 export function NivoBarChart<T extends number | string>({
@@ -13,6 +16,8 @@ export function NivoBarChart<T extends number | string>({
   hideFilter,
   loading,
   className,
+  highlightIndex,
+  categoryColors,
   ...props
 }: NivoBarChartProps<T>) {
   const [filterValue, setFilterValue] = useState<string[]>([]);
@@ -75,6 +80,11 @@ export function NivoBarChart<T extends number | string>({
 
   const isEmpty = !nivoData.length;
 
+  const categoryStyles = useMemo(
+    () => (categoryColors ? assignCategoryColors(keys) : undefined),
+    [categoryColors, keys]
+  );
+
   return (
     <div className={cn('h-[300px]', className)}>
       {showFilter && (
@@ -90,12 +100,12 @@ export function NivoBarChart<T extends number | string>({
         </div>
       )}
       {loading ? (
-        <div className="h-full flex justify-center items-center">
-          <StatusIndicator status="loading">Loading</StatusIndicator>
+        <div className="flex h-full items-center justify-center">
+          <LoadingState />
         </div>
       ) : isEmpty ? (
-        <div className="h-full flex justify-center items-center text-sm">
-          No data for the selected Date range
+        <div className="flex h-full items-center justify-center text-center text-sm text-ink-muted">
+          Nothing scanned in this date range yet
         </div>
       ) : (
         <ResponsiveBar
@@ -105,25 +115,25 @@ export function NivoBarChart<T extends number | string>({
           motionConfig="stiff"
           indexBy="x"
           margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
-          borderRadius={4}
+          borderRadius={8}
           padding={0.3}
           valueScale={{ type: 'linear' }}
-          valueFormat=">-$.2f"
+          valueFormat=">-$,.2f"
           indexScale={{ type: 'band', round: true }}
-          colors={'hsl(var(--primary))'}
-          theme={{
-            text: {
-              fontFamily: 'inherit',
-              fontSize: 12,
-              color: 'inherit',
-              fill: 'hsl(var(--foreground))',
-            },
-            grid: {
-              line: {
-                stroke: 'hsl(var(--border))',
-              },
-            },
+          colors={(bar) => {
+            if (categoryStyles)
+              return (categoryStyles[String(bar.id)] ?? categoryStyles[keys[0]])
+                .color;
+            if (highlightIndex !== undefined)
+              return bar.indexValue === highlightIndex
+                ? 'var(--primary)'
+                : 'var(--blob-peach)';
+            return 'var(--blob-peach)';
           }}
+          borderColor={MARK_OUTLINE}
+          borderWidth={MARK_OUTLINE_WIDTH}
+          theme={chartTheme}
+          enableGridX={false}
           axisTop={null}
           axisRight={null}
           axisBottom={{
@@ -136,27 +146,29 @@ export function NivoBarChart<T extends number | string>({
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: 'Total ($)',
-            legendPosition: 'middle',
-            legendOffset: -50,
+            format: (value: number | string) => `$${value}`,
             truncateTickAt: 0,
           }}
-          labelSkipWidth={48}
-          labelSkipHeight={16}
-          // labelTextColor={{
-          //   from: 'color',
-          //   modifiers: [['darker', 1.6]],
-          // }}
-          labelTextColor="hsl(var(--primary-foreground))"
+          enableLabel={false}
           role="application"
-          ariaLabel="Spending Explorer"
+          ariaLabel="Spending chart"
           barAriaLabel={(e) =>
             e.id + ': ' + e.formattedValue + ' in time period: ' + e.indexValue
           }
-          // tooltip={(props) => {
-          //   props.value;
-          //   return <div>{props.value}</div>;
-          // }}
+          tooltip={(bar) => (
+            <ChartTooltip
+              title={bar.indexValue}
+              value={bar.formattedValue}
+              swatch={bar.color}
+              note={
+                categoryStyles
+                  ? undefined
+                  : bar.id !== bar.indexValue
+                  ? String(bar.id)
+                  : undefined
+              }
+            />
+          )}
           animate={true}
           layout="vertical"
           {...props}

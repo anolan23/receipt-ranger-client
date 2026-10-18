@@ -1,15 +1,10 @@
-import LogoSVG from '@/assets/logo.svg?react';
+import { Pip } from './mascot';
 
 interface ScanLogoProps {
   size?: number;
-  fill?: string;
 }
 
-export function ScanLogo({
-  size = 24,
-  fill = 'hsl(var(--foreground))',
-
-  ...props
-}: ScanLogoProps) {
-  return <LogoSVG fill={fill} width={size} height={size} stroke={fill} />;
+/** The brand mark: Pip's head. */
+export function ScanLogo({ size = 48 }: ScanLogoProps) {
+  return <Pip head size={size} title="Receipt Ranger" />;
 }

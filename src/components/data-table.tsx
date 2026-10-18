@@ -1,3 +1,4 @@
+import { LoadingState } from '@/components/loading-state';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -26,12 +27,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { cn } from 'cn';
-import { CaretSortIcon } from '@radix-ui/react-icons';
+import { cn } from '@/lib/utils';
+import { ArrowDown, ArrowUp, ChevronsUpDown } from 'lucide-react';
 import React, { ReactNode, useMemo } from 'react';
-import { StatusIndicator } from './status-indicator';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
+import { EmptyState } from './empty-state';
 import { Checkbox } from './ui/checkbox';
 
 type ColumnVisibilty<TData> = {
@@ -196,18 +197,14 @@ export function DataTable<TData>({
       {tools && <div className="mb-4">{tools(table)}</div>}
       <Card
         className={cn({
-          'rounded-md border shadow-none': variant === 'border',
+          'rounded-md shadow-none': variant === 'border',
         })}
       >
         {header}
-        <CardContent
-          className={cn({
-            'p-0': variant === 'border',
-          })}
-        >
+        <CardContent>
           {loading ? (
-            <div className="h-[100px] flex justify-center items-center">
-              <StatusIndicator status="loading">Loading</StatusIndicator>
+            <div className="flex min-h-24 items-center justify-center">
+              <LoadingState />
             </div>
           ) : (
             <Table
@@ -229,6 +226,7 @@ export function DataTable<TData>({
                           {header.isPlaceholder ? null : (
                             <HeaderCell
                               sortable={header.column.getCanSort()}
+                              sorted={header.column.getIsSorted()}
                               onClick={() =>
                                 header.column.toggleSorting(
                                   header.column.getIsSorted() === 'asc'
@@ -285,9 +283,16 @@ export function DataTable<TData>({
                   <TableRow>
                     <TableCell
                       colSpan={columns.length + 1}
-                      className="h-24 text-center"
+                      className="text-center"
                     >
-                      {empty ? empty : 'No results.'}
+                      <EmptyState
+                        title={typeof empty === 'string' ? empty : 'Nothing here yet'}
+                        description={
+                          typeof empty === 'string'
+                            ? undefined
+                            : (empty as ReactNode)
+                        }
+                      />
                     </TableCell>
                   </TableRow>
                 )}
@@ -303,15 +308,22 @@ export function DataTable<TData>({
 }
 interface HeaderCellProps {
   sortable?: boolean;
+  sorted?: false | 'asc' | 'desc';
   children?: ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
-function HeaderCell({ sortable, onClick, children }: HeaderCellProps) {
+function HeaderCell({ sortable, sorted, onClick, children }: HeaderCellProps) {
   if (!sortable) return <>{children}</>;
+  const Icon = sorted === 'asc' ? ArrowUp : sorted === 'desc' ? ArrowDown : ChevronsUpDown;
   return (
-    <Button variant="ghost" onClick={onClick}>
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={onClick}
+      className="-ml-4 gap-1 text-xs no-underline hover:bg-surface-200"
+    >
       {children}
-      <CaretSortIcon className="ml-2 h-4 w-4" />
+      <Icon aria-hidden className="size-4" />
     </Button>
   );
 }

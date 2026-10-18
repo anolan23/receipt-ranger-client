@@ -1,0 +1,1 @@
+The Scan screen: a camera-first viewfinder with corner guides and a large "Scan a receipt" button, "Choose from photos", a desktop drop zone, a batch tray with per-receipt status, and scanning tips. Both themes shown.

@@ -53,7 +53,7 @@ export function DrawerDialog({
           <DrawerFooter className="pt-4">
             {action}
             <DrawerClose asChild>
-              <Button variant="outline" size={isMobile ? 'lg' : 'default'}>
+              <Button variant="secondary" size={isMobile ? 'lg' : 'default'}>
                 Close
               </Button>
             </DrawerClose>

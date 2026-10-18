@@ -1,14 +1,5 @@
-import { ScanText } from 'lucide-react';
+import { BrandMark } from './mascot';
 
-interface LogoProps {
-  fill?: string;
-}
-
-export function Logo({ fill, ...props }: LogoProps) {
-  return (
-    <div className="flex space-x-2 items-center">
-      <ScanText fill={fill} />
-      <span className="font-bold tracking-tighter">snapceipt</span>
-    </div>
-  );
+export function Logo({ className }: { className?: string }) {
+  return <BrandMark className={className} />;
 }

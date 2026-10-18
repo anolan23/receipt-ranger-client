@@ -4,10 +4,10 @@ import { ReceiptData } from '@/lib/types';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { ImageLogo } from './image-logo';
-import { Badge } from './ui/badge';
+import { CategoryBadge } from './category-badge';
 import { useDeviceWidth } from '@/hooks/use-device-width';
 import { StatusIndicator } from './status-indicator';
-import { getFileUrl } from '@/lib/helpers';
+import { getFileUrl, toDollar } from '@/lib/helpers';
 import {
   Popover,
   PopoverContent,
@@ -50,7 +50,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
             size={40}
             className="shrink-0"
           />
-          <span>{getValue()}</span>
+          <span className="font-bold">{getValue()}</span>
         </div>
       ),
       size: 200,
@@ -63,9 +63,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       header: 'Category',
       enableSorting: false,
       cell: (info) => {
-        const value = info.getValue();
-        if (!value) return '-';
-        return <Badge variant="outline">{value}</Badge>;
+        return <CategoryBadge label={info.getValue()} />;
       },
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));
@@ -83,7 +81,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
           return (
             <Popover>
               <PopoverTrigger
-                className="underline decoration-dotted underline-offset-4 cursor-pointer"
+                className="cursor-pointer rounded-full"
                 onClick={(e) => e.stopPropagation()}
               >
                 <StatusIndicator status="warning">
@@ -94,9 +92,9 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
                 className="space-y-2 text-sm"
                 onClick={(e) => e.stopPropagation()}
               >
-                <p className="font-medium">Possible duplicate</p>
-                <p className="text-muted-foreground">
-                  This receipt looks similar to an existing one.
+                <p className="font-display text-base font-semibold">Possible duplicate</p>
+                <p className="text-ink-muted">
+                  This receipt looks a lot like one you already have.
                 </p>
                 <Link to={`/dashboard/receipts/${duplicateOf}`}>
                   View original ({String(duplicateOf).slice(0, 8)})
@@ -105,8 +103,8 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
             </Popover>
           );
         if (value)
-          return <StatusIndicator status="success">Reviewed</StatusIndicator>;
-        return <StatusIndicator status="pending">Pending</StatusIndicator>;
+          return <StatusIndicator status="success">Looks good</StatusIndicator>;
+        return <StatusIndicator status="warning">Needs a look</StatusIndicator>;
       },
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));
@@ -117,7 +115,11 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
       id: 'transaction_date',
       header: 'Transaction date',
       cell: (info) => {
-        return dayjs(info.row.original.transaction_date).format('YYYY/MM/DD');
+        return (
+          <span className="num">
+            {dayjs(info.row.original.transaction_date).format('MMM D, YYYY')}
+          </span>
+        );
       },
       enableSorting: true,
       sortingFn: (rowA, rowB, columnId) => {
@@ -139,7 +141,11 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
     columnHelper.accessor('total_amount', {
       id: 'total',
       header: 'Total',
-      cell: (info) => `$${info.getValue()}`,
+      cell: (info) => (
+        <span className="num font-bold">
+          {info.getValue() ? toDollar(info.getValue() as string) : '-'}
+        </span>
+      ),
       enableSorting: true,
       enableHiding: false,
       size: 100,
@@ -168,7 +174,7 @@ export function ReceiptsTable({ ...props }: ReceiptsTableProps) {
     <DataTable
       columns={columns}
       selectionType="single"
-      empty={'No Receipts found'}
+      empty={'No receipts found'}
       hidden={isMobile}
       wrapLines={false}
       initialColumnVisibility={{ created_at: false }}

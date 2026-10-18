@@ -5,6 +5,7 @@ import { useCategoryItems } from '@/hooks/use-category-items';
 import { useReceipt } from '@/hooks/use-receipt';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { ChevronLeft } from 'lucide-react';
+import { LoadingState } from '@/components/loading-state';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface CategoryPageProps {}
@@ -17,9 +18,8 @@ export function CategoryPage({ ...props }: CategoryPageProps) {
   const { data: category } = useCategory(categoryId);
 
   const { data: items } = useCategoryItems(categoryId);
-  console.log(items);
 
-  if (!category) return <div>Loading...</div>;
+  if (!category) return <LoadingState />;
 
   return (
     <DashboardLayout
@@ -29,14 +29,13 @@ export function CategoryPage({ ...props }: CategoryPageProps) {
           <div className="flex items-center gap-4">
             <Button
               onClick={() => navigate(-1)}
-              variant="outline"
+              variant="secondary"
               size="icon"
-              className="h-7 w-7"
-            >
-              <ChevronLeft className="h-4 w-4" />
+              >
+              <ChevronLeft aria-hidden />
               <span className="sr-only">Back</span>
             </Button>
-            <h1 className="flex-1 shrink-0 truncate text-xl font-semibold tracking-tight">
+            <h1 className="type-h2 min-w-0 flex-1 truncate">
               {`Category ${category.label}`}
             </h1>
           </div>

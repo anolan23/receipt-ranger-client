@@ -13,11 +13,11 @@ export function DuplicateReceiptNotice({
 }: DuplicateReceiptNoticeProps) {
   const { data: original } = useReceipt(originalReceiptId);
   return (
-    <Alert>
-      <CircleAlertIcon className="h-4 w-4" />
+    <Alert variant="rise">
+      <CircleAlertIcon aria-hidden />
       <AlertTitle>Possible duplicate</AlertTitle>
       <AlertDescription>
-        This receipt looks similar to{" "}
+        This receipt looks a lot like{" "}
         <Link to={`/dashboard/receipts/${originalReceiptId}`}>
           {original ? getReceiptTitle(original) : "an earlier receipt"}
         </Link>

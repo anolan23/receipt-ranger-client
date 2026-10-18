@@ -1,6 +1,6 @@
+import { LoadingState } from '@/components/loading-state';
 import { HTMLAttributes, ReactNode } from 'react';
 import { ErrorLayout } from './error-layout';
-import { StatusIndicator } from '@/components/status-indicator';
 
 interface ContentLayoutProps<T> {
   children: (data: T) => ReactNode;
@@ -20,20 +20,20 @@ export function ContentLayout<T>({
   if (loading)
     return (
       <div>
-        <StatusIndicator status="loading">Loading</StatusIndicator>
+        <LoadingState pip />
       </div>
     );
   if (error)
     return (
       <ErrorLayout
-        title="Oops! Something went wrong"
+        title="Oops, that was tricky to load"
         description={
-          error instanceof Error ? error.message : 'Something went wrong'
+          error instanceof Error ? error.message : 'Try again in a moment?'
         }
       />
     );
   if (!data) {
-    return <ErrorLayout title="No data" description={'No data available'} />;
+    return <ErrorLayout title="I couldn't find anything here" description={'Nothing to show yet.'} />;
   }
   return <div {...props}>{children(data)}</div>;
 }

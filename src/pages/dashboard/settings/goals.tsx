@@ -1,5 +1,5 @@
 import { DollarInput } from '@/components/dollar-input';
-import { StatusIndicator } from '@/components/status-indicator';
+import { LoadingState } from '@/components/loading-state';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,7 +21,7 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { useGoal } from '@/hooks/use-goal';
 import { createOrUpdateGoal } from '@/lib/api/goals';
-import { ExclamationTriangleIcon, ReloadIcon } from '@radix-ui/react-icons';
+import { LoaderCircle, TriangleAlert } from 'lucide-react';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -51,7 +51,7 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
   async function onSubmit(values: GoalsSettingsValues) {
     try {
       const result = await createOrUpdateGoal(values.amount);
-      toast({ variant: 'default', title: 'Goals updated' });
+      toast({ title: 'Goal saved!', description: 'Nice, your budget is all set.' });
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
@@ -63,17 +63,15 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
   }
 
   const { errors, isSubmitting, isValid } = form.formState;
-  if (isLoading)
-    return <StatusIndicator status="loading">Loading</StatusIndicator>;
+  if (isLoading) return <LoadingState label="Fetching your goal…" />;
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card>
           <CardHeader>
-            <CardTitle>Goals</CardTitle>
+            <CardTitle>Monthly goal</CardTitle>
             <CardDescription>
-              Track your spending and stay on top of your budget goals with
-              ease.
+              Set a monthly budget and I'll cheer you on as you get closer.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -84,7 +82,7 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Monthly Budget Goal</FormLabel>
+                    <FormLabel>Monthly budget</FormLabel>
                     <FormControl>
                       <DollarInput
                         type="number"
@@ -110,15 +108,15 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
         </Card>
 
         {errors.root?.message && (
-          <Alert variant="destructive">
-            <ExclamationTriangleIcon className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
+          <Alert variant="oops">
+            <TriangleAlert aria-hidden />
+            <AlertTitle>Oops, that didn't save</AlertTitle>
             <AlertDescription>{errors.root.message}</AlertDescription>
           </Alert>
         )}
         <Button disabled={isSubmitting}>
-          {isSubmitting && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-          Update goals
+          {isSubmitting && <LoaderCircle className="animate-spin" aria-hidden />}
+          Save goal
         </Button>
       </form>
     </Form>

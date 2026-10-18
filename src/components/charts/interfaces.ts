@@ -57,12 +57,22 @@ export interface NivoBarChartProps<T extends ChartDataTypes>
   hideFilter?: boolean;
   loading?: boolean;
   className?: string;
+  /** Index value (x label) of the bar to draw in `primary`, e.g. the current month. */
+  highlightIndex?: string;
+  /** Colour each series with its fixed category colour instead of a single tone. */
+  categoryColors?: boolean;
 }
 
 export interface NivoPieChartProps<T extends ChartDataTypes> {
   series: PieSeries<T>[];
   loading?: boolean;
   className?: string;
+  /** Format a slice value for the centre label and legend. */
+  formatValue?: (value: number) => string;
+  /** Fixed per-category colours, with emoji and name in the legend. */
+  categoryColors?: boolean;
+  /** Label under the total in the centre of the donut. */
+  centerLabel?: string;
 }
 
 export type ChartDataTypes = number | string | Date;

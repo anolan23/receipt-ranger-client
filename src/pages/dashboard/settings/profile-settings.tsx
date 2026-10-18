@@ -1,4 +1,4 @@
-import { StatusIndicator } from '@/components/status-indicator';
+import { LoadingState } from '@/components/loading-state';
 import {
   Card,
   CardContent,
@@ -16,7 +16,7 @@ export function ProfileSettings({ ...props }: ProfileSettingsProps) {
   const { data, isLoading } = useUserAttributes();
 
   if (isLoading)
-    return <StatusIndicator status="loading">Loading</StatusIndicator>;
+    return <LoadingState />;
   return (
     <Card>
       <CardHeader>

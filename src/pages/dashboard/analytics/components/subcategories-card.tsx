@@ -19,7 +19,7 @@ export function SubcategoriesCard({
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Top Item Categories</CardTitle>
+        <CardTitle>Where the items went</CardTitle>
       </CardHeader>
       <CardContent>
         <SubcategoriesChart {...props} />

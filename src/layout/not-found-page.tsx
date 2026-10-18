@@ -1,15 +1,15 @@
 import { usePageTitle } from '@/hooks/use-page-title';
 import { ErrorLayout } from './error-layout';
 
-interface NotFoundPageProps {}
-
-export function NotFoundPage({ ...props }: NotFoundPageProps) {
-  usePageTitle('404: Not Found');
+export function NotFoundPage() {
+  usePageTitle('Page not found');
   return (
-    <ErrorLayout
-      hideLogo={false}
-      title="404 - Page Not Found"
-      description="Oops! Looks like the page you're searching for has gone missing. Don't worry, though – we'll help you get back on track!"
-    />
+    <div className="min-h-dvh bg-surface-100 text-ink">
+      <ErrorLayout
+        hideLogo={false}
+        title="Oops, I can't find that page"
+        description="It may have wandered off. Let's get you back on track!"
+      />
+    </div>
   );
 }

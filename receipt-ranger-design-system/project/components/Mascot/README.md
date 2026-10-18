@@ -1,0 +1,3 @@
+Pip is a small ranger raccoon with a butter-yellow campaign hat, a sage neckerchief and a receipt in paw. Use `happy` for greetings and empty states, `reading` while a scan is processing, `celebrate` once when a batch finishes, `oops` for read errors and denied permissions.
+
+The mascot is an inline SVG with a 160 by 160 viewBox. Give it a 48px minimum, show it once per screen, and never place it over text or a chart. The cropped head is the logo mark. Its colours are fixed illustration colours and do not follow the theme; place it on `surface-100`, `surface-raised` or a `blob-*` fill.

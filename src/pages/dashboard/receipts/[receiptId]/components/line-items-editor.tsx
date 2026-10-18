@@ -60,7 +60,7 @@ export const LineItemsEditor = <T,>({
           <Button
             type="button"
             onClick={onRemoveClick ? () => onRemoveClick(index) : undefined}
-            variant="outline"
+            variant="secondary"
             size="icon"
             className="h-7 w-7"
           >
@@ -79,7 +79,7 @@ export const LineItemsEditor = <T,>({
           })}
         </div>
       ) : (
-        <div className="text-muted-foreground">{empty}</div>
+        <div className="text-ink-muted">{empty}</div>
       )}
       <div className="mt-2">
         <Button type="button" onClick={onAddClick} color="secondary">

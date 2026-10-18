@@ -1,0 +1,3 @@
+The first KPI is the hero: `blob-butter` ground, `ink` text, `money-xl` amount, a win chip and Pip peeking in the corner. The other cards are `surface-raised` with a `caption` label, a `h2`-style value in `display` with tabular numerals, and one line of positive context.
+
+Keep labels short ("Spent this month", "Receipts scanned", "Top category", "Average per receipt"). Phrase a change as a win when it is one ("8% less than this time in September") and in amber when it rose. On phones the hero spans both columns and the rest form a 2 by 2 grid.

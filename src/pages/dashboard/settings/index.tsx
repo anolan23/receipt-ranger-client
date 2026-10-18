@@ -17,14 +17,14 @@ export function SettingsPage({ ...props }: SettingsPageProps) {
         <div className="space-y-6 pb-16">
           <Header
             title="Settings"
-            description="Manage your account settings and set e-mail preferences."
+            description="Make Receipt Ranger work the way you like."
           />
-          <Separator className="w-full" />
-          <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+          <Separator />
+          <div className="flex flex-col gap-6 lg:flex-row lg:gap-12">
             <aside className="lg:w-1/5 lg:max-w-[250px]">
-              <nav className="flex gap-2 flex-wrap lg:flex-col lg:space-x-0 lg:space-y-1">
+              <nav aria-label="Settings" className="flex flex-wrap gap-2 lg:flex-col lg:gap-1.5">
                 <NavButton to="/dashboard/settings">Profile</NavButton>
-                <NavButton to="/dashboard/settings/goals">Goals</NavButton>
+                <NavButton to="/dashboard/settings/goals">Goal</NavButton>
                 <NavButton to="/dashboard/settings/subscription">
                   Subscription
                 </NavButton>

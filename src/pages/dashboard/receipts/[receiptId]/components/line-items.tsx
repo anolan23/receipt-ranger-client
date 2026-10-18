@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ItemSeparator } from "@/components/ui/item";
+import { Separator } from "@/components/ui/separator";
 import { ReceiptData, SubcategoryData } from "@/lib/types";
 import { Plus } from "lucide-react";
 import { Fragment, useMemo } from "react";
@@ -50,9 +50,9 @@ export function LineItems({
   return (
     <section aria-labelledby="line-items-heading" className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 id="line-items-heading" className="text-sm font-semibold">
+        <h2 id="line-items-heading" className="type-h3">
           Items{" "}
-          <span className="ml-1 font-normal tabular-nums text-muted-foreground">
+          <span className="num ml-1 font-sans text-sm font-bold text-ink-muted">
             ({fields.length})
           </span>
         </h2>
@@ -61,39 +61,39 @@ export function LineItems({
             type="button"
             variant="ghost"
             size="sm"
-            className="-mr-2 h-8 gap-1"
+            className="-mr-3"
             onClick={addItem}
           >
-            <Plus className="h-3.5 w-3.5" />
+            <Plus aria-hidden />
             Add item
           </Button>
         ) : null}
       </div>
       {!fields.length ? (
-        <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed px-4 py-8 text-center">
-          <p className="text-sm font-medium">No items on this receipt</p>
-          <p className="text-xs text-muted-foreground">
+        <div className="flex flex-col items-center gap-2 rounded-md border-2 border-dashed border-outline px-4 py-8 text-center">
+          <p className="font-display text-lg font-semibold">No items on this receipt</p>
+          <p className="max-w-[34ch] text-sm text-ink-muted">
             Add them to track what you bought, or skip this if you only need the
             total.
           </p>
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             size="sm"
-            className="mt-1 gap-1"
+            className="mt-1"
             onClick={addItem}
           >
-            <Plus className="h-3.5 w-3.5" />
+            <Plus aria-hidden />
             Add item
           </Button>
         </div>
       ) : (
-        <ul className="min-w-0 overflow-hidden rounded-lg border bg-background">
+        <ul className="min-w-0 overflow-hidden rounded-md border border-line bg-surface-100 p-1">
           {fields?.map((item, index) => (
             <Fragment key={item.id}>
               {index > 0 && (
                 <li role="presentation">
-                  <ItemSeparator />
+                  <Separator />
                 </li>
               )}
               <LineItem
@@ -142,7 +142,7 @@ export function LineItems({
                             <FormControl>
                               <Select
                                 id="subcategory"
-                                placeholder="Select Item Category"
+                                placeholder="Pick a category"
                                 items={selectItems}
                                 value={field.value?.toString()}
                                 onValueChange={(value) => {
@@ -187,7 +187,7 @@ export function LineItems({
                                 id="price"
                                 value={field.value || ""}
                                 onChange={field.onChange}
-                                className="text-right tabular-nums"
+                                className="num text-right"
                               />
                             </FormControl>
                             <FormMessage />

@@ -11,6 +11,7 @@ interface ReceiptSheetProps {
   onDeleteSuccess?: (receipt: ReceiptData) => void;
 }
 
+/** Receipt drawer: slides in from the right over 220ms with a fade of the scrim. */
 export function ReceiptSheet({
   open,
   receipt,

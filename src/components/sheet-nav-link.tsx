@@ -1,4 +1,4 @@
-import { cn } from 'cn';
+import { cn } from '@/lib/utils';
 import { forwardRef } from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 
@@ -13,9 +13,9 @@ export const SheetNavLink = forwardRef<HTMLAnchorElement, SheetNavLinkProps>(
         ref={ref}
         className={({ isActive }) => {
           return cn(
-            'flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground',
+            'flex min-h-12 items-center gap-4 rounded-full px-4 font-bold text-ink-muted hover:bg-surface-200 hover:text-ink',
             {
-              'text-foreground': isActive,
+              'bg-primary-soft text-ink': isActive,
             }
           );
         }}

@@ -4,9 +4,9 @@ interface EmptyProps {
   children?: ReactNode;
 }
 
-export function Empty({ children, ...props }: EmptyProps) {
+export function Empty({ children }: EmptyProps) {
   return (
-    <div className="p-2 h-24 text-center flex items-center justify-center">
+    <div className="flex h-24 items-center justify-center p-2 text-center text-sm text-ink-muted">
       {children}
     </div>
   );

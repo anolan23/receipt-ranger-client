@@ -1,7 +1,6 @@
-import placeHolderUser from '@/assets/user.webp';
-import { DashboardLink } from '@/components/dashboard-link';
-import { SheetNavLink } from '@/components/sheet-nav-link';
-import { Button } from '@/components/ui/button';
+import { Blob } from '@/components/blob';
+import { BrandMark } from '@/components/mascot';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,27 +10,43 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { logout } from '@/lib/api/auth';
-import { clearSWRCache } from '@/lib/utils';
+import { clearSWRCache, cn } from '@/lib/utils';
 import {
-  FileBarChart2,
+  Camera,
   Home,
   LineChart,
-  PanelLeft,
   ReceiptText,
-  Scan,
-  ScanText,
   Search,
-  Settings,
+  Smile,
+  UserRound,
+  type LucideIcon,
 } from 'lucide-react';
 import { ReactNode, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+
+interface NavItem {
+  to: string;
+  label: string;
+  /** Label used on the phone tab bar, when different. */
+  tabLabel?: string;
+  icon: LucideIcon;
+  end?: boolean;
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { to: '/dashboard', label: 'Overview', icon: Home, end: true },
+  { to: '/dashboard/receipts', label: 'Receipts', icon: ReceiptText },
+  { to: '/dashboard/analytics', label: 'Insights', icon: LineChart },
+  {
+    to: '/dashboard/settings',
+    label: 'Settings',
+    tabLabel: 'Me',
+    icon: Smile,
+  },
+];
+
+const SCAN_PATH = '/dashboard/scanner';
 
 interface DashboardLayoutProps {
   breadcrumbs?: ReactNode;
@@ -60,172 +75,185 @@ export function DashboardLayout({
       search: `q=${query.toLowerCase()}`,
     });
   };
+
+  const search = (
+    <form onSubmit={handleSearchSubmit} role="search" className="relative">
+      <Search
+        aria-hidden
+        className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-ink-muted"
+      />
+      <Input
+        type="search"
+        aria-label="Search receipts"
+        placeholder="Search merchant, category or total"
+        className="pl-11 md:w-64 lg:w-80"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+    </form>
+  );
+
+  const accountMenu = (
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="secondary"
+          size="icon"
+          className="size-12 shrink-0 rounded-full border-ink bg-blob-peach hover:bg-blob-peach"
+          aria-label="Your account"
+        >
+          <UserRound className="size-6" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>My account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link to="/dashboard/settings">Settings</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>Support</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={handleLogoutSelect}>Log out</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-        <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+    <div className="min-h-dvh bg-surface-100 text-ink">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:rounded-full focus:bg-surface-raised focus:px-5 focus:py-3 focus:font-bold"
+      >
+        Skip to content
+      </a>
+
+      {/* Desktop: 224px sidebar of pill nav items and a persistent Scan button. */}
+      <aside className="fixed inset-y-0 left-0 z-20 hidden w-56 flex-col gap-1.5 bg-surface-200 px-4 py-6 md:flex">
+        <Link
+          to="/dashboard"
+          className="mb-4 rounded-full px-2 outline-offset-4"
+          aria-label="Receipt Ranger home"
+        >
+          <BrandMark />
+        </Link>
+        <nav aria-label="Main" className="flex flex-col gap-1.5">
+          {NAV_ITEMS.slice(0, 3).map((item) => (
+            <SideNavLink key={item.to} item={item} />
+          ))}
+        </nav>
+        <div className="grow" />
+        <SideNavLink item={NAV_ITEMS[3]} />
+        <p className="mt-3 rounded-md bg-surface-raised p-3.5 text-[13px] leading-[18px] text-ink-muted">
+          <span aria-hidden>💡</span> Tip: batch your receipts on Sunday. Pip
+          loves a big stack!
+        </p>
+        <Link
+          to={SCAN_PATH}
+          className={cn(buttonVariants(), 'mt-3 w-full')}
+        >
+          <Camera aria-hidden />
+          Scan a receipt
+        </Link>
+      </aside>
+
+      <div className="flex min-h-dvh min-w-0 flex-col md:pl-56">
+        <header className="relative z-10 flex flex-wrap items-center gap-x-4 gap-y-3 px-4 pt-4 md:px-8 md:pt-6">
           <Link
             to="/dashboard"
-            className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
+            className="mr-auto rounded-full md:hidden"
+            aria-label="Receipt Ranger home"
           >
-            <ScanText className="h-4 w-4 transition-all group-hover:scale-110" />
-            {/* <Package2 className="h-4 w-4 transition-all group-hover:scale-110" /> */}
-            <span className="sr-only">Scanceipt</span>
+            <BrandMark size={44} className="text-lg" />
           </Link>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <DashboardLink to="/dashboard" end>
-                <Home className="h-5 w-5" />
-                <span className="sr-only">Dashboard</span>
-              </DashboardLink>
-            </TooltipTrigger>
-            <TooltipContent side="right">Dashboard</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <DashboardLink to="/dashboard/receipts">
-                <ReceiptText className="h-5 w-5" />
-                <span className="sr-only">Receipts</span>
-              </DashboardLink>
-            </TooltipTrigger>
-            <TooltipContent side="right">Receipts</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <DashboardLink to="/dashboard/scanner">
-                <Scan className="h-5 w-5" />
-                <span className="sr-only">Scanner</span>
-              </DashboardLink>
-            </TooltipTrigger>
-            <TooltipContent side="right">Scanner</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <DashboardLink to="/dashboard/analytics">
-                <LineChart className="h-5 w-5" />
-                <span className="sr-only">Analytics</span>
-              </DashboardLink>
-            </TooltipTrigger>
-            <TooltipContent side="right">Analytics</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                to="/dashboard/reports"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-              >
-                <FileBarChart2 className="h-5 w-5" />
-                <span className="sr-only">Reports</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Reports</TooltipContent>
-          </Tooltip>
-        </nav>
-        <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                to="/dashboard/settings"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-              >
-                <Settings className="h-5 w-5" />
-                <span className="sr-only">Settings</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Settings</TooltipContent>
-          </Tooltip>
-        </nav>
-      </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button size="icon" variant="outline" className="sm:hidden">
-                <PanelLeft className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="sm:max-w-xs">
-              <nav className="grid gap-6 text-lg font-medium">
-                <Link
-                  to="/dashboard"
-                  className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
-                >
-                  <ScanText className="h-5 w-5 transition-all group-hover:scale-110" />
-                  <span className="sr-only">Snapceipt</span>
-                </Link>
-                <SheetNavLink to="/dashboard" end>
-                  <Home className="h-5 w-5" />
-                  Dashboard
-                </SheetNavLink>
-                <SheetNavLink to="/dashboard/receipts">
-                  <ReceiptText className="h-5 w-5" />
-                  Receipts
-                </SheetNavLink>
-                <SheetNavLink to="/dashboard/scanner">
-                  <Scan className="h-5 w-5" />
-                  Scanner
-                </SheetNavLink>
-                <SheetNavLink to="/dashboard/analytics">
-                  <LineChart className="h-5 w-5" />
-                  Analytics
-                </SheetNavLink>
-                <SheetNavLink to="/dashboard/reports">
-                  <FileBarChart2 className="h-5 w-5" />
-                  Reports
-                </SheetNavLink>
-                <SheetNavLink to="/dashboard/settings">
-                  <Settings className="h-5 w-5" />
-                  Settings
-                </SheetNavLink>
-              </nav>
-            </SheetContent>
-          </Sheet>
-          {breadcrumbs}
-          <div className="relative ml-auto flex-1 md:grow-0">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <form onSubmit={handleSearchSubmit}>
-              <Input
-                type="search"
-                placeholder="Search by Merchant, Category, or total"
-                className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </form>
-          </div>
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="overflow-hidden rounded-full"
-              >
-                <img
-                  src={placeHolderUser}
-                  width={36}
-                  height={36}
-                  alt="Avatar"
-                  className="overflow-hidden rounded-full"
-                />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link to="/dashboard/settings">Settings</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onSelect={handleLogoutSelect}>
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="mr-auto hidden min-w-0 md:block">{breadcrumbs}</div>
+          <div className="hidden md:block">{search}</div>
+          {accountMenu}
+          <div className="w-full md:hidden">{search}</div>
         </header>
-        <main className="flex-1 p-4 sm:px-6 sm:py-0">{content}</main>
+        <main
+          id="main"
+          className="relative isolate flex-1 px-4 pt-5 pb-36 md:px-8 md:pt-6 md:pb-10"
+        >
+          <Blob
+            color="peach"
+            className="-top-24 -right-16 -z-10 h-72 w-72 md:-right-8 md:h-96 md:w-96"
+          />
+          <Blob
+            color="lavender"
+            className="top-40 -left-24 -z-10 hidden h-64 w-64 md:block"
+          />
+          {content}
+        </main>
       </div>
+
+      {/* Phone: bottom tab bar with a raised, round Scan button in the centre. */}
+      <nav
+        aria-label="Main"
+        className="fixed inset-x-0 bottom-0 z-30 flex items-end justify-around border-t border-line bg-surface-raised px-1.5 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))] md:hidden"
+      >
+        <TabLink item={NAV_ITEMS[0]} />
+        <TabLink item={NAV_ITEMS[1]} />
+        <NavLink
+          to={SCAN_PATH}
+          className="group -mt-9 flex flex-1 flex-col items-center gap-0.5 text-xs leading-4 font-bold text-ink"
+        >
+          <span className="grid size-[68px] place-items-center rounded-full bg-primary text-on-primary shadow-[var(--shadow-button-v),0_0_0_6px_var(--surface-raised)] transition-transform duration-[220ms] ease-bounce group-hover:-translate-y-[3px] group-hover:scale-105 group-active:translate-y-px">
+            <Camera aria-hidden className="size-[30px]" />
+          </span>
+          Scan
+        </NavLink>
+        <TabLink item={NAV_ITEMS[2]} />
+        <TabLink item={NAV_ITEMS[3]} />
+      </nav>
     </div>
+  );
+}
+
+function SideNavLink({ item }: { item: NavItem }) {
+  const Icon = item.icon;
+  return (
+    <NavLink
+      to={item.to}
+      end={item.end}
+      className={({ isActive }) =>
+        cn(
+          'flex min-h-12 items-center gap-3 rounded-full px-4 text-[15px] leading-none font-bold transition-[background-color,transform] duration-[220ms] ease-bounce hover:translate-x-[3px] hover:bg-surface-raised',
+          isActive ? 'bg-primary-soft text-ink' : 'text-ink-muted'
+        )
+      }
+    >
+      <Icon aria-hidden className="size-[22px] shrink-0" />
+      {item.label}
+    </NavLink>
+  );
+}
+
+function TabLink({ item }: { item: NavItem }) {
+  const Icon = item.icon;
+  return (
+    <NavLink
+      to={item.to}
+      end={item.end}
+      className={({ isActive }) =>
+        cn(
+          'flex min-h-12 flex-1 flex-col items-center gap-0.5 text-xs leading-4 font-bold',
+          isActive ? 'text-ink' : 'text-ink-muted'
+        )
+      }
+    >
+      {({ isActive }) => (
+        <>
+          <span
+            className={cn(
+              'grid h-8 w-14 place-items-center rounded-full transition-colors',
+              isActive && 'bg-primary-soft'
+            )}
+          >
+            <Icon aria-hidden className="size-[22px]" />
+          </span>
+          {item.tabLabel ?? item.label}
+        </>
+      )}
+    </NavLink>
   );
 }

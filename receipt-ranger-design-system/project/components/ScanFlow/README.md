@@ -1,0 +1,3 @@
+Scanning is camera-first. The primary "Scan a receipt" button opens the camera on phones; "Choose from photos" and a drag-and-drop zone cover the library and desktop. The viewfinder is a `radius-xl` frame with butter corner guides, a sweeping beam and the tip "Lay it flat and make sure the total is visible".
+
+Scanned receipts collect in a batch tray of thumbnails, each with its own `StatusPill` (queued, reading, done, needs review, failed). While reading, Pip squints at a receipt above a striped progress bar. When the batch finishes, Pip celebrates once and the copy counts the win ("Nice, 4 receipts scanned!").

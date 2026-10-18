@@ -35,19 +35,19 @@ export function CopyableText({ text, children }: CopyableTextProps) {
   }, [isCopied]);
 
   return (
-    <div className="group flex items-center gap-2 text-lg overflow-hidden">
+    <div className="group flex items-center gap-2 overflow-hidden text-lg">
       {children}
       <Button
         onClick={copyToClipboard}
         size="icon"
-        variant="outline"
-        className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
+        variant="secondary"
+        className="size-11 opacity-100 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100"
       >
         {isCopied ? (
-          <CopyCheck className="h-3 w-3" />
+          <CopyCheck aria-hidden />
         ) : (
           <>
-            <Copy className="h-3 w-3" />
+            <Copy aria-hidden />
             <span className="sr-only">Copy text</span>
           </>
         )}

@@ -1,0 +1,3 @@
+Every state has Pip and kind copy. Empty: "Let's scan your first receipt!". Loading: shimmering skeletons with a squinting Pip ("Counting the coupons…"). Error: "Oops, that receipt was tricky to read. Try scanning it again?" with a retry and a manual-entry escape. Camera denied: explain how to turn it on and always offer "Choose from photos".
+
+Low-confidence reads use the `rise-*` highlight with "Can you double-check this one?". Never use alarm red; failures use `oops-*`. Skeletons stop shimmering under reduced motion.

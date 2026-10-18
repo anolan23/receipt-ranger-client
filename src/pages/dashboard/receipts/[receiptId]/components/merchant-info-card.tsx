@@ -45,7 +45,7 @@ export function MerchantInfoCard({
   return (
     <Card className="min-w-0">
       <CardHeader>
-        <CardTitle>Merchant Information</CardTitle>
+        <CardTitle>Store</CardTitle>
         <CardDescription>
           Provides key details about the business associated with the receipt.
         </CardDescription>
@@ -65,8 +65,8 @@ export function MerchantInfoCard({
                     selectedOption={field.value}
                     onOptionChange={field.onChange}
                     triggerVariant="option"
-                    searchPlaceHolder="Search Merchants..."
-                    empty="No Merchant found."
+                    searchPlaceHolder="Search stores…"
+                    empty="I couldn't find that store."
                   />
                 </FormControl>
                 <FormMessage />

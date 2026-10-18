@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { CalendarIcon } from '@radix-ui/react-icons';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { addDays, format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 
-import { cn } from 'cn';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -32,14 +32,14 @@ export function DateRangePicker({
         <PopoverTrigger asChild>
           <Button
             id="date"
-            variant={'outline'}
+            variant="secondary"
             className={cn(
-              'w-[300px] justify-start text-left font-normal',
-              !dateRange && 'text-muted-foreground',
+              'w-[300px] justify-start text-left',
+              !dateRange && 'text-ink-muted',
               className
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon aria-hidden />
             {dateRange?.from ? (
               dateRange.to ? (
                 <>

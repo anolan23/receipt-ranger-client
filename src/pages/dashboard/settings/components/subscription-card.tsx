@@ -1,4 +1,4 @@
-import { StatusIndicator } from '@/components/status-indicator';
+import { LoadingState } from '@/components/loading-state';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { SubscriptionRecordData } from '@/lib/types';
@@ -22,13 +22,13 @@ export function SubscriptionCard({
     <Card className="w-full">
       <CardContent className="flex justify-between items-center p-6 gap-2">
         {loading ? (
-          <StatusIndicator status="loading">Loading</StatusIndicator>
+          <LoadingState />
         ) : (
           <>
             <div className="flex flex-col">
               <div>{hasSubscription ? 'Pro member' : 'Basic member'}</div>
               {subscription?.subscription_status && (
-                <div className="text-sm text-muted-foreground first-letter:uppercase">
+                <div className="text-sm text-ink-muted first-letter:uppercase">
                   {subscription.subscription_status}
                 </div>
               )}

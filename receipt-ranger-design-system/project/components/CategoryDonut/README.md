@@ -1,0 +1,3 @@
+The donut shows each category as a `cat-*` slice with a 2px `ink` outline and a small gap. The centre reads the month total by default and switches to the hovered or focused slice (emoji, amount, name and percent).
+
+The legend is mandatory: swatch, emoji, name, whole-number percentage (they sum to 100) and amount. Order slices largest first and keep each category on its fixed colour; "Everything else" is always last. Never label a slice with colour alone.

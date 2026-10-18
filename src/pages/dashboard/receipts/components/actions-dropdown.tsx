@@ -46,13 +46,13 @@ export function ActionsDropdown({
         if (!receipt?.id) return;
         await deleteReceipt(receipt.id);
         onDelete && onDelete(receipt);
-        toast({ variant: 'default', title: 'Receipt deleted' });
+        toast({ title: 'Receipt deleted', description: 'All tidied up.' });
       } catch (error) {
         let message = 'Something went wrong';
         if (error instanceof Error) {
           message = error.message;
         }
-        toast({ variant: 'destructive', title: 'Error', description: message });
+        toast({ variant: 'oops', title: "Oops, that didn't work", description: message });
       } finally {
         setDropdownOpen(false);
         setHasOpenDialog(false);
@@ -71,7 +71,7 @@ export function ActionsDropdown({
       if (error instanceof Error) {
         message = error.message;
       }
-      toast({ variant: 'destructive', title: 'Error', description: message });
+      toast({ variant: 'oops', title: "Oops, that didn't work", description: message });
     }
   };
 
@@ -82,14 +82,9 @@ export function ActionsDropdown({
       modal={false}
     >
       <DropdownMenuTrigger asChild>
-        <Button
-          size="icon"
-          variant="outline"
-          className="h-8 w-8"
-          disabled={!receipt}
-        >
-          <MoreVertical className="h-3.5 w-3.5" />
-          <span className="sr-only">More</span>
+        <Button size="icon" variant="secondary" disabled={!receipt}>
+          <MoreVertical aria-hidden />
+          <span className="sr-only">More actions</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" hidden={hasOpenDialog}>
@@ -98,13 +93,16 @@ export function ActionsDropdown({
           disabled={receipt?.reviewed}
           onSelect={handleReviewSelect}
         >
-          Mark as reviewed
+          Looks good, mark reviewed
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DeleteReceiptDialog
           trigger={
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              Trash
+            <DropdownMenuItem
+              variant="danger"
+              onSelect={(e) => e.preventDefault()}
+            >
+              Delete receipt
             </DropdownMenuItem>
           }
           receipt={receipt}

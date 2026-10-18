@@ -1,6 +1,13 @@
 import { BarSeries, Datum } from '@/components/charts/interfaces';
 import { NivoBarChart } from '@/components/charts/nivo-bar-chart';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { formatDate, getDates } from '@/lib/helpers';
 import { DatePreset, MonthySpendingData } from '@/lib/types';
 import { useMemo } from 'react';
@@ -11,6 +18,8 @@ interface MonthlyTotalsCardProps {
   dateRange?: DateRange;
   datePreset?: DatePreset;
   loading?: boolean;
+  /** Show a 3M / 6M / 12M selector in the card header. */
+  onDatePresetChange?: (preset: DatePreset) => void;
 }
 
 export function MonthlyTotalsCard({
@@ -18,7 +27,7 @@ export function MonthlyTotalsCard({
   loading,
   dateRange,
   datePreset,
-  ...props
+  onDatePresetChange,
 }: MonthlyTotalsCardProps) {
   const dates = useMemo(() => {
     return dateRange?.from && dateRange?.to
@@ -65,13 +74,30 @@ export function MonthlyTotalsCard({
   return (
     <Card className="min-w-0 md:col-span-1">
       <CardHeader>
-        <CardTitle>Monthly Totals ($)</CardTitle>
+        <CardTitle>Monthly totals</CardTitle>
+        {onDatePresetChange && (
+          <CardAction>
+            <ToggleGroup
+              type="single"
+              aria-label="Time range"
+              value={datePreset}
+              onValueChange={(value) =>
+                value && onDatePresetChange(value as DatePreset)
+              }
+            >
+              <ToggleGroupItem value="3-months">3M</ToggleGroupItem>
+              <ToggleGroupItem value="6-months">6M</ToggleGroupItem>
+              <ToggleGroupItem value="1-year">12M</ToggleGroupItem>
+            </ToggleGroup>
+          </CardAction>
+        )}
       </CardHeader>
       <CardContent>
         <NivoBarChart
           className="h-[200px] sm:h-[300px]"
           series={series}
           hideFilter
+          highlightIndex={formatDate(new Date())}
           loading={loading}
           margin={{ top: 10, right: 0, bottom: 50, left: 50 }}
           gridYValues={5}
@@ -89,7 +115,7 @@ export function MonthlyTotalsCard({
             truncateTickAt: 30,
             format: (val) => {
               if (datePreset === '3-years') return '';
-              else return undefined;
+              return String(val).split(' ')[0];
             },
           }}
         />

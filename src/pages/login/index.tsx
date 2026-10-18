@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { AuthLayout } from '@/layout/auth-layout';
 import { getErrorMessage, login } from '@/lib/api/auth';
 import { Credentials } from '@/lib/types';
-import { ReloadIcon } from '@radix-ui/react-icons';
+import { LoaderCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { usePageTitle } from '@/hooks/use-page-title';
 
@@ -50,11 +50,11 @@ export function LoginPage({ ...props }: LoginPageProps) {
       content={
         <>
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Log in to your account
+            <h1 className="type-h1">
+              Welcome back!
             </h1>
-            <p className="text-sm text-muted-foreground">
-              Enter your email and password below
+            <p className="text-sm text-ink-muted">
+              Log in to see how this month is going.
             </p>
           </div>
           <div className="grid gap-6">
@@ -116,19 +116,19 @@ export function LoginPage({ ...props }: LoginPageProps) {
                       )}
                     />
                   </div>
-                  <Button className="bg-zinc-900 text-primary-foreground hover:bg-zinc-900/90">
+                  <Button size="lg" className="mt-2" disabled={isSubmitting}>
                     {isSubmitting && (
-                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                      <LoaderCircle aria-hidden className="animate-spin" />
                     )}
-                    Log in with Email
+                    Log in
                   </Button>
                 </div>
               </form>
             </Form>
 
           </div>
-          <p className="px-8 text-center text-sm text-muted-foreground">
-            By clicking continue, you agree to our{' '}
+          <p className="px-4 text-center text-sm text-ink-muted">
+            By logging in, you agree to our{' '}
             <Link external href="https://snapceipt.com/terms-of-service/">
               Terms of Service
             </Link>{' '}
