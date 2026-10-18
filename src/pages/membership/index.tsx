@@ -1,9 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PriceCard } from './components/price-card';
-import { createCheckoutSession, createPortalSession } from '@/lib/api/stripe';
+import { createCheckoutSession } from '@/lib/api/stripe';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Info } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useUser } from '@/hooks/use-user';
@@ -16,53 +17,34 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
   usePageTitle('Membership');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [loading, setLoading] = useState(false);
-  const { user, isAuthenticated } = useUser();
+  const [loadingPlan, setLoadingPlan] = useState<'monthly' | 'yearly' | null>(
+    null
+  );
+  const [error, setError] = useState<string>();
+  const { isAuthenticated } = useUser();
 
-  const ensureAuth = function () {
-    if (isAuthenticated === false) navigate('/signup');
+  const startCheckout = async (plan: 'monthly' | 'yearly') => {
+    if (isAuthenticated === false) {
+      navigate('/signup');
+      return;
+    }
+    const appUrl = import.meta.env.VITE_APP_URL;
+    setError(undefined);
+    setLoadingPlan(plan);
+    try {
+      await createCheckoutSession({
+        subscription_type: plan,
+        success_url: `${appUrl}/dashboard/settings/subscription?checkout=success`,
+        cancel_url: `${appUrl}/membership?checkout=canceled${
+          searchParams.get('c') ? `&c=${searchParams.get('c')}` : ''
+        }`,
+      });
+    } catch (e) {
+      console.error(e);
+      setError("We couldn't open checkout. Nothing was charged. Try again.");
+      setLoadingPlan(null);
+    }
   };
-
-  const handleMonthlyClick: React.MouseEventHandler<HTMLButtonElement> =
-    async function (e) {
-      try {
-        ensureAuth();
-        setLoading(true);
-        await createCheckoutSession({
-          subscription_type: 'monthly',
-          success_url: `${
-            import.meta.env.VITE_APP_URL
-          }/dashboard/settings/subscription`,
-          cancel_url: `${
-            import.meta.env.VITE_APP_URL
-          }/dashboard/settings/subscription`,
-        });
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-  const handleYearlyClick: React.MouseEventHandler<HTMLButtonElement> =
-    async function (e) {
-      try {
-        ensureAuth();
-        setLoading(true);
-        await createCheckoutSession({
-          subscription_type: 'yearly',
-          success_url: `${
-            import.meta.env.VITE_APP_URL
-          }/dashboard/settings/subscription`,
-          cancel_url: `${
-            import.meta.env.VITE_APP_URL
-          }/dashboard/settings/subscription`,
-        });
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
   return (
     <div className="min-h-dvh bg-surface-100 text-ink">
@@ -78,6 +60,8 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
                 to={
                   searchParams.get('c') === 'settings'
                     ? '/dashboard/settings/subscription'
+                    : searchParams.get('c') === 'scan'
+                    ? '/dashboard/scan'
                     : '/dashboard'
                 }
               >
@@ -93,35 +77,51 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
       </header>
       <main className="mb-10">
         <div className="flex flex-col items-center space-y-4 mx-4">
+          {searchParams.get('checkout') === 'canceled' && (
+            <Alert variant="default" role="status" className="max-w-sm">
+              <Info aria-hidden />
+              <AlertDescription>
+                No worries, you weren't charged. Pick a plan whenever you're
+                ready.
+              </AlertDescription>
+            </Alert>
+          )}
           <Tabs defaultValue="yearly">
             <TabsList className="mb-4">
               <TabsTrigger value="monthly">Monthly</TabsTrigger>
-              <TabsTrigger value="yearly">Yearly (save 50%)</TabsTrigger>
+              <TabsTrigger value="yearly">Yearly (save 33%)</TabsTrigger>
             </TabsList>
             <TabsContent value="monthly">
               <PriceCard
                 title="Receipt Ranger Pro"
-                description="Scan as many receipts as you like and get the latest features first."
+                description="Scan as many receipts as you like."
                 price="4.99"
                 interval="monthly"
-                onClick={handleMonthlyClick}
+                billedAmount="4.99"
+                loading={loadingPlan === 'monthly'}
+                disabled={loadingPlan !== null}
+                error={error}
+                onClick={() => startCheckout('monthly')}
               />
             </TabsContent>
             <TabsContent value="yearly">
               <PriceCard
                 badge="Best deal"
                 title="Receipt Ranger Pro"
-                description="Scan as many receipts as you like and get the latest features first."
+                description="Scan as many receipts as you like."
                 price="3.33"
                 interval="yearly"
-                footer="*when billed yearly"
-                onClick={handleYearlyClick}
+                billedAmount="39.99"
+                loading={loadingPlan === 'yearly'}
+                disabled={loadingPlan !== null}
+                error={error}
+                onClick={() => startCheckout('yearly')}
               />
             </TabsContent>
           </Tabs>
           <p className="w-full text-center text-ink-muted sm:w-[50%]">
-            Both plans include <strong>unlimited receipt scans</strong>. By
-            choosing the yearly plan, you save 50% compared to paying monthly.
+            Free gives you a monthly scan limit. Pro removes it. Yearly costs
+            about 33% less than paying monthly.
           </p>
         </div>
       </main>

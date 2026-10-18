@@ -34,6 +34,33 @@ export type CreateReceiptResult = {
   potential_duplicate?: boolean;
   duplicate_receipt_id?: string | null;
 };
+export type ScanUsage = {
+  used: number;
+  /** null when the plan has no cap */
+  limit: number | null;
+  unlimited: boolean;
+  resets_at: string;
+};
+export async function getScanUsage() {
+  const response = await backend.get<ScanUsage>('/receipts/usage');
+  return response.data;
+}
+
+/** Thrown when the free plan's scan limit is hit. Fields are set only if the backend sends them. */
+export class ScanLimitError extends Error {
+  limit?: number;
+  used?: number;
+  resetsAt?: string;
+
+  constructor(details?: { limit?: number; used?: number; resetsAt?: string }) {
+    super('Upgrade to Pro for unlimited Receipt scans');
+    this.name = 'ScanLimitError';
+    this.limit = details?.limit;
+    this.used = details?.used;
+    this.resetsAt = details?.resetsAt;
+  }
+}
+
 export async function createReceipt(file: File) {
   try {
     const formData = new FormData();
@@ -53,7 +80,13 @@ export async function createReceipt(file: File) {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 429) {
-        throw new Error('Upgrade to Pro for unlimited Receipt scans');
+        const data = error.response.data;
+        throw new ScanLimitError({
+          limit: typeof data?.limit === 'number' ? data.limit : undefined,
+          used: typeof data?.used === 'number' ? data.used : undefined,
+          resetsAt:
+            typeof data?.resets_at === 'string' ? data.resets_at : undefined,
+        });
       }
       const detail = error.response?.data?.detail;
       if (typeof detail === 'string') throw new Error(detail);

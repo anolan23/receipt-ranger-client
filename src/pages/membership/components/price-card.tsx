@@ -1,23 +1,34 @@
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from '@/components/ui/card';
-import { LoaderCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { CircleX, LoaderCircle } from 'lucide-react';
 
 interface PriceCardProps {
   title: string;
   description: string;
+  /** Price per month shown in the headline, e.g. "3.33". */
   price: string;
   interval: 'monthly' | 'yearly';
+  /** What is actually charged each billing period, e.g. "39.99". */
+  billedAmount: string;
   badge?: string;
-  footer?: string;
   buttonText?: string;
   loading?: boolean;
+  disabled?: boolean;
+  error?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+function renewalDate(interval: 'monthly' | 'yearly') {
+  const date = new Date();
+  if (interval === 'monthly') date.setMonth(date.getMonth() + 1);
+  else date.setFullYear(date.getFullYear() + 1);
+  return date.toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
 }
 
 export function PriceCard({
@@ -25,17 +36,24 @@ export function PriceCard({
   description,
   price,
   interval,
+  billedAmount,
   badge,
-  buttonText = 'Upgrade to Pro',
+  buttonText,
   loading,
-  footer,
+  disabled,
+  error,
   onClick,
-  ...props
 }: PriceCardProps) {
-  const intervalText = interval === 'monthly' ? 'month' : 'year';
   const [dollar, cents] = price.split('.');
+  const billing =
+    interval === 'monthly'
+      ? `Billed $${billedAmount} every month.`
+      : `Billed $${billedAmount} once a year.`;
+  const label =
+    buttonText ??
+    `Get Pro, $${billedAmount}/${interval === 'monthly' ? 'month' : 'year'}`;
   return (
-    <Card className="max-w-[350px]">
+    <Card className="w-full max-w-sm">
       <CardHeader>
         {badge && (
           <div>
@@ -44,35 +62,37 @@ export function PriceCard({
         )}
         <div className="type-h2">{title}</div>
       </CardHeader>
-      <CardContent className="flex flex-col ">
+      <CardContent className="flex flex-col">
         <p className="mb-8 text-sm text-ink-muted">{description}</p>
-        <div className="flex flex-col items-center mb-4">
+        <div className="mb-4 flex flex-col items-center gap-1">
           <span className="num font-display text-3xl font-semibold">
-            <span>
-              ${dollar}
-              <span>.{cents}</span> <span>/ month</span>
-              {footer && <sup>*</sup>}
+            ${dollar}.{cents}
+            <span className="text-sm font-normal text-ink-muted">
+              {' '}
+              / month
             </span>
           </span>
-          {/* <span className="text-3xl font-bold tracking-tighter mr-1">
-          {price}
-        </span>
-        <span className="text-xs text-ink-muted">
-          per
-          <br />
-          {intervalText}
-        </span> */}
+          <span className="text-sm">{billing}</span>
+          <span className="text-center text-xs text-ink-muted">
+            Renews {renewalDate(interval)}. Cancel any time in Settings.
+          </span>
         </div>
-        <Button onClick={onClick} size="lg">
+        <Button
+          onClick={onClick}
+          size="lg"
+          disabled={loading || disabled}
+          aria-busy={loading}
+        >
           {loading && <LoaderCircle aria-hidden className="animate-spin" />}
-          {buttonText}
+          {loading ? 'Opening checkout…' : label}
         </Button>
+        {error && (
+          <Alert variant="oops" className="mt-4">
+            <CircleX aria-hidden />
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
       </CardContent>
-      {footer ? (
-        <CardFooter className="text-center justify-center">
-          <span className="text-xs text-ink-muted">{footer}</span>
-        </CardFooter>
-      ) : null}
     </Card>
   );
 }

@@ -25,7 +25,8 @@ import { useReceipt } from '@/hooks/use-receipt';
 import { useReceipts } from '@/hooks/use-receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
 import { useSpendingOverview } from '@/hooks/use-spending-overview';
-import { useSubscription } from '@/hooks/use-subscription';
+import { UsageMeter } from '@/components/usage-meter';
+import { usePlan } from '@/hooks/use-plan';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { getCategoryStyle } from '@/lib/categories';
 import { toDollar } from '@/lib/helpers';
@@ -63,7 +64,7 @@ export function DashboardPage() {
     mutate: mutateSpendingOverview,
   } = useSpendingOverview();
 
-  const { data: subscriptionRecord } = useSubscription();
+  const { tier: planTier, isLoading: isPlanLoading } = usePlan();
 
   const { datePreset, setDatePreset, dateRange, dateInterval } =
     useDateRangePreset('6-months');
@@ -145,7 +146,7 @@ export function DashboardPage() {
             description="A quick look at where your money went."
             actions={
               <Button asChild className="hidden md:inline-flex">
-                <Link to="/dashboard/scanner">Scan a receipt</Link>
+                <Link to="/dashboard/scan">Scan a receipt</Link>
               </Button>
             }
           />
@@ -278,14 +279,14 @@ export function DashboardPage() {
             />
           </div>
 
-          {!subscriptionRecord?.subscription && (
+          {!isPlanLoading && planTier === 'free' && (
             <Card className="flex-col items-start gap-3 bg-blob-lavender sm:flex-row sm:items-center">
               <div className="grid flex-1 gap-0.5">
                 <div className="type-h3">Upgrade to Pro</div>
                 <p className="text-sm">
-                  Scan as many receipts as you like and get the latest features
-                  first.
+                  Scan as many receipts as you like, with no monthly limit.
                 </p>
+                <UsageMeter />
               </div>
               <Button asChild variant="secondary">
                 <Link to="/membership">Choose a plan</Link>

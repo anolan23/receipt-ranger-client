@@ -7,7 +7,6 @@ import { MembershipPage } from './pages/membership';
 import { DashboardPage } from './pages/dashboard';
 import { AnalyticsPage } from './pages/dashboard/analytics';
 import { ReceiptsPage } from './pages/dashboard/receipts';
-import { ScannerPage } from './pages/scanner';
 import { ScanPage } from './pages/scan';
 import { SettingsPage } from './pages/dashboard/settings';
 import { ProfileSettings } from './pages/dashboard/settings/profile-settings';
@@ -41,7 +40,6 @@ function App() {
             <Route path="receipts" element={<ReceiptsPage />} />
             <Route path="items" element={<ItemsPage />} />
             <Route path="receipts/:receiptId" element={<ReceiptPage />} />
-            <Route path="scanner" element={<ScannerPage />} />
             <Route path="scan" element={<ScanPage />} />
             <Route path="settings" element={<SettingsPage />}>
               <Route index element={<ProfileSettings />} />

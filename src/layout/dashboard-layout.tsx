@@ -46,7 +46,7 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
-const SCAN_PATH = '/dashboard/scanner';
+const SCAN_PATH = '/dashboard/scan';
 
 interface DashboardLayoutProps {
   breadcrumbs?: ReactNode;

@@ -5,7 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { DashboardLayout } from '@/layout/dashboard-layout';
-import { createReceipt } from '@/lib/api/receipts';
+import { UsageMeter } from '@/components/usage-meter';
+import { usePlan } from '@/hooks/use-plan';
+import { useScanUsage } from '@/hooks/use-scan-usage';
+import { createReceipt, ScanLimitError } from '@/lib/api/receipts';
 import { cn } from '@/lib/utils';
 import {
   Camera,
@@ -25,7 +28,7 @@ import {
 import { Link } from 'react-router-dom';
 
 type CameraState = 'starting' | 'live' | 'denied' | 'unsupported';
-type ItemStatus = 'reading' | 'done' | 'review' | 'failed';
+type ItemStatus = 'reading' | 'done' | 'review' | 'failed' | 'blocked';
 
 interface BatchItem {
   id: string;
@@ -44,6 +47,19 @@ const TIPS = [
 
 let counter = 0;
 
+interface ScanLimit {
+  limit?: number;
+  used?: number;
+  resetsAt?: string;
+}
+
+function formatResetDate(resetsAt?: string) {
+  if (!resetsAt) return undefined;
+  const date = new Date(resetsAt);
+  if (Number.isNaN(date.getTime())) return undefined;
+  return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
 /** Camera-first scanning: viewfinder, big Scan button, photo picker, batch tray. */
 export function ScanPage() {
   usePageTitle('Scan');
@@ -53,6 +69,10 @@ export function ScanPage() {
   const [camera, setCamera] = useState<CameraState>('starting');
   const [items, setItems] = useState<BatchItem[]>([]);
   const [dragOver, setDragOver] = useState(false);
+  const [scanLimit, setScanLimit] = useState<ScanLimit | null>(null);
+  const scanLimitRef = useRef<ScanLimit | null>(null);
+  const { tier, isLoading: planLoading } = usePlan();
+  const { mutate: refreshUsage } = useScanUsage();
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -110,13 +130,25 @@ export function ScanPage() {
         status: result.potential_duplicate ? 'review' : 'done',
         receiptId: result.receipt_id,
       });
+      refreshUsage();
     } catch (error) {
+      if (error instanceof ScanLimitError) {
+        const details = {
+          limit: error.limit,
+          used: error.used,
+          resetsAt: error.resetsAt,
+        };
+        scanLimitRef.current = details;
+        setScanLimit(details);
+        update(item.id, { status: 'blocked' });
+        return;
+      }
       update(item.id, {
         status: 'failed',
         message: error instanceof Error ? error.message : undefined,
       });
     }
-  }, []);
+  }, [refreshUsage]);
 
   const addFiles = useCallback(
     (files: File[]) => {
@@ -124,11 +156,12 @@ export function ScanPage() {
         id: `scan-${++counter}`,
         file,
         url: URL.createObjectURL(file),
-        status: 'reading',
+        status: scanLimitRef.current ? 'blocked' : 'reading',
       }));
       if (!added.length) return;
       setItems((prev) => [...prev, ...added]);
-      added.forEach(read);
+      // Once the limit is hit, hold new photos instead of sending more 429s.
+      if (!scanLimitRef.current) added.forEach(read);
     },
     [read]
   );
@@ -163,14 +196,29 @@ export function ScanPage() {
     addFiles(Array.from(e.dataTransfer.files));
   };
 
+  // SWR revalidates the plan when the tab regains focus, so upgrading in
+  // another tab shows up here without any effect.
+  const readHeld = async () => {
+    scanLimitRef.current = null;
+    setScanLimit(null);
+    for (const item of itemsRef.current.filter((i) => i.status === 'blocked')) {
+      await read(item);
+      if (scanLimitRef.current) break;
+    }
+  };
+
   const reading = items.filter((item) => item.status === 'reading').length;
+  const blockedCount = items.filter((item) => item.status === 'blocked').length;
+  const limitHit = blockedCount > 0 && reading === 0 && !planLoading;
   const finished = items.filter((item) => item.status !== 'reading');
   const doneCount = items.filter(
     (item) => item.status === 'done' || item.status === 'review'
   ).length;
-  const allSettled = items.length > 0 && reading === 0;
+  const allSettled = items.length > 0 && reading === 0 && blockedCount === 0;
   const celebrate = allSettled && doneCount > 0;
-  const pipMood = reading
+  const pipMood = limitHit
+    ? 'happy'
+    : reading
     ? 'reading'
     : celebrate
     ? 'celebrate'
@@ -178,7 +226,10 @@ export function ScanPage() {
     ? 'oops'
     : 'happy';
 
-  const headline = reading
+  const resetDate = formatResetDate(scanLimit?.resetsAt);
+  const headline = limitHit
+    ? "You've used your free scans this month"
+    : reading
     ? `Reading receipt ${finished.length + 1} of ${items.length}…`
     : celebrate
     ? `Nice, ${doneCount} ${doneCount === 1 ? 'receipt' : 'receipts'} scanned!`
@@ -203,6 +254,7 @@ export function ScanPage() {
                 onRetry={startCamera}
                 onPick={() => fileInputRef.current?.click()}
               />
+              <UsageMeter from="scan" />
               <input
                 ref={fileInputRef}
                 type="file"
@@ -247,6 +299,39 @@ export function ScanPage() {
                 <Pip mood={pipMood} size={96} />
                 <div className="min-w-0 flex-1 space-y-2">
                   <h2 className="type-h3">{headline}</h2>
+                  {limitHit && (
+                    <>
+                      <p className="text-sm text-ink-muted">
+                        {scanLimit?.used !== undefined &&
+                        scanLimit.limit !== undefined
+                          ? `${scanLimit.used} of ${scanLimit.limit} used.${
+                              resetDate ? ` Resets ${resetDate}.` : ''
+                            } `
+                          : resetDate
+                          ? `Your scans reset ${resetDate}. `
+                          : 'Your free plan has a monthly scan limit. '}
+                        {blockedCount === 1
+                          ? 'Your receipt is'
+                          : `Your ${blockedCount} receipts are`}{' '}
+                        on hold. Leaving or reloading this page will clear{' '}
+                        {blockedCount === 1 ? 'it' : 'them'}.
+                      </p>
+                      {tier === 'pro' ? (
+                        <Button size="sm" onClick={readHeld}>
+                          Read my receipts
+                        </Button>
+                      ) : (
+                        <Button asChild size="sm">
+                          <Link
+                            to={{ pathname: '/membership', search: 'c=scan' }}
+                            target="_blank"
+                          >
+                            Upgrade to Pro
+                          </Link>
+                        </Button>
+                      )}
+                    </>
+                  )}
                   {reading > 0 && (
                     <div
                       role="progressbar"
@@ -325,6 +410,11 @@ export function ScanPage() {
                             Try again
                           </button>
                         )}
+                        {item.status === 'blocked' && (
+                          <p className="mt-1 text-xs text-ink-muted">
+                            Waiting for Pro
+                          </p>
+                        )}
                         {item.status === 'review' && (
                           <p className="mt-1 text-xs text-rise-ink">
                             Can you double-check this one?
@@ -370,6 +460,8 @@ function TrayPill({ item }: { item: BatchItem }) {
       return <StatusIndicator status="warning">Take a look</StatusIndicator>;
     case 'failed':
       return <StatusIndicator status="destructive">Oops</StatusIndicator>;
+    case 'blocked':
+      return <StatusIndicator status="pending">Saved</StatusIndicator>;
   }
 }
 
