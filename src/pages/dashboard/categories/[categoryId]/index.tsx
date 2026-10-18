@@ -1,8 +1,8 @@
 import SmartBreadcrumb from '@/components/smart-breadcrumb';
 import { Button } from '@/components/ui/button';
-import { useCategory } from '@/hooks/use-category';
-import { useCategoryItems } from '@/hooks/use-category-items';
-import { useReceipt } from '@/hooks/use-receipt';
+import { useCategory } from '@/queries/categories';
+import { useCategoryItems } from '@/queries/categories';
+import { useReceipt } from '@/queries/receipts';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { ChevronLeft } from 'lucide-react';
 import { LoadingState } from '@/components/loading-state';

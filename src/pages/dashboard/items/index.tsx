@@ -1,6 +1,6 @@
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { ItemsTable } from '@/components/items-table';
-import { useItems } from '@/hooks/use-items';
+import { useItems } from '@/queries/items';
 import { TextFilter } from '@/components/text-filter';
 import { DataTableFacetedFilter } from '@/components/data-table-faceted-filter';
 import { Button } from '@/components/ui/button';

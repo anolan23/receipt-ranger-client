@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PriceCard } from './components/price-card';
-import { createCheckoutSession } from '@/lib/api/stripe';
+import { useCreateCheckoutSession } from '@/queries/subscription';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Info } from 'lucide-react';
@@ -22,6 +22,8 @@ export function MembershipPage({ ...props }: MembershipPageProps) {
   );
   const [error, setError] = useState<string>();
   const { isAuthenticated } = useUser();
+
+  const { mutateAsync: createCheckoutSession } = useCreateCheckoutSession();
 
   const startCheckout = async (plan: 'monthly' | 'yearly') => {
     if (isAuthenticated === false) {

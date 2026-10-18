@@ -1,5 +1,5 @@
 import { getPlan } from '@/lib/plan';
-import { useSubscription } from './use-subscription';
+import { useSubscription } from '@/queries/subscription';
 
 /** The user's plan, derived from their subscription record. Read this instead of checking the record directly. */
 export function usePlan() {

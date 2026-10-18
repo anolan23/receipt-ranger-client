@@ -8,7 +8,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
-import { deleteReceipt, updateReceiptReviewStatus } from '@/lib/api/receipts';
+import {
+  useDeleteReceipt,
+  useUpdateReceiptReviewStatus,
+} from '@/queries/receipts';
 import { ReceiptData } from '@/lib/types';
 import { MoreVertical } from 'lucide-react';
 import { useCallback, useState } from 'react';
@@ -40,6 +43,9 @@ export function ActionsDropdown({
     }
   }
 
+  const { mutateAsync: deleteReceipt } = useDeleteReceipt();
+  const { mutateAsync: updateReviewStatus } = useUpdateReceiptReviewStatus();
+
   const handleDeleteSubmit = useCallback(
     async (receipt: ReceiptData) => {
       try {
@@ -58,13 +64,13 @@ export function ActionsDropdown({
         setHasOpenDialog(false);
       }
     },
-    [toast, onDelete]
+    [toast, onDelete, deleteReceipt]
   );
 
   const handleReviewSelect = async function () {
     try {
       if (!receipt) return;
-      await updateReceiptReviewStatus(receipt.id, true);
+      await updateReviewStatus({ receiptId: receipt.id, reviewed: true });
       onReviewed && onReviewed(receipt);
     } catch (error) {
       let message = 'Something went wrong';

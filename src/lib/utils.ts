@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { queryClient } from './query-client';
+import { queryClient } from '@/queries/query-client';
 
 export function getRandomColor() {
   const letters = '0123456789ABCDEF';

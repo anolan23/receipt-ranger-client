@@ -5,12 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
 import { usePageTitle } from '@/hooks/use-page-title';
-import { useReceipt } from '@/hooks/use-receipt';
-import { useReceiptItems } from '@/hooks/use-receipt-items';
-import { useSubcategories } from '@/hooks/use-subcategories';
+import { useReceipt, useUpdateReceipt } from '@/queries/receipts';
+import { useReceiptItems } from '@/queries/receipts';
+import { useSubcategories } from '@/queries/categories';
 import { ContentLayout } from '@/layout/content-layout';
 import { DashboardLayout } from '@/layout/dashboard-layout';
-import { updateReceipt } from '@/lib/api/receipts';
 import { getFileUrl, getReceiptTitle } from '@/lib/helpers';
 import { ItemData } from '@/lib/types';
 import { ChevronLeft } from 'lucide-react';
@@ -85,6 +84,7 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
   const formValues = form.watch();
 
   const { data: subcategories } = useSubcategories(formValues.category_id);
+  const { mutateAsync: updateReceipt } = useUpdateReceipt();
 
   const calculatedSubtotal = useMemo<string>(() => {
     const { items } = formValues;
@@ -100,11 +100,10 @@ export function ReceiptPage({ ...props }: ReceiptPageProps) {
     try {
       if (!receipt?.id) return;
       const { merchantOption, ...rest } = values;
-      await updateReceipt(receipt.id, {
-        ...rest,
-        merchant_id: merchantOption?.value || '',
+      await updateReceipt({
+        receiptId: receipt.id,
+        updates: { ...rest, merchant_id: merchantOption?.value || '' },
       });
-      refetchReceipt();
       toast({ title: 'Saved!', description: 'Your receipt is all up to date.' });
     } catch (error) {
       toast({

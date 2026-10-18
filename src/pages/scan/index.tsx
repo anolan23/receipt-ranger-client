@@ -7,8 +7,8 @@ import { usePageTitle } from '@/hooks/use-page-title';
 import { DashboardLayout } from '@/layout/dashboard-layout';
 import { UsageMeter } from '@/components/usage-meter';
 import { usePlan } from '@/hooks/use-plan';
-import { useScanUsage } from '@/hooks/use-scan-usage';
-import { createReceipt, ScanLimitError } from '@/lib/api/receipts';
+import { useCreateReceipt } from '@/queries/receipts';
+import { ScanLimitError } from '@/lib/api/receipts';
 import { cn } from '@/lib/utils';
 import {
   Camera,
@@ -72,7 +72,7 @@ export function ScanPage() {
   const [scanLimit, setScanLimit] = useState<ScanLimit | null>(null);
   const scanLimitRef = useRef<ScanLimit | null>(null);
   const { tier, isLoading: planLoading } = usePlan();
-  const { refetch: refreshUsage } = useScanUsage();
+  const { mutateAsync: createReceipt } = useCreateReceipt();
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -130,7 +130,6 @@ export function ScanPage() {
         status: result.potential_duplicate ? 'review' : 'done',
         receiptId: result.receipt_id,
       });
-      refreshUsage();
     } catch (error) {
       if (error instanceof ScanLimitError) {
         const details = {
@@ -148,7 +147,7 @@ export function ScanPage() {
         message: error instanceof Error ? error.message : undefined,
       });
     }
-  }, [refreshUsage]);
+  }, [createReceipt]);
 
   const addFiles = useCallback(
     (files: File[]) => {

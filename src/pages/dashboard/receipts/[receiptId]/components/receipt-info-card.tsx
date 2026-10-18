@@ -16,12 +16,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useMerchantSearch } from '@/hooks/use-merchant-search';
+import { useMerchantSearch } from '@/queries/merchants';
 import { useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { EditReceiptFormValues } from '../interfaces';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
-import { useCategories } from '@/hooks/use-categories';
+import { useCategories } from '@/queries/categories';
 import { Select } from '@/components/select';
 import { AlertTriangle } from 'lucide-react';
 import { DollarInput } from '@/components/dollar-input';

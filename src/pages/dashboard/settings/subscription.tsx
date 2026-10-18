@@ -1,6 +1,6 @@
 import { usePlan } from '@/hooks/use-plan';
 import { SettingsLayout } from '@/layout/settings-layout';
-import { createPortalSession } from '@/lib/api/stripe';
+import { useCreatePortalSession } from '@/queries/subscription';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -42,6 +42,7 @@ export function SubscriptionSettings({ ...props }: SubscriptionSettingsProps) {
     };
   }, [waiting, refetch]);
   const [loading, setLoading] = useState(false);
+  const { mutateAsync: createPortalSession } = useCreatePortalSession();
 
   const handleManageClick = async function () {
     try {

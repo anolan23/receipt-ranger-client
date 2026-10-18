@@ -1,6 +1,6 @@
 import { Link } from "@/components/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useReceipt } from "@/hooks/use-receipt";
+import { useReceipt } from '@/queries/receipts';
 import { getReceiptTitle } from "@/lib/helpers";
 import { CircleAlertIcon } from "lucide-react";
 

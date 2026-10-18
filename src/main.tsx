@@ -7,7 +7,7 @@ import App from './App.tsx';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import './lib/dayjs-config.ts';
-import { queryClient } from './lib/query-client.ts';
+import { queryClient } from './queries/query-client.ts';
 
 import { ThemeProvider } from './components/context/theme-context.tsx';
 import { TooltipProvider } from './components/ui/tooltip.tsx';

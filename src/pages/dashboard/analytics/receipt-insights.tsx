@@ -1,10 +1,10 @@
 import { MetricCard } from '@/components/metric-card';
-import { useCategoryTotals } from '@/hooks/use-category-totals';
+import { useCategoryTotals } from '@/queries/analytics';
 import { useDateRangePresetOutletContext } from '@/hooks/use-date-range-preset';
-import { useMerchantCounts } from '@/hooks/use-merchant-counts';
-import { useMonthlyTotals } from '@/hooks/use-monthly-totals';
+import { useMerchantCounts } from '@/queries/analytics';
+import { useMonthlyTotals } from '@/queries/analytics';
 
-import { useOverview } from '@/hooks/use-overview';
+import { useOverview } from '@/queries/analytics';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { toDollar } from '@/lib/helpers';
 import { CategoriesCard } from './components/categories-card';

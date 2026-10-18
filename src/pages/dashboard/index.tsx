@@ -14,17 +14,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useCategoryTotals } from '@/hooks/use-category-totals';
+import { useCategoryTotals } from '@/queries/analytics';
 import { useDateRangePreset } from '@/hooks/use-date-range-preset';
 import { useDeviceWidth } from '@/hooks/use-device-width';
-import { useMerchantCounts } from '@/hooks/use-merchant-counts';
-import { useMonthlyTotals } from '@/hooks/use-monthly-totals';
-import { useOverview } from '@/hooks/use-overview';
+import { useMerchantCounts } from '@/queries/analytics';
+import { useMonthlyTotals } from '@/queries/analytics';
+import { useOverview } from '@/queries/analytics';
 import { usePageTitle } from '@/hooks/use-page-title';
-import { useReceipt } from '@/hooks/use-receipt';
-import { useReceipts } from '@/hooks/use-receipts';
+import { useReceipt } from '@/queries/receipts';
+import { useReceipts } from '@/queries/receipts';
 import { useRowSelection } from '@/hooks/use-row-selection';
-import { useSpendingOverview } from '@/hooks/use-spending-overview';
+import { useSpendingOverview } from '@/queries/analytics';
 import { UsageMeter } from '@/components/usage-meter';
 import { usePlan } from '@/hooks/use-plan';
 import { DashboardLayout } from '@/layout/dashboard-layout';

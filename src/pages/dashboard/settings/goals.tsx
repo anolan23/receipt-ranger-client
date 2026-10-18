@@ -19,8 +19,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
-import { useGoal } from '@/hooks/use-goal';
-import { createOrUpdateGoal } from '@/lib/api/goals';
+import { useGoal, useSaveGoal } from '@/queries/goals';
 import { LoaderCircle, TriangleAlert } from 'lucide-react';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -48,9 +47,11 @@ export function GoalsSettings({ ...props }: GoalsSettingsProps) {
     form.reset(defaultValues);
   }, [form, defaultValues]);
 
+  const { mutateAsync: saveGoal } = useSaveGoal();
+
   async function onSubmit(values: GoalsSettingsValues) {
     try {
-      const result = await createOrUpdateGoal(values.amount);
+      await saveGoal(values.amount);
       toast({ title: 'Goal saved!', description: 'Nice, your budget is all set.' });
     } catch (error) {
       console.error(error);

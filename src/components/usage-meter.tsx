@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { usePlan } from '@/hooks/use-plan';
-import { useScanUsage } from '@/hooks/use-scan-usage';
+import { useScanUsage } from '@/queries/receipts';
 import { CircleAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
