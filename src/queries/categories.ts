@@ -1,45 +1,37 @@
+import { CategoryId, queryKeys } from './keys';
 import {
   getCategories,
   getCategory,
   getCategoryItems,
   getSubcategories,
 } from '@/lib/api/categories';
-import { useQuery } from '@tanstack/react-query';
-
-type CategoryId = number | string;
-
-export const categoryKeys = {
-  all: ['categories'] as const,
-  detail: (id?: CategoryId | null) => ['categories', id] as const,
-  items: (id?: CategoryId | null) => ['categories', id, 'items'] as const,
-  subcategories: (id?: CategoryId | null) =>
-    ['categories', id, 'subcategories'] as const,
-};
+import { skipToken, useQuery } from '@tanstack/react-query';
 
 export function useCategories() {
-  return useQuery({ queryKey: categoryKeys.all, queryFn: getCategories });
+  return useQuery({
+    queryKey: queryKeys.categories.list.queryKey,
+    queryFn: getCategories,
+  });
 }
 
 export function useCategory(categoryId?: CategoryId) {
   return useQuery({
-    queryKey: categoryKeys.detail(categoryId),
-    queryFn: () => getCategory(categoryId!),
-    enabled: !!categoryId,
+    queryKey: queryKeys.categories.detail(categoryId).queryKey,
+    queryFn: categoryId ? () => getCategory(categoryId) : skipToken,
   });
 }
 
 export function useCategoryItems(categoryId?: CategoryId) {
   return useQuery({
-    queryKey: categoryKeys.items(categoryId),
-    queryFn: () => getCategoryItems(categoryId!),
-    enabled: !!categoryId,
+    queryKey: queryKeys.categories.detail(categoryId)._ctx.items.queryKey,
+    queryFn: categoryId ? () => getCategoryItems(categoryId) : skipToken,
   });
 }
 
 export function useSubcategories(categoryId?: CategoryId | null) {
+  const id = categoryId ?? undefined;
   return useQuery({
-    queryKey: categoryKeys.subcategories(categoryId),
-    queryFn: () => getSubcategories(categoryId!),
-    enabled: !!categoryId,
+    queryKey: queryKeys.categories.detail(id)._ctx.subcategories.queryKey,
+    queryFn: id ? () => getSubcategories(id) : skipToken,
   });
 }

@@ -10,44 +10,41 @@ import {
   updateReceipt,
   updateReceiptReviewStatus,
 } from '@/lib/api/receipts';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { analyticsKeys } from './analytics';
-
-export const receiptKeys = {
-  all: ['receipts'] as const,
-  list: (params?: GetReceiptsParams) => ['receipts', 'list', params] as const,
-  detail: (id?: string) => ['receipts', id] as const,
-  items: (id?: string) => ['receipts', id, 'items'] as const,
-  usage: ['receipts', 'usage'] as const,
-};
+import {
+  skipToken,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { queryKeys } from './keys';
 
 export function useReceipts(params?: GetReceiptsParams) {
   return useQuery({
-    queryKey: receiptKeys.list(params),
+    queryKey: queryKeys.receipts.list(params).queryKey,
     queryFn: () => getReceipts(params),
   });
 }
 
 export function useReceipt(receiptId?: string) {
   return useQuery({
-    queryKey: receiptKeys.detail(receiptId),
-    queryFn: () => getReceipt(receiptId!),
-    enabled: !!receiptId,
+    queryKey: queryKeys.receipts.detail(receiptId).queryKey,
+    queryFn: receiptId ? () => getReceipt(receiptId) : skipToken,
     retry: false,
   });
 }
 
 export function useReceiptItems(receiptId?: string) {
   return useQuery({
-    queryKey: receiptKeys.items(receiptId),
-    queryFn: () => getReceiptItems(receiptId!),
-    enabled: !!receiptId,
-    retry: false,
+    queryKey: queryKeys.receipts.detail(receiptId)._ctx.items.queryKey,
+    queryFn: receiptId ? () => getReceiptItems(receiptId) : skipToken,
   });
 }
 
 export function useScanUsage() {
-  return useQuery({ queryKey: receiptKeys.usage, queryFn: getScanUsage });
+  return useQuery({
+    queryKey: queryKeys.receipts.usage.queryKey,
+    queryFn: getScanUsage,
+  });
 }
 
 /** Receipts feed every analytics view, so any receipt change invalidates both. */
@@ -55,8 +52,8 @@ function useInvalidateReceipts() {
   const queryClient = useQueryClient();
   return () =>
     Promise.all([
-      queryClient.invalidateQueries({ queryKey: receiptKeys.all }),
-      queryClient.invalidateQueries({ queryKey: analyticsKeys.all }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.receipts._def }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.analytics._def }),
     ]);
 }
 

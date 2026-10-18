@@ -1,19 +1,17 @@
+import { queryKeys } from './keys';
 import { getMerchants, searchMerchant } from '@/lib/api/merchants';
-import { useQuery } from '@tanstack/react-query';
-
-export const merchantKeys = {
-  all: ['merchants'] as const,
-  search: (search?: string) => ['merchants', 'search', search] as const,
-};
+import { skipToken, useQuery } from '@tanstack/react-query';
 
 export function useMerchants() {
-  return useQuery({ queryKey: merchantKeys.all, queryFn: getMerchants });
+  return useQuery({
+    queryKey: queryKeys.merchants.list.queryKey,
+    queryFn: getMerchants,
+  });
 }
 
 export function useMerchantSearch(search?: string) {
   return useQuery({
-    queryKey: merchantKeys.search(search),
-    queryFn: () => searchMerchant(search!),
-    enabled: !!search,
+    queryKey: queryKeys.merchants.search(search).queryKey,
+    queryFn: search ? () => searchMerchant(search) : skipToken,
   });
 }

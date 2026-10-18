@@ -1,3 +1,4 @@
+import { queryKeys } from './keys';
 import {
   createCheckoutSession,
   createPortalSession,
@@ -5,13 +6,9 @@ import {
 } from '@/lib/api/stripe';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-export const subscriptionKeys = {
-  all: ['stripe', 'subscription'] as const,
-};
-
 export function useSubscription() {
   return useQuery({
-    queryKey: subscriptionKeys.all,
+    queryKey: queryKeys.subscription.current.queryKey,
     queryFn: getSubscriptionRecord,
   });
 }

@@ -1,3 +1,4 @@
+import { queryKeys } from './keys';
 import {
   getCategoryTotals,
   getMerchantCounts,
@@ -18,77 +19,58 @@ import {
 } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
 
-export const analyticsKeys = {
-  all: ['analytics'] as const,
-  overview: (params: GetOverviewParams) =>
-    ['analytics', 'overview', params] as const,
-  spendingOverview: ['analytics', 'spending-overview'] as const,
-  spendingExplorer: (params: SpendingExplorerParams) =>
-    ['analytics', 'spending-explorer', params] as const,
-  categoryTotals: (params: UseCategoryTotalsParams) =>
-    ['analytics', 'category-totals', params] as const,
-  subcategoryTotals: (params: UseCategoryTotalsParams) =>
-    ['analytics', 'subcategory-totals', params] as const,
-  merchantCounts: (params: UseMerchantCountsParams) =>
-    ['analytics', 'merchant-counts', params] as const,
-  topBaseItems: (params?: UseTopBaseItemsParams) =>
-    ['analytics', 'top-base-items', params] as const,
-  monthlyTotals: (params: UseMonthlyTotalsParams) =>
-    ['analytics', 'monthly-totals', params] as const,
-};
-
 export function useOverview(params: GetOverviewParams) {
   return useQuery({
-    queryKey: analyticsKeys.overview(params),
+    queryKey: queryKeys.analytics.overview(params).queryKey,
     queryFn: () => getOverview(params),
   });
 }
 
 export function useSpendingOverview() {
   return useQuery({
-    queryKey: analyticsKeys.spendingOverview,
+    queryKey: queryKeys.analytics.spendingOverview.queryKey,
     queryFn: getSpendingOverview,
   });
 }
 
 export function useSpendingExplorer(params: SpendingExplorerParams) {
   return useQuery({
-    queryKey: analyticsKeys.spendingExplorer(params),
+    queryKey: queryKeys.analytics.spendingExplorer(params).queryKey,
     queryFn: () => getSpendingExplorer(params),
   });
 }
 
 export function useCategoryTotals(params: UseCategoryTotalsParams) {
   return useQuery({
-    queryKey: analyticsKeys.categoryTotals(params),
+    queryKey: queryKeys.analytics.categoryTotals(params).queryKey,
     queryFn: () => getCategoryTotals(params),
   });
 }
 
 export function useSubcategoryTotals(params: UseCategoryTotalsParams) {
   return useQuery({
-    queryKey: analyticsKeys.subcategoryTotals(params),
+    queryKey: queryKeys.analytics.subcategoryTotals(params).queryKey,
     queryFn: () => getSubcategoryTotals(params),
   });
 }
 
 export function useMerchantCounts(params: UseMerchantCountsParams) {
   return useQuery({
-    queryKey: analyticsKeys.merchantCounts(params),
+    queryKey: queryKeys.analytics.merchantCounts(params).queryKey,
     queryFn: () => getMerchantCounts(params),
   });
 }
 
 export function useTopBaseItems(params?: UseTopBaseItemsParams) {
   return useQuery({
-    queryKey: analyticsKeys.topBaseItems(params),
+    queryKey: queryKeys.analytics.topBaseItems(params).queryKey,
     queryFn: () => getTopBaseItems(params),
   });
 }
 
 export function useMonthlyTotals(params: UseMonthlyTotalsParams) {
   return useQuery({
-    queryKey: analyticsKeys.monthlyTotals(params),
+    queryKey: queryKeys.analytics.monthlyTotals(params).queryKey,
     queryFn: () => getMonthlyTotals(params),
   });
 }
